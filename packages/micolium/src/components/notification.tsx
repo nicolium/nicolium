@@ -7,6 +7,7 @@ import { CalendarDotIcon } from 'phosphor-react-native/src/icons/CalendarDot';
 import { CalendarStarIcon } from 'phosphor-react-native/src/icons/CalendarStar';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
 import { ChatsTeardropIcon } from 'phosphor-react-native/src/icons/ChatsTeardrop';
+import { HeartIcon } from 'phosphor-react-native/src/icons/Heart';
 import { PencilSimpleLineIcon } from 'phosphor-react-native/src/icons/PencilSimpleLine';
 import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
 import { RepeatIcon } from 'phosphor-react-native/src/icons/Repeat';
@@ -30,6 +31,7 @@ import { type ColorValue, View } from 'react-native';
 import { useInstance } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useNotification } from '@/queries/notifications/use-notifications';
+import { useSetting } from '@/stores/settings';
 
 import { Account } from './accounts/account';
 import { Status } from './statuses/status';
@@ -247,6 +249,7 @@ const Notification: React.FC<INotification> = (props) => {
   const { colors } = useTheme();
 
   const { data: currentAccountId } = useCredentialAccountId();
+  const useHeartIconForFavourites = useSetting('appearance.useHeartIconForFavourites');
 
   const notification = useNotification(props.notification);
   const status = notification.status;
@@ -331,6 +334,8 @@ const Notification: React.FC<INotification> = (props) => {
     icon = () => (
       <Emoji size={18} emoji={notification.emoji!} url={notification.emoji_url || undefined} />
     );
+  } else if (useHeartIconForFavourites && displayedType === 'favourite') {
+    icon = iconHelper(HeartIcon);
   } else if (icons[displayedType]) {
     icon = iconHelper(icons[displayedType]);
   }

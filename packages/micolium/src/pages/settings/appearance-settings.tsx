@@ -27,6 +27,10 @@ const messages = defineMessages({
     id: 'preferences.options.brand_color',
     defaultMessage: 'Base color',
   },
+  useHeartIconForFavourites: {
+    id: 'preferences.fields.use_heart_icon_for_favourites.label.short',
+    defaultMessage: 'Use heart icon for likes',
+  },
 });
 const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'appearance'>) => {
   const intl = useIntl();
@@ -37,6 +41,7 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   const enableLiquidGlass = useSetting('appearance.enableLiquidGlass');
   const sourceColor = useSetting('appearance.sourceColor');
   const black = useSetting('appearance.black');
+  const useHeartIconForFavourites = useSetting('appearance.useHeartIconForFavourites');
 
   const listSections = React.useMemo(() => {
     const section: IListSections[number] = {
@@ -69,8 +74,21 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
       });
     }
 
-    return [section];
-  }, [black, sourceColor, glassEffect, enableLiquidGlass]);
+    return [
+      section,
+      {
+        items: [
+          {
+            type: 'toggle',
+            label: intl.formatMessage(messages.useHeartIconForFavourites),
+            active: useHeartIconForFavourites,
+            onPress: () =>
+              update('appearance.useHeartIconForFavourites', !useHeartIconForFavourites),
+          },
+        ],
+      },
+    ] as IListSections;
+  }, [black, sourceColor, glassEffect, enableLiquidGlass, useHeartIconForFavourites]);
 
   return (
     <ScrollView>

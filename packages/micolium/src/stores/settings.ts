@@ -70,6 +70,7 @@ const settingsSchema = v.object({
   'appearance.black': v.optional(v.boolean(), false),
   'appearance.enableLiquidGlass': v.optional(v.boolean(), true),
   'appearance.sourceColor': v.optional(v.string(), '#6750A4'),
+  'appearance.useHeartIconForFavourites': v.optional(v.boolean(), false),
 
   'general.useInAppBrowser': v.optional(v.boolean(), false),
   'content.displayTargetHost': v.optional(v.boolean(), true),

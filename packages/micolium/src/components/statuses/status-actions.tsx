@@ -2,6 +2,7 @@ import { IconButton, Text, Tooltip, useTheme } from '@mkljczk/react-native-paper
 import { useNavigation } from '@react-navigation/native';
 import { ArrowBendDoubleUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendDoubleUpLeft';
 import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
+import { HeartIcon } from 'phosphor-react-native/src/icons/Heart';
 import { RepeatIcon } from 'phosphor-react-native/src/icons/Repeat';
 import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
 import { StarIcon } from 'phosphor-react-native/src/icons/Star';
@@ -26,6 +27,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
+import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 import { haptics } from '@/utils/haptics';
 import { getSegmentedMenuStyles } from '@/utils/themes';
@@ -348,6 +350,7 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
   const navigation = useNavigation();
 
   const interactionTooltip = useInteractionMessages(status, 'can_favourite');
+  const useHeartIconForFavourites = useSetting('appearance.useHeartIconForFavourites');
 
   const { mutate: favouriteStatus, isPending: isPendingFavourite } = useFavouriteStatus(status.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);
@@ -356,7 +359,11 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       <IconButton
         icon={(props) => {
-          const Icon = features.statusDislikes ? ThumbsUpIcon : StarIcon;
+          const Icon = features.statusDislikes
+            ? ThumbsUpIcon
+            : useHeartIconForFavourites
+              ? HeartIcon
+              : StarIcon;
           return <Icon {...props} weight={status.favourited ? 'fill' : undefined} />;
         }}
         onPress={() =>
