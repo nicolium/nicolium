@@ -6,7 +6,9 @@ import {
   TextInput,
   useTheme,
 } from '@mkljczk/react-native-paper';
+import { File } from 'expo-file-system';
 import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
 import { pick } from 'lodash-es';
 import { create } from 'mutative';
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
@@ -253,6 +255,14 @@ const messages = defineMessages({
     id: 'textarea.counter.label',
     defaultMessage: '{count, plural, one {# character} other {# characters}} remaining',
   },
+  uploadPermissionRequiredTitle: {
+    id: 'upload_button.permission_required.title',
+    defaultMessage: 'Permission required',
+  },
+  uploadPermissionRequiredMessage: {
+    id: 'upload_button.permission_required.message',
+    defaultMessage: 'Permission to access the media library is required.',
+  },
 });
 
 interface IAltTextEditor {
@@ -391,7 +401,7 @@ const EditProfileScreen = ({
   const features = useFeatures();
   const instance = useInstance();
 
-  const { mutate: updateCredentials } = useUpdateCredentials();
+  const { mutateAsync: updateCredentials } = useUpdateCredentials();
 
   const [data, setData] = React.useState<UpdateCredentials>({
     fields: [],
@@ -413,8 +423,12 @@ const EditProfileScreen = ({
         const strangerNotifications =
           credentialAccount.__meta.pleroma?.notification_settings?.block_from_strangers === true;
         setData(credentials);
-        setAvatar(credentialAccount.avatar || undefined);
-        setHeader(credentialAccount.header || undefined);
+        setAvatar(
+          credentialAccount.avatar_default ? undefined : credentialAccount.avatar || undefined,
+        );
+        setHeader(
+          credentialAccount.header_default ? undefined : credentialAccount.header || undefined,
+        );
         setMuteStrangers(strangerNotifications);
         setHideNotificationContent(
           credentialAccount.__meta.pleroma?.hide_notification_content ?? false,
@@ -446,20 +460,12 @@ const EditProfileScreen = ({
         );
       }
       if (typeof header === 'object') {
-        params.header = {
-          uri: header.uri,
-          name: header.fileName,
-          type: header.type,
-        } as unknown as File;
+        params.header = new File(header.uri) as any as globalThis.File;
       } else if (!header) {
         params.header = '';
       }
       if (typeof avatar === 'object') {
-        params.avatar = {
-          uri: avatar.uri,
-          name: avatar.fileName,
-          type: avatar.type,
-        } as unknown as File;
+        params.avatar = new File(avatar.uri) as any as globalThis.File;
       } else if (!avatar) {
         params.avatar = '';
       }
@@ -590,6 +596,35 @@ const EditProfileScreen = ({
     const fields = [...oldFields];
     fields.splice(i, 1);
     updateData('fields', fields);
+  };
+
+  const handleAddAvatar = async (type: 'avatar' | 'header') => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert(
+        intl.formatMessage(messages.uploadPermissionRequiredTitle),
+        intl.formatMessage(messages.uploadPermissionRequiredMessage),
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsMultipleSelection: true,
+      preferredAssetRepresentationMode:
+        ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Compatible,
+      selectionLimit: 1,
+    });
+
+    if (result.canceled) return;
+
+    setIsChanged(true);
+
+    if (type === 'avatar') {
+      setAvatar(result.assets[0]);
+    } else {
+      setHeader(result.assets[0]);
+    }
   };
 
   const handleBackButton = () => {
@@ -804,12 +839,12 @@ const EditProfileScreen = ({
       key: 'upload',
       type: 'button',
       label: intl.formatMessage(messages.uploadHeader),
-      onPress: () => {},
+      onPress: () => handleAddAvatar('header'),
       appleIcon: 'photo.on.rectangle.angled',
       androidIcon: 'ph_images',
     });
 
-    if (features.accountAvatarDescription) {
+    if (header && features.accountAvatarDescription) {
       items.push({
         key: 'change-description',
         type: 'button',
@@ -842,12 +877,12 @@ const EditProfileScreen = ({
       key: 'upload',
       type: 'button',
       label: intl.formatMessage(messages.uploadAvatar),
-      onPress: () => {},
+      onPress: () => handleAddAvatar('avatar'),
       appleIcon: 'photo.on.rectangle.angled',
       androidIcon: 'ph_images',
     });
 
-    if (features.accountAvatarDescription) {
+    if (avatar && features.accountAvatarDescription) {
       items.push({
         key: 'change-description',
         type: 'button',
@@ -894,7 +929,7 @@ const EditProfileScreen = ({
       </Appbar.Header>
       <ScrollView>
         <View style={{ padding: 16, paddingBottom: 0, gap: 12 }}>
-          <View style={{ position: 'relative', marginBottom: -48 }}>
+          <View style={{ position: 'relative', marginBottom: -16 }}>
             <DropdownMenu
               fullWidth
               trigger={
@@ -921,17 +956,28 @@ const EditProfileScreen = ({
               }
               items={headerMenu}
             />
-            <View style={{ left: 16, bottom: 48, width: 96, borderRadius: 48, overflow: 'hidden' }}>
+            <View
+              style={{
+                left: 16,
+                bottom: 16,
+                width: 88,
+                height: 88,
+                borderRadius: 44,
+                borderWidth: 3,
+                borderColor: theme.colors.background,
+                overflow: 'hidden',
+              }}
+            >
               <DropdownMenu
                 trigger={
                   <Pressable
                     style={{
-                      borderRadius: 48,
+                      borderRadius: 40,
                       borderWidth: 1,
                       borderColor: theme.colors.surfaceDim,
-                      height: 96,
-                      width: 96,
-                      maxWidth: 96,
+                      height: 82,
+                      width: 82,
+                      maxWidth: 82,
                       aspectRatio: 3,
                       overflow: 'hidden',
                       backgroundColor: theme.colors.surfaceContainerHigh,
