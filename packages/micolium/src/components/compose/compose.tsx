@@ -748,6 +748,7 @@ const ComposeBottomSheet = () => {
       setIsPresented(true);
       bottomSheetRef.current?.present();
     } else {
+      setSuggestionToken(null);
       bottomSheetRef.current?.dismiss();
     }
   }, [isComposeOpen]);
