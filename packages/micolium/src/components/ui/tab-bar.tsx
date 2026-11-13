@@ -9,7 +9,6 @@ const useTabBarProps = () => {
   const screenOptions: MaterialTopTabNavigationOptions = {
     tabBarActiveTintColor: colors.primary,
     tabBarInactiveTintColor: colors.onSurfaceVariant,
-    tabBarPressColor: colors.surfaceContainerHighest,
     tabBarIndicatorStyle: { backgroundColor: colors.primary },
     tabBarStyle: {
       backgroundColor: colors.surfaceContainer,
