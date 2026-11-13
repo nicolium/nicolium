@@ -35,7 +35,7 @@ import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
 import { useSetting } from '@/stores/settings';
 
-import type { SearchStackParams, SearchTabsParams, TabsParams } from '@/router/router';
+import type { TabsParams } from '@/router/router';
 import type { Tag } from 'pl-api';
 
 const messages = defineMessages({
@@ -328,15 +328,5 @@ const SearchScreen = ({ route, navigation }: NativeStackScreenProps<TabsParams, 
     </>
   );
 };
-
-// const SearchStack = createNativeStackNavigator<SearchStackParams>();
-
-// const SearchStackScreen = () => {
-//   return (
-//     <SearchStack.Navigator>
-//       <SearchStack.Screen name='search' component={SearchScreen} options={{ headerShown: false }} />
-//     </SearchStack.Navigator>
-//   );
-// };
 
 export { SearchScreen };
