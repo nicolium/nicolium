@@ -1,8 +1,8 @@
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { create } from 'mutative';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { TabView } from 'react-native-tab-view';
 
 import {
   InteractionPolicyConfig,
@@ -13,7 +13,7 @@ import {
   type Visibility,
 } from '@/components/interaction-policy-config';
 import { GlassButton } from '@/components/ui/glass-button';
-import { TabBar } from '@/components/ui/tab-bar';
+import { useTabBarProps } from '@/components/ui/tab-bar';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
@@ -35,6 +35,8 @@ const messages = defineMessages({
   },
 });
 
+const InteractionPoliciesTabs = createMaterialTopTabNavigator<Record<Visibility, undefined>>();
+
 const InteractionPoliciesScreen = (
   _: NativeStackScreenProps<SettingsStackParams, 'interaction_policies'>,
 ) => {
@@ -48,10 +50,10 @@ const InteractionPoliciesScreen = (
     updateInteractionPolicies,
     isUpdating,
   } = useInteractionPolicies();
+  const tabBarProps = useTabBarProps();
 
   const [quotePolicy, setQuotePolicy] = React.useState<QuoteApprovalPolicy>('public');
   const [interactionPolicies, setInteractionPolicies] = React.useState(initial);
-  const [visibility, setVisibility] = React.useState<Visibility>('public');
 
   React.useEffect(() => {
     setInteractionPolicies(initial);
@@ -111,49 +113,44 @@ const InteractionPoliciesScreen = (
       });
   };
 
-  const routes: Array<{
-    key: Visibility;
-    title: string;
-  }> = [
-    { key: 'public', title: intl.formatMessage(messages.private) },
-    { key: 'unlisted', title: intl.formatMessage(messages.unlisted) },
-    { key: 'private', title: intl.formatMessage(messages.private) },
-  ];
-
   return (
-    <TabView
-      navigationState={{ index: VISIBILITIES.indexOf(visibility), routes }}
-      onIndexChange={(index) => setVisibility(VISIBILITIES[index])}
-      renderScene={({ route }) => (
-        <>
-          <InteractionPolicyConfig
-            interactionPolicy={interactionPolicies[route.key]}
-            onChange={(...props) => {
-              handleChange(route.key, ...props);
-            }}
-            quotePolicy={quotePolicy}
-            onQuotePolicyChange={setQuotePolicy}
-            visibility={route.key}
-            disabled={isUpdating}
-          />
+    <InteractionPoliciesTabs.Navigator {...tabBarProps}>
+      {VISIBILITIES.map((visibility) => (
+        <InteractionPoliciesTabs.Screen
+          key={visibility}
+          name={visibility}
+          options={{ title: intl.formatMessage(messages[visibility]) }}
+        >
+          {() => (
+            <>
+              <InteractionPolicyConfig
+                interactionPolicy={interactionPolicies[visibility]}
+                onChange={(...props) => {
+                  handleChange(visibility, ...props);
+                }}
+                quotePolicy={quotePolicy}
+                onQuotePolicyChange={setQuotePolicy}
+                visibility={visibility}
+                disabled={isUpdating}
+              />
 
-          <View style={{ flexDirection: 'row', gap: 8, padding: 16 }}>
-            <GlassButton
-              mode='contained'
-              onPress={handleSubmit}
-              disabled={isUpdating}
-              loading={isUpdating}
-              containerStyle={{ marginLeft: 'auto' }}
-              style={{ marginLeft: 'auto' }}
-            >
-              <FormattedMessage id='common.save' defaultMessage='Save' />
-            </GlassButton>
-          </View>
-        </>
-      )}
-      renderTabBar={TabBar}
-      lazy
-    />
+              <View style={{ flexDirection: 'row', gap: 8, padding: 16 }}>
+                <GlassButton
+                  mode='contained'
+                  onPress={handleSubmit}
+                  disabled={isUpdating}
+                  loading={isUpdating}
+                  containerStyle={{ marginLeft: 'auto' }}
+                  style={{ marginLeft: 'auto' }}
+                >
+                  <FormattedMessage id='common.save' defaultMessage='Save' />
+                </GlassButton>
+              </View>
+            </>
+          )}
+        </InteractionPoliciesTabs.Screen>
+      ))}
+    </InteractionPoliciesTabs.Navigator>
   );
 };
 

@@ -1,9 +1,10 @@
 import { ActivityIndicator, Divider, Text } from '@mkljczk/react-native-paper';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useScrollToTop } from '@react-navigation/native';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
-import React, { useState } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { type TabDescriptor, TabView } from 'react-native-tab-view';
 
 import { Account } from '@/components/accounts/account';
 import { AccountsList } from '@/components/accounts/accounts-list';
@@ -11,7 +12,7 @@ import { StatusesList } from '@/components/statuses/statuses-list';
 import { Emoji } from '@/components/ui/emoji';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
-import { TabBar } from '@/components/ui/tab-bar';
+import { useTabBarProps } from '@/components/ui/tab-bar';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
   useStatusDislikes,
@@ -91,108 +92,104 @@ interface IAccountWithReaction {
   reactionUrl?: string;
 }
 
+interface IReactionsList {
+  id: string;
+  emoji: 'all' | string;
+}
+
+const ReactionsList: React.FC<IReactionsList> = ({ id, emoji }) => {
+  const { data: status, refetch, isRefetching } = useStatus(id);
+  const ref = React.useRef<FlashListRef<IAccountWithReaction>>(null);
+  useScrollToTop(ref);
+
+  let accounts: Array<IAccountWithReaction> = [];
+
+  if (emoji === 'all') {
+    accounts =
+      status?.emoji_reactions.flatMap(({ account_ids, name, url }) =>
+        account_ids.map((account) => ({
+          id: account,
+          reaction: name,
+          reactionUrl: url ?? undefined,
+        })),
+      ) ?? [];
+  } else {
+    const reactionRecord = status?.emoji_reactions.find(({ name }) => name === emoji);
+
+    if (reactionRecord)
+      accounts = reactionRecord.account_ids.map((account) => ({
+        id: account,
+        reaction: emoji,
+        reactionUrl: reactionRecord.url ?? undefined,
+      }));
+  }
+
+  return (
+    <FlashList
+      ref={ref}
+      data={accounts}
+      renderItem={({ item }) => (
+        <Account
+          id={item.id}
+          style={{ paddingVertical: 8, padding: 12 }}
+          withLink
+          badge={<Emoji emoji={item.reaction} url={item.reactionUrl} />}
+        />
+      )}
+      keyExtractor={(item) => item.id}
+      ItemSeparatorComponent={Divider}
+      onEndReachedThreshold={0.1}
+      onRefresh={refetch}
+      refreshing={isRefetching}
+    />
+  );
+};
+
+const ReactionsTabs = createMaterialTopTabNavigator<Record<string, undefined>>();
+
 const StatusReactionsScreen = ({
   route: {
     params: { id, emoji: initialEmoji },
   },
 }: NativeStackScreenProps<StatusStackParams, 'reactions'>) => {
   const intl = useIntl();
+  const tabBarProps = useTabBarProps();
 
-  const { data: status, refetch, isRefetching } = useStatus(id);
-  const listRefs = React.useRef<Record<string, FlashListRef<IAccountWithReaction> | null>>({});
-  const [index, setIndex] = useState(() => {
-    const index = status?.emoji_reactions.findIndex(({ name }) => name === initialEmoji);
-    if (index !== undefined && index !== -1) {
-      return index + 1;
-    }
-    return 0;
-  });
+  const { data: status } = useStatus(id);
 
   if (!status) return <LoadingIndicator />;
 
-  const routes: Array<{
-    key: 'all' | string;
-    title: string;
-  }> = [
-    {
-      key: 'all',
-      title: intl.formatMessage(messages.reactionsAll),
-    },
-  ];
-
-  const options: Record<string, TabDescriptor<(typeof routes)[number]>> = {};
-
-  const renderScene = (emoji: 'all' | string) => {
-    let accounts: Array<IAccountWithReaction> = [];
-
-    if (emoji === 'all') {
-      accounts = status.emoji_reactions.flatMap(({ account_ids, name, url }) =>
-        account_ids.map((account) => ({
-          id: account,
-          reaction: name,
-          reactionUrl: url ?? undefined,
-        })),
-      );
-    } else {
-      const reactionRecord = status.emoji_reactions.find(({ name }) => name === emoji);
-
-      if (reactionRecord)
-        accounts = reactionRecord.account_ids.map((account) => ({
-          id: account,
-          reaction: emoji,
-          reactionUrl: reactionRecord.url ?? undefined,
-        }));
-    }
-
-    return (
-      <FlashList
-        ref={(ref) => {
-          listRefs.current[emoji] = ref;
-        }}
-        data={accounts}
-        renderItem={({ item }) => (
-          <Account
-            id={item.id}
-            style={{ paddingVertical: 8, padding: 12 }}
-            withLink
-            badge={<Emoji emoji={item.reaction} url={item.reactionUrl} />}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={Divider}
-        onEndReachedThreshold={0.1}
-        onRefresh={refetch}
-        refreshing={isRefetching}
-      />
-    );
-  };
-
-  for (const reaction of status.emoji_reactions) {
-    routes.push({
-      key: reaction.name,
-      title: reaction.name,
-    });
-    options[reaction.name] = {
-      label: () => (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Emoji emoji={reaction.name} url={reaction.url} size={20} />
-          <Text>{reaction.count}</Text>
-        </View>
-      ),
-    };
-  }
-
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      options={options}
-      renderTabBar={(props) => (
-        <TabBar {...props} onTabReselect={({ key }) => listRefs.current[key]?.scrollToTop()} />
-      )}
-      renderScene={({ route }) => renderScene(route.key)}
-      lazy
-    />
+    <ReactionsTabs.Navigator
+      {...tabBarProps}
+      initialRouteName={
+        status.emoji_reactions.some(({ name }) => name === initialEmoji) ? initialEmoji : 'all'
+      }
+    >
+      <ReactionsTabs.Screen
+        name='all'
+        options={{ title: intl.formatMessage(messages.reactionsAll) }}
+      >
+        {() => <ReactionsList id={id} emoji='all' />}
+      </ReactionsTabs.Screen>
+      {status.emoji_reactions.map((reaction) => (
+        <ReactionsTabs.Screen
+          key={reaction.name}
+          name={reaction.name}
+          options={{
+            title: reaction.name,
+            tabBarLabel: () => (
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Emoji emoji={reaction.name} url={reaction.url} size={20} />
+                <Text>{reaction.count}</Text>
+              </View>
+            ),
+          }}
+        >
+          {() => <ReactionsList id={id} emoji={reaction.name} />}
+        </ReactionsTabs.Screen>
+      ))}
+    </ReactionsTabs.Navigator>
   );
 };
 

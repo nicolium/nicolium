@@ -1,15 +1,19 @@
 import { Carousel, CarouselItem, Divider, Searchbar, useTheme } from '@mkljczk/react-native-paper';
 import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBar,
+} from '@react-navigation/material-top-tabs';
+import { useScrollToTop } from '@react-navigation/native';
+import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TabView } from 'react-native-tab-view';
 
 import { Account } from '@/components/accounts/account';
 import { Hashtag } from '@/components/hashtag';
@@ -18,7 +22,7 @@ import { TrendsLink } from '@/components/trends-link';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { LoadMore } from '@/components/ui/load-more';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
-import { TabBar } from '@/components/ui/tab-bar';
+import { useTabBarProps } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import {
   useSearchAccounts,
@@ -31,7 +35,7 @@ import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
 import { useSetting } from '@/stores/settings';
 
-import type { SearchStackParams } from '@/router/router';
+import type { SearchStackParams, SearchTabsParams, TabsParams } from '@/router/router';
 import type { Tag } from 'pl-api';
 
 const messages = defineMessages({
@@ -42,16 +46,13 @@ const messages = defineMessages({
   searchPlaceholder: { id: 'search.placeholder', defaultMessage: 'Search the Fediverse' },
 });
 
-const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
-
-type SearchType = (typeof SEARCH_TYPES)[number];
-
-interface ISearchResults<T> {
+interface ISearchResults {
   query: string;
-  ref?: React.Ref<FlashListRef<T>>;
 }
 
-const AccountsResults: React.FC<ISearchResults<string>> = ({ query, ref }) => {
+const AccountsResults: React.FC<ISearchResults> = ({ query }) => {
+  const ref = React.useRef<FlashListRef<string>>(null);
+  useScrollToTop(ref);
   const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
@@ -111,7 +112,9 @@ const AccountsResults: React.FC<ISearchResults<string>> = ({ query, ref }) => {
   );
 };
 
-const StatusesResults: React.FC<ISearchResults<string>> = ({ query, ref }) => {
+const StatusesResults: React.FC<ISearchResults> = ({ query }) => {
+  const ref = React.useRef<FlashListRef<string>>(null);
+  useScrollToTop(ref);
   const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
@@ -158,7 +161,9 @@ const StatusesResults: React.FC<ISearchResults<string>> = ({ query, ref }) => {
   );
 };
 
-const HashtagsResults: React.FC<ISearchResults<Tag>> = ({ query, ref }) => {
+const HashtagsResults: React.FC<ISearchResults> = ({ query }) => {
+  const ref = React.useRef<FlashListRef<Tag>>(null);
+  useScrollToTop(ref);
   const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
@@ -238,26 +243,25 @@ const LinksResults: React.FC = () => {
   );
 };
 
-const SearchScreen = ({
-  route,
-  navigation,
-}: NativeStackScreenProps<SearchStackParams, 'search'>) => {
+const SearchTabs = createMaterialTopTabNavigator<{
+  accounts: undefined;
+  statuses: undefined;
+  hashtags: undefined;
+  links: undefined;
+}>();
+
+const SearchScreen = ({ route, navigation }: NativeStackScreenProps<TabsParams, 'search'>) => {
   const intl = useIntl();
   const { top: topInset } = useSafeAreaInsets();
   const { colors } = useTheme();
   const features = useFeatures();
+  const tabBarProps = useTabBarProps();
 
-  const { type: activeType = 'accounts', query: activeQuery = '' } = route.params || {};
+  const activeQuery = route.params?.query || '';
 
-  const [enteredQuery, setEnteredQuery] = React.useState(activeQuery || '');
+  const [enteredQuery, setEnteredQuery] = React.useState(activeQuery);
 
   const hasQuery = activeQuery.trim().length > 0;
-
-  useEffect(() => {
-    if (activeType === 'links' && hasQuery) {
-      navigation.setParams({ type: 'accounts' });
-    }
-  }, [activeType, navigation, activeQuery]);
 
   const debouncedNavigate = useCallback(
     debounce(
@@ -269,54 +273,10 @@ const SearchScreen = ({
     [],
   );
 
-  const listRefs = {
-    accounts: React.useRef<FlashListRef<string>>(null),
-    statuses: React.useRef<FlashListRef<string>>(null),
-    hashtags: React.useRef<FlashListRef<Tag>>(null),
-  };
-
-  const handleChangeIndex = (index: number) => navigation.setParams({ type: SEARCH_TYPES[index] });
-
   const setQuery = (query: string) => {
     setEnteredQuery(query);
     debouncedNavigate(query);
   };
-
-  const routes = useMemo(() => {
-    const routes: Array<{
-      key: SearchType;
-      title: string;
-    }> = [
-      { key: 'accounts', title: intl.formatMessage(messages.accounts) },
-      { key: 'statuses', title: intl.formatMessage(messages.statuses) },
-      { key: 'hashtags', title: intl.formatMessage(messages.hashtags) },
-    ];
-
-    if (!hasQuery && features.trendingLinks) {
-      routes.push({
-        key: 'links',
-        title: intl.formatMessage(messages.links),
-      });
-    }
-
-    return routes;
-  }, [features, intl, hasQuery]);
-
-  const renderScene = (route: SearchType) => {
-    switch (route) {
-      case 'accounts':
-        return <AccountsResults ref={listRefs.accounts} query={activeQuery} />;
-      case 'statuses':
-        return <StatusesResults ref={listRefs.statuses} query={activeQuery} />;
-      case 'hashtags':
-        return <HashtagsResults ref={listRefs.hashtags} query={activeQuery} />;
-      case 'links':
-        return <LinksResults />;
-    }
-  };
-
-  let index = SEARCH_TYPES.indexOf(route.params?.type || 'accounts');
-  if (index === 3 && routes.length === 3) index = 0;
 
   const tabBarKey = features.trendingLinks && !hasQuery ? 'with-links' : 'without-links';
 
@@ -335,31 +295,48 @@ const SearchScreen = ({
           onChangeText={setQuery}
         />
       </View>
-      <TabView
-        navigationState={{ index, routes }}
-        onIndexChange={handleChangeIndex}
-        renderScene={({ route }) => renderScene(route.key)}
-        renderTabBar={(props) => (
-          <TabBar
-            {...props}
-            key={tabBarKey}
-            onTabReselect={({ key }) => key !== 'links' && listRefs[key].current?.scrollToTop()}
+      <SearchTabs.Navigator
+        {...tabBarProps}
+        tabBar={(props) => <MaterialTopTabBar key={tabBarKey} {...props} />}
+      >
+        <SearchTabs.Screen
+          name='accounts'
+          options={{ title: intl.formatMessage(messages.accounts) }}
+        >
+          {() => <AccountsResults query={activeQuery} />}
+        </SearchTabs.Screen>
+        <SearchTabs.Screen
+          name='statuses'
+          options={{ title: intl.formatMessage(messages.statuses) }}
+        >
+          {() => <StatusesResults query={activeQuery} />}
+        </SearchTabs.Screen>
+        <SearchTabs.Screen
+          name='hashtags'
+          options={{ title: intl.formatMessage(messages.hashtags) }}
+        >
+          {() => <HashtagsResults query={activeQuery} />}
+        </SearchTabs.Screen>
+        {!hasQuery && features.trendingLinks && (
+          <SearchTabs.Screen
+            name='links'
+            component={LinksResults}
+            options={{ title: intl.formatMessage(messages.links) }}
           />
         )}
-        lazy
-      />
+      </SearchTabs.Navigator>
     </>
   );
 };
 
-const SearchStack = createNativeStackNavigator<SearchStackParams>();
+// const SearchStack = createNativeStackNavigator<SearchStackParams>();
 
-const SearchStackScreen = () => {
-  return (
-    <SearchStack.Navigator>
-      <SearchStack.Screen name='search' component={SearchScreen} options={{ headerShown: false }} />
-    </SearchStack.Navigator>
-  );
-};
+// const SearchStackScreen = () => {
+//   return (
+//     <SearchStack.Navigator>
+//       <SearchStack.Screen name='search' component={SearchScreen} options={{ headerShown: false }} />
+//     </SearchStack.Navigator>
+//   );
+// };
 
-export { SearchStackScreen };
+export { SearchScreen };

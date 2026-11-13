@@ -20,7 +20,7 @@ import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { HomeStackScreen } from '@/pages/home';
 import { NotificationsStackScreen } from '@/pages/notifications';
 import { ProfileStackScreen } from '@/pages/profile';
-import { SearchStackScreen } from '@/pages/search';
+import { SearchScreen, SearchStackScreen } from '@/pages/search';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useUiStoreActions } from '@/stores/ui';
 
@@ -230,7 +230,7 @@ const PaperTabs = () => {
       />
       <Tab.Screen
         name='search'
-        component={SearchStackScreen}
+        component={SearchScreen}
         options={{
           tabBarLabel: intl.formatMessage(messages.search),
           tabBarIcon: ({ color, focused }) => (

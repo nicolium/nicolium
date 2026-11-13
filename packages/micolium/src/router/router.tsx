@@ -30,11 +30,15 @@ type TimelineStackParams = {
   circle: { id: string };
   antenna: { id: string };
 };
+type NotificationsTabsParams = {
+  all: undefined;
+  mentions: undefined;
+};
 type NotificationsStackParams = {
-  view: { tab: 'all' | 'mentions' };
+  view: NavigatorScreenParams<NotificationsTabsParams> | undefined;
 };
 type SearchStackParams = {
-  search?: { type: 'statuses' | 'accounts' | 'hashtags' | 'links'; query: string };
+  search?: { query: string };
 };
 type ProfileStackParams = {
   view: undefined;
@@ -173,6 +177,7 @@ const RootNavigator = () => {
 
 export {
   type TimelineStackParams,
+  type NotificationsTabsParams,
   type NotificationsStackParams,
   type SearchStackParams,
   type ProfileStackParams,

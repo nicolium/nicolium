@@ -1,10 +1,14 @@
 import { Toggle } from '@expo/ui/swift-ui';
 import { Appbar, Checkbox, Divider, List, Text, useTheme } from '@mkljczk/react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+  useScrollToTop,
+} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
-  type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { ChecksIcon } from 'phosphor-react-native/src/icons/Checks';
@@ -13,7 +17,6 @@ import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TabView } from 'react-native-tab-view';
 
 import { Notification } from '@/components/notification';
 import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
@@ -22,7 +25,7 @@ import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { LoadMore } from '@/components/ui/load-more';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { SwiftUIList } from '@/components/ui/swift-ui-list';
-import { TabBar } from '@/components/ui/tab-bar';
+import { useTabBarProps } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
@@ -35,7 +38,7 @@ import {
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { compareId } from '@/utils/comparators';
 
-import type { NotificationsStackParams } from '@/router/router';
+import type { NotificationsStackParams, NotificationsTabsParams } from '@/router/router';
 import type { NotificationGroup } from 'pl-api';
 
 const messages = defineMessages({
@@ -65,11 +68,6 @@ const filtersMessages: Record<(typeof ALL_FILTERS)[number], MessageDescriptor> =
   follow: { id: 'notifications.filters.follow', defaultMessage: 'Follows' },
   events: { id: 'notifications.filters.events', defaultMessage: 'Events' },
 });
-
-const NOTIFICATION_TABS = {
-  all: 0,
-  mentions: 1,
-} as const;
 
 const ALL_FILTERS = [
   'mention',
@@ -255,8 +253,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
             </Text>
           }
         />
-        {(!route.params ||
-          (route.params as NotificationsStackParams['view'] | undefined)?.tab === 'all') && (
+        {getFocusedRouteNameFromRoute(route) !== 'mentions' && (
           <HeaderIconButton
             icon={FunnelIcon}
             onPress={() => setShowFiltersDialog(true)}
@@ -271,108 +268,98 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
   );
 };
 
-const NotificationsScreen = ({
-  navigation,
-}: NativeStackScreenProps<NotificationsStackParams, 'view'>) => {
-  const intl = useIntl();
-  const listRefs = {
-    all: React.useRef<FlashListRef<NotificationGroup>>(null),
-    mentions: React.useRef<FlashListRef<NotificationGroup>>(null),
-  };
+interface INotificationsList {
+  tab: keyof NotificationsTabsParams;
+}
+
+const NotificationsList: React.FC<INotificationsList> = ({ tab }) => {
+  const ref = React.useRef<FlashListRef<NotificationGroup>>(null);
+  useScrollToTop(ref);
 
   const filters = useSetting('notifications.filters');
-
-  const [currentTab, setCurrentTab] = React.useState(0);
-
-  const notificationsQuery = useNotifications(filters, currentTab === NOTIFICATION_TABS.all);
-  const mentionsNotificationsQuery = useNotifications(
-    ['mention'],
-    currentTab === NOTIFICATION_TABS.mentions,
-  );
+  const query = useNotifications(tab === 'all' ? filters : ['mention']);
   const { data: marker } = useNotificationsMarker();
 
   const autoloadMore = useSetting('timelines.autoloadMore');
   const { bottom: bottomInset } = useSafeAreaInsets();
 
-  const handleChangeIndex = (index: number) => {
-    setCurrentTab(index);
-    navigation.setParams({ tab: index ? 'mentions' : 'all' });
-  };
-
-  const renderNotifications = (tab: 'all' | 'mentions') => {
-    const query = tab === 'all' ? notificationsQuery : mentionsNotificationsQuery;
-
-    if (query.isPending) return <LoadingIndicator />;
-
-    return (
-      <FlashList
-        ref={listRefs[tab]}
-        data={query.data}
-        renderItem={({ item }) => (
-          <Notification
-            notification={item}
-            unread={marker && compareId(item.most_recent_notification_id, marker.last_read_id) > 0}
-          />
-        )}
-        keyExtractor={(item) => item.most_recent_notification_id}
-        ItemSeparatorComponent={Divider}
-        onRefresh={query.refetch}
-        refreshing={query.isRefetching}
-        onEndReached={
-          autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
-        }
-        onEndReachedThreshold={0.1}
-        ListEmptyComponent={
-          !query.isPending ? (
-            tab === 'all' ? (
-              <EmptyMessage
-                emptyMessageText={
-                  <FormattedMessage
-                    id='empty_column.notifications'
-                    defaultMessage='You don’t have any notifications yet. Interact with others to start the conversation.'
-                  />
-                }
-              />
-            ) : (
-              <EmptyMessage
-                emptyMessageText={
-                  <FormattedMessage
-                    id='empty_column.notifications_filtered'
-                    defaultMessage='You don’t have any notifications of this type yet.'
-                  />
-                }
-              />
-            )
-          ) : null
-        }
-        ListFooterComponent={<LoadMore query={query} />}
-        contentContainerStyle={{ paddingBottom: bottomInset }}
-        scrollIndicatorInsets={{ bottom: bottomInset }}
-      />
-    );
-  };
-
-  const routes: Array<{
-    key: 'all' | 'mentions';
-    title: string;
-  }> = [
-    {
-      key: 'all',
-      title: intl.formatMessage(filters.length ? messages.tabFiltered : messages.tabAll),
-    },
-    { key: 'mentions', title: intl.formatMessage(messages.tabMentions) },
-  ];
+  if (query.isPending) return <LoadingIndicator />;
 
   return (
-    <TabView
-      navigationState={{ index: currentTab, routes }}
-      onIndexChange={handleChangeIndex}
-      renderScene={({ route }) => renderNotifications(route.key)}
-      renderTabBar={(props) => (
-        <TabBar {...props} onTabReselect={({ key }) => listRefs[key].current?.scrollToTop()} />
+    <FlashList
+      ref={ref}
+      data={query.data}
+      renderItem={({ item }) => (
+        <Notification
+          notification={item}
+          unread={marker && compareId(item.most_recent_notification_id, marker.last_read_id) > 0}
+        />
       )}
-      lazy
+      keyExtractor={(item) => item.most_recent_notification_id}
+      ItemSeparatorComponent={Divider}
+      onRefresh={query.refetch}
+      refreshing={query.isRefetching}
+      onEndReached={
+        autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
+      }
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={
+        !query.isPending ? (
+          tab === 'all' ? (
+            <EmptyMessage
+              emptyMessageText={
+                <FormattedMessage
+                  id='empty_column.notifications'
+                  defaultMessage='You don’t have any notifications yet. Interact with others to start the conversation.'
+                />
+              }
+            />
+          ) : (
+            <EmptyMessage
+              emptyMessageText={
+                <FormattedMessage
+                  id='empty_column.notifications_filtered'
+                  defaultMessage='You don’t have any notifications of this type yet.'
+                />
+              }
+            />
+          )
+        ) : null
+      }
+      ListFooterComponent={<LoadMore query={query} />}
+      contentContainerStyle={{ paddingBottom: bottomInset }}
+      scrollIndicatorInsets={{ bottom: bottomInset }}
     />
+  );
+};
+
+const AllNotifications = () => <NotificationsList tab='all' />;
+
+const MentionNotifications = () => <NotificationsList tab='mentions' />;
+
+const NotificationsTabs = createMaterialTopTabNavigator<NotificationsTabsParams>();
+
+const NotificationsScreen = () => {
+  const intl = useIntl();
+  const tabBarProps = useTabBarProps();
+
+  const filters = useSetting('notifications.filters');
+
+  return (
+    <NotificationsTabs.Navigator {...tabBarProps}>
+      <NotificationsTabs.Screen
+        name='all'
+        component={AllNotifications}
+        options={{
+          title: intl.formatMessage(filters.length ? messages.tabFiltered : messages.tabAll),
+        }}
+      />
+      <NotificationsTabs.Screen
+        name='mentions'
+        component={MentionNotifications}
+        options={{ title: intl.formatMessage(messages.tabMentions) }}
+      />
+    </NotificationsTabs.Navigator>
   );
 };
 

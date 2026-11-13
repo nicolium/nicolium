@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useScrollToTop } from '@react-navigation/native';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { TabView } from 'react-native-tab-view';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
-import { TabBar } from '@/components/ui/tab-bar';
+import { useTabBarProps } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import {
   useFollowRequests,
@@ -19,12 +20,10 @@ const messages = defineMessages({
   outgoing: { id: 'column.outgoing_follow_requests.short', defaultMessage: 'Outgoing' },
 });
 
-interface IFollowRequests {
-  ref?: React.Ref<FlashListRef<string>>;
-}
-
-const IncomingFollowRequests: React.FC<IFollowRequests> = ({ ref }) => {
+const IncomingFollowRequests = () => {
   const query = useFollowRequests();
+  const ref = React.useRef<FlashListRef<string>>(null);
+  useScrollToTop(ref);
 
   return (
     <AccountsList
@@ -41,8 +40,10 @@ const IncomingFollowRequests: React.FC<IFollowRequests> = ({ ref }) => {
   );
 };
 
-const OutgoingFollowRequests: React.FC<IFollowRequests> = ({ ref }) => {
+const OutgoingFollowRequests = () => {
   const query = useOutgoingFollowRequests();
+  const ref = React.useRef<FlashListRef<string>>(null);
+  useScrollToTop(ref);
 
   return (
     <AccountsList
@@ -58,41 +59,33 @@ const OutgoingFollowRequests: React.FC<IFollowRequests> = ({ ref }) => {
   );
 };
 
+const FollowRequestsTabs = createMaterialTopTabNavigator<{
+  incoming: undefined;
+  outgoing: undefined;
+}>();
+
 const FollowRequestsScreen = (
   _: NativeStackScreenProps<SettingsStackParams, 'follow_requests'>,
 ) => {
   const intl = useIntl();
-  const [index, setIndex] = useState(0);
   const features = useFeatures();
-
-  const listRefs = {
-    incoming: React.useRef<FlashListRef<string>>(null),
-    outgoing: React.useRef<FlashListRef<string>>(null),
-  };
+  const tabBarProps = useTabBarProps();
 
   if (!features.outgoingFollowRequests) return <IncomingFollowRequests />;
 
-  const routes: Array<{ key: 'incoming' | 'outgoing'; title: string }> = [
-    { key: 'incoming', title: intl.formatMessage(messages.incoming) },
-    { key: 'outgoing', title: intl.formatMessage(messages.outgoing) },
-  ];
-
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={({ route }) =>
-        route.key === 'outgoing' ? (
-          <OutgoingFollowRequests ref={listRefs.outgoing} />
-        ) : (
-          <IncomingFollowRequests ref={listRefs.incoming} />
-        )
-      }
-      renderTabBar={(props) => (
-        <TabBar {...props} onTabReselect={({ key }) => listRefs[key].current?.scrollToTop()} />
-      )}
-      lazy
-    />
+    <FollowRequestsTabs.Navigator {...tabBarProps}>
+      <FollowRequestsTabs.Screen
+        name='incoming'
+        component={IncomingFollowRequests}
+        options={{ title: intl.formatMessage(messages.incoming) }}
+      />
+      <FollowRequestsTabs.Screen
+        name='outgoing'
+        component={OutgoingFollowRequests}
+        options={{ title: intl.formatMessage(messages.outgoing) }}
+      />
+    </FollowRequestsTabs.Navigator>
   );
 };
 
