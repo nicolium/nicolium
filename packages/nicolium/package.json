@@ -104,7 +104,7 @@
     "react-dom": "^19.3.1",
     "react-hot-toast": "^2.6.1",
     "react-inlinesvg": "^4.6.0",
-    "react-intl": "^8.1.3",
+    "react-intl": "^11.0.1",
     "react-sparklines": "^1.7.0",
     "react-sticky-box": "^2.0.5",
     "react-virtuoso": "^4.18.21",
@@ -117,7 +117,7 @@
     "zustand-mutative": "^2.0.0"
   },
   "devDependencies": {
-    "@formatjs/cli": "^6.13.1",
+    "@formatjs/cli": "^6.18.2",
     "@mkljczk/vite-tsgo-checker": "^0.0.3",
     "@stylistic/stylelint-plugin": "^6.0.1",
     "@testing-library/jest-dom": "^7.0.1",
