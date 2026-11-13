@@ -11,43 +11,43 @@ import { shouldPolyfill as shouldPolyfillRelativeTimeFormat } from '@formatjs/in
 async function loadPolyfills() {
   // 1. getCanonicalLocales — no deps
   if (shouldPolyfillGetCanonicalLocales()) {
-    await import('@formatjs/intl-getcanonicallocales/polyfill');
+    require('@formatjs/intl-getcanonicallocales/polyfill'); 
   }
 
   // 2. Locale — depends on getCanonicalLocales
   if (shouldPolyfillLocale()) {
-    await import('@formatjs/intl-locale/polyfill');
+    require('@formatjs/intl-locale/polyfill');
   }
 
   // 3. PluralRules — depends on Locale
   if (shouldPolyfillPluralRules('en')) {
-    await import('@formatjs/intl-pluralrules/polyfill-force');
-    await import(`@formatjs/intl-pluralrules/locale-data/en`);
+    require('@formatjs/intl-pluralrules/polyfill-force');
+    require(`@formatjs/intl-pluralrules/locale-data/en`);
   }
 
   // 4. NumberFormat — depends on PluralRules, Locale
   if (shouldPolyfillNumberFormat('en')) {
-    await import('@formatjs/intl-numberformat/polyfill-force');
-    await import(`@formatjs/intl-numberformat/locale-data/en`);
+    require('@formatjs/intl-numberformat/polyfill-force');
+    require(`@formatjs/intl-numberformat/locale-data/en`);
   }
 
   // 5. DateTimeFormat — depends on Locale
   if (shouldPolyfillDateTimeFormat('en')) {
-    await import('@formatjs/intl-datetimeformat/polyfill-force');
-    await import(`@formatjs/intl-datetimeformat/locale-data/en`);
+    require('@formatjs/intl-datetimeformat/polyfill-force');
+    require(`@formatjs/intl-datetimeformat/locale-data/en`);
     // Add timezone data if needed
-    await import('@formatjs/intl-datetimeformat/add-all-tz');
+    require('@formatjs/intl-datetimeformat/add-all-tz');
   }
 
   // 6. RelativeTimeFormat — depends on PluralRules, Locale
   if (shouldPolyfillRelativeTimeFormat('en')) {
-    await import('@formatjs/intl-relativetimeformat/polyfill-force');
-    await import(`@formatjs/intl-relativetimeformat/locale-data/en`);
+    require('@formatjs/intl-relativetimeformat/polyfill-force');
+    require(`@formatjs/intl-relativetimeformat/locale-data/en`);
   }
 
   if (shouldPolyfillListFormat('en')) {
-    await import('@formatjs/intl-listformat/polyfill-force');
-    await import(`@formatjs/intl-listformat/locale-data/en`);
+    require('@formatjs/intl-listformat/polyfill-force');
+    require(`@formatjs/intl-listformat/locale-data/en`);
   }
 }
 
