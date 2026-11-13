@@ -1,5 +1,5 @@
 import { Appbar, Card, Icon, Text, useTheme } from '@mkljczk/react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { UNSTABLE_CornerInset, useNavigation } from '@react-navigation/native';
 import { ArrowSquareOutIcon } from 'phosphor-react-native/src/icons/ArrowSquareOut';
 import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
@@ -79,6 +79,7 @@ const LinksScreen = ({
             },
         ]}
       >
+        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
         <HeaderBackButton onPress={navigation.goBack} />
         <Appbar.Content
           title={intl.formatMessage(messages.header, {

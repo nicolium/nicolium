@@ -6,6 +6,7 @@ import {
   TextInput,
   useTheme,
 } from '@mkljczk/react-native-paper';
+import { UNSTABLE_CornerInset } from '@react-navigation/native';
 import { File } from 'expo-file-system';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
@@ -923,6 +924,7 @@ const EditProfileScreen = ({
             },
         ]}
       >
+        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
         <HeaderBackButton onPress={handleBackButton} />
         <Appbar.Content title={intl.formatMessage(messages.heading)} />
         <HeaderIconButton icon={CheckIcon} disabled={isLoading} onPress={handleSubmit} />

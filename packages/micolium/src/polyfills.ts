@@ -11,7 +11,7 @@ import { shouldPolyfill as shouldPolyfillRelativeTimeFormat } from '@formatjs/in
 async function loadPolyfills() {
   // 1. getCanonicalLocales — no deps
   if (shouldPolyfillGetCanonicalLocales()) {
-    require('@formatjs/intl-getcanonicallocales/polyfill'); 
+    require('@formatjs/intl-getcanonicallocales/polyfill');
   }
 
   // 2. Locale — depends on getCanonicalLocales

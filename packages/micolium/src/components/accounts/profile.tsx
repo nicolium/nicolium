@@ -8,7 +8,7 @@ import {
   Text,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import { Link, useNavigation } from '@react-navigation/native';
+import { Link, UNSTABLE_CornerInset, useNavigation } from '@react-navigation/native';
 import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { ArrowLineDownIcon } from 'phosphor-react-native/src/icons/ArrowLineDown';
@@ -698,6 +698,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               },
           ]}
         >
+          <UNSTABLE_CornerInset direction='horizontal' edge='left' />
           {!ownAccount && <HeaderBackButton onPress={navigation.goBack} />}
           <Appbar.Content
             title={

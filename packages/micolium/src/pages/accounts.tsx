@@ -1,5 +1,10 @@
 import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
+  UNSTABLE_CornerInset,
+  type NavigatorScreenParams,
+  type StaticScreenProps,
+} from '@react-navigation/native';
+import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
   type NativeStackScreenProps,
@@ -19,7 +24,6 @@ import { useFavourites } from '@/queries/status-lists/use-favourites';
 import { useSetting } from '@/stores/settings';
 
 import type { AccountStackParams } from '@/router/router';
-import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   followingHeader: { id: 'column.following', defaultMessage: 'Following' },
@@ -74,6 +78,7 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
           },
       ]}
     >
+      <UNSTABLE_CornerInset direction='horizontal' edge='left' />
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       {subtitle ? (
         <View>

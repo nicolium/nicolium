@@ -1,5 +1,10 @@
 import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
+  UNSTABLE_CornerInset,
+  type NavigatorScreenParams,
+  type StaticScreenProps,
+} from '@react-navigation/native';
+import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
@@ -25,7 +30,6 @@ import { useSetting } from '@/stores/settings';
 import { toast } from '@/utils/toast';
 
 import type { BookmarksStackParams } from '@/router/router';
-import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
@@ -73,6 +77,7 @@ const AllBookmarksScreen = ({
           }
         }
       >
+        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content
@@ -150,6 +155,7 @@ const BookmarksFolderScreen = ({
           }
         }
       >
+        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content

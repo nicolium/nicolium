@@ -3,6 +3,7 @@ import { Appbar, Checkbox, Divider, List, Text, useTheme } from '@mkljczk/react-
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import {
   getFocusedRouteNameFromRoute,
+  UNSTABLE_CornerInset,
   useNavigation,
   useScrollToTop,
 } from '@react-navigation/native';
@@ -246,6 +247,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
           backgroundColor: colors.surfaceContainer,
         }}
       >
+        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
         <Appbar.Content
           title={
             <Text variant='titleLarge'>
