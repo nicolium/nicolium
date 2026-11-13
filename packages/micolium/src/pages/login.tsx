@@ -7,6 +7,7 @@ import {
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { useHeaderHeight } from '@react-navigation/elements';
+import { useNavigation } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -32,7 +33,7 @@ import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 import { toast } from '@/utils/toast';
 
-import type { LoginStackParams, RootStackParams } from '@/router/router';
+import type { LoginStackParams } from '@/router/router';
 
 const EXTRA_GAYNESS_MODE = new Date().getMonth() === 5;
 
@@ -397,7 +398,8 @@ const OauthFlowScreen = ({
 
 const LoginStack = createNativeStackNavigator<LoginStackParams>();
 
-const LoginStackScreen = ({ navigation }: NativeStackScreenProps<RootStackParams, 'login'>) => {
+const LoginStackScreen = () => {
+  const navigation = useNavigation('login');
   const instanceUrl = useAuthStore(({ pendingAuth }) => pendingAuth?.instance);
   const currentAccount = useAuthStore(({ currentAccount }) => currentAccount);
   const isLoggedIn = !!useCurrentAccount();

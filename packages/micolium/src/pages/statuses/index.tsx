@@ -2,7 +2,6 @@ import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
-  type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -24,7 +23,8 @@ import {
 } from './status-interactions';
 import { ThreadExpandPostsButton, ThreadScreen } from './thread';
 
-import type { RootStackParams, StatusStackParams } from '@/router/router';
+import type { StatusStackParams } from '@/router/router';
+import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   statusHeader: { id: 'column.status', defaultMessage: 'Post' },
@@ -141,7 +141,7 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
 
 const StatusStack = createNativeStackNavigator<StatusStackParams>();
 
-const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'status'>) => {
+const StatusStackScreen = (_props: StaticScreenProps<NavigatorScreenParams<StatusStackParams>>) => {
   return (
     <StatusStack.Navigator screenOptions={{ header: StatusHeader }}>
       <StatusStack.Screen name='view' component={ThreadScreen} />

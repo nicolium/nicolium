@@ -1,7 +1,4 @@
-import {
-  createNativeStackNavigator,
-  type NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -25,7 +22,8 @@ import { ScheduledStatusesScreen } from './scheduled-statuses';
 import { SettingsScreen } from './settings';
 import { TimelinesSettingsScreen } from './timeline-settings';
 
-import type { RootStackParams, SettingsStackParams } from '@/router/router';
+import type { SettingsStackParams } from '@/router/router';
+import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   settingsHeading: { id: 'settings.settings', defaultMessage: 'Settings' },
@@ -72,7 +70,9 @@ const messages = defineMessages({
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
 
-const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'settings'>) => {
+const SettingsStackScreen = (
+  _props: StaticScreenProps<NavigatorScreenParams<SettingsStackParams>>,
+) => {
   const intl = useIntl();
 
   return (

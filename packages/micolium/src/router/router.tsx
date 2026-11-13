@@ -1,5 +1,7 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import {
+  createNativeStackNavigator,
+  createNativeStackScreen,
+} from '@react-navigation/native-stack';
 
 import { AccountsStackScreen } from '@/pages/accounts';
 import { BookmarksStackScreen } from '@/pages/bookmarks';
@@ -36,9 +38,6 @@ type NotificationsTabsParams = {
 };
 type NotificationsStackParams = {
   view: NavigatorScreenParams<NotificationsTabsParams> | undefined;
-};
-type SearchStackParams = {
-  search?: { query: string };
 };
 type ProfileStackParams = {
   view: undefined;
@@ -92,7 +91,7 @@ type ConversationsStackParams = {
 type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;
   notifications: NavigatorScreenParams<NotificationsStackParams>;
-  search: NavigatorScreenParams<SearchStackParams>;
+  search: { query: string } | undefined;
   profile: NavigatorScreenParams<ProfileStackParams>;
 };
 type LoginStackParams = {
@@ -100,86 +99,67 @@ type LoginStackParams = {
   credentials: undefined;
   oauth_flow: undefined;
 };
-type RootStackParams = {
-  login: undefined;
-  app: NavigatorScreenParams<TabsParams>;
-  settings: NavigatorScreenParams<SettingsStackParams>;
-  status: NavigatorScreenParams<StatusStackParams>;
-  accounts: NavigatorScreenParams<AccountStackParams>;
-  hashtags: { tag: string };
-  bookmarks: NavigatorScreenParams<BookmarksStackParams>;
-  links: { url: string };
-  conversations: NavigatorScreenParams<ConversationsStackParams>;
-};
 
-const RootStack = createNativeStackNavigator<RootStackParams>();
+const useIsLoggedIn = () => useAuthStore(({ currentAccount }) => !!currentAccount);
 
-const RootNavigator = () => {
-  const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
+const RootStack = createNativeStackNavigator({
+  screenOptions: { headerShown: false },
+  groups: {
+    loggedIn: {
+      if: useIsLoggedIn,
+      screens: {
+        app: Tabs,
+        settings: createNativeStackScreen({
+          screen: SettingsStackScreen,
+          layout: TabScreenLayout,
+        }),
+        status: createNativeStackScreen({
+          screen: StatusStackScreen,
+          getId: ({ params }) => params?.params?.id,
+          layout: TabScreenLayout,
+        }),
+        accounts: createNativeStackScreen({
+          screen: AccountsStackScreen,
+          getId: ({ params }) => params?.params?.id,
+          layout: TabScreenLayout,
+        }),
+        hashtags: createNativeStackScreen({
+          screen: HashtagsScreen,
+          getId: ({ params }) => params.tag,
+          layout: TabScreenLayout,
+        }),
+        bookmarks: createNativeStackScreen({
+          screen: BookmarksStackScreen,
+          layout: TabScreenLayout,
+        }),
+        links: createNativeStackScreen({
+          screen: LinksScreen,
+          getId: ({ params }) => params.url,
+          layout: TabScreenLayout,
+        }),
+        conversations: createNativeStackScreen({
+          screen: ConversationsStackScreen,
+          layout: TabScreenLayout,
+        }),
+      },
+    },
+    auth: {
+      screens: {
+        login: createNativeStackScreen({
+          screen: LoginStackScreen,
+          options: { animationTypeForReplace: 'pop' },
+        }),
+      },
+    },
+  },
+});
 
-  return (
-    <RootStack.Navigator screenOptions={{ headerShown: false }}>
-      {isLoggedIn && (
-        <>
-          <RootStack.Screen name='app' component={Tabs} />
-          <RootStack.Screen
-            name='settings'
-            component={SettingsStackScreen}
-            layout={TabScreenLayout}
-          />
-          <RootStack.Screen
-            name='status'
-            component={StatusStackScreen}
-            getId={({ params }) => params?.params?.id}
-            layout={TabScreenLayout}
-          />
-          <RootStack.Screen
-            name='accounts'
-            component={AccountsStackScreen}
-            getId={({ params }) => params?.params?.id}
-            layout={TabScreenLayout}
-          />
-          <RootStack.Screen
-            name='hashtags'
-            component={HashtagsScreen}
-            getId={({ params }) => params.tag}
-            layout={TabScreenLayout}
-          />
-          <RootStack.Screen
-            name='bookmarks'
-            component={BookmarksStackScreen}
-
-            layout={TabScreenLayout}
-          />
-          <RootStack.Screen
-            name='links'
-            component={LinksScreen}
-            getId={({ params }) => params.url}
-            layout={TabScreenLayout}
-          />
-          <RootStack.Screen
-            name='conversations'
-            component={ConversationsStackScreen}
-
-            layout={TabScreenLayout}
-          />
-        </>
-      )}
-      <RootStack.Screen
-        name='login'
-        component={LoginStackScreen}
-        navigationKey={isLoggedIn ? 'logged-in' : 'not-logged-in'}
-        options={{ headerShown: false, animationTypeForReplace: 'pop' }}
-      />
-    </RootStack.Navigator>
-  );
-};
+const RootNavigator = RootStack.getComponent();
 
 export {
   type TimelineStackParams,
   type NotificationsTabsParams,
   type NotificationsStackParams,
-  type SearchStackParams,
   type ProfileStackParams,
   type SettingsStackParams,
   type StatusStackParams,
@@ -188,6 +168,5 @@ export {
   type ConversationsStackParams,
   type TabsParams,
   type LoginStackParams,
-  type RootStackParams,
   RootNavigator,
 };

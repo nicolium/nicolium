@@ -1,4 +1,5 @@
 import { Appbar, Card, Icon, Text, useTheme } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { ArrowSquareOutIcon } from 'phosphor-react-native/src/icons/ArrowSquareOut';
 import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
@@ -14,8 +15,7 @@ import { useTrendingLinks } from '@/queries/trends/use-trending-links';
 import { useSetting } from '@/stores/settings';
 import { openUrl } from '@/utils/url';
 
-import type { RootStackParams } from '@/router/router';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   header: { id: 'column.link_timeline', defaultMessage: 'Posts linking to {url}' },
@@ -23,11 +23,11 @@ const messages = defineMessages({
 });
 
 const LinksScreen = ({
-  navigation,
   route: {
     params: { url },
   },
-}: NativeStackScreenProps<RootStackParams, 'links'>) => {
+}: StaticScreenProps<{ url: string }>) => {
+  const navigation = useNavigation('links');
   const intl = useIntl();
   const client = useClient();
   const { colors } = useTheme();

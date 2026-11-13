@@ -1,4 +1,5 @@
 import { Appbar, Button, Text, useTheme } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { UserMinusIcon } from 'phosphor-react-native/src/icons/UserMinus';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
@@ -28,8 +29,7 @@ import { useHashtag } from '@/queries/hashtags/use-hashtag';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useSetting } from '@/stores/settings';
 
-import type { RootStackParams } from '@/router/router';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   followHashtag: { id: 'hashtag.follow', defaultMessage: 'Follow hashtag' },
@@ -40,11 +40,11 @@ const AnimatedAppbarContent = createAnimatedComponent(Appbar.Content);
 const AnimatedHeaderIconButton = createAnimatedComponent(HeaderIconButton);
 
 const HashtagsScreen = ({
-  navigation,
   route: {
     params: { tag },
   },
-}: NativeStackScreenProps<RootStackParams, 'hashtags'>) => {
+}: StaticScreenProps<{ tag: string }>) => {
+  const navigation = useNavigation('hashtags');
   const intl = useIntl();
   const { colors } = useTheme();
   const colorScheme = useColorScheme();

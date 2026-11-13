@@ -1,10 +1,10 @@
 import { BottomNavigation } from '@mkljczk/react-native-paper';
+import { type BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
-  type BottomTabBarProps,
-  type BottomTabNavigationOptions,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
-import { CommonActions, type ScreenLayoutArgs } from '@react-navigation/native';
+  CommonActions,
+  type NavigatorScreenParams,
+  type StaticScreenProps,
+} from '@react-navigation/native';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { CaretUpDownIcon } from 'phosphor-react-native/src/icons/CaretUpDown';
 import { HouseIcon } from 'phosphor-react-native/src/icons/House';
@@ -20,7 +20,7 @@ import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { HomeStackScreen } from '@/pages/home';
 import { NotificationsStackScreen } from '@/pages/notifications';
 import { ProfileStackScreen } from '@/pages/profile';
-import { SearchScreen, SearchStackScreen } from '@/pages/search';
+import { SearchScreen } from '@/pages/search';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useUiStoreActions } from '@/stores/ui';
 
@@ -36,9 +36,9 @@ const messages = defineMessages({
 
 const EmptyComponent = () => null;
 
-const TabScreenLayout: (
-  props: ScreenLayoutArgs<TabsParams, keyof TabsParams, BottomTabNavigationOptions, any>,
-) => React.ReactElement = ({ children }) => <SafeAreaProvider>{children}</SafeAreaProvider>;
+const TabScreenLayout = ({ children }: { children: React.ReactElement }) => (
+  <SafeAreaProvider>{children}</SafeAreaProvider>
+);
 
 const Tab = createBottomTabNavigator<TabsParams>();
 
@@ -75,7 +75,7 @@ if (Platform.OS === 'ios') {
         />
         <Tab.Screen
           name='search'
-          component={SearchStackScreen}
+          component={SearchScreen}
           options={{
             tabBarLabel: intl.formatMessage(messages.search),
             tabBarIcon: {
@@ -261,7 +261,7 @@ const PaperTabs = () => {
   );
 };
 
-const Tabs = () => {
+const Tabs = (_: StaticScreenProps<NavigatorScreenParams<TabsParams>>) => {
   const glassEffect = useEnableLiquidGlass();
   useUserStream();
 

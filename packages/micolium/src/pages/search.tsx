@@ -4,10 +4,6 @@ import {
   MaterialTopTabBar,
 } from '@react-navigation/material-top-tabs';
 import { useScrollToTop } from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  type NativeStackScreenProps,
-} from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback } from 'react';
@@ -36,6 +32,7 @@ import useTrendingTags from '@/queries/trends/use-trending-tags';
 import { useSetting } from '@/stores/settings';
 
 import type { TabsParams } from '@/router/router';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { Tag } from 'pl-api';
 
 const messages = defineMessages({
@@ -250,7 +247,7 @@ const SearchTabs = createMaterialTopTabNavigator<{
   links: undefined;
 }>();
 
-const SearchScreen = ({ route, navigation }: NativeStackScreenProps<TabsParams, 'search'>) => {
+const SearchScreen = ({ route, navigation }: BottomTabScreenProps<TabsParams, 'search'>) => {
   const intl = useIntl();
   const { top: topInset } = useSafeAreaInsets();
   const { colors } = useTheme();

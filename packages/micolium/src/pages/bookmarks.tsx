@@ -25,6 +25,7 @@ import { useSetting } from '@/stores/settings';
 import { toast } from '@/utils/toast';
 
 import type { BookmarksStackParams } from '@/router/router';
+import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
@@ -211,7 +212,9 @@ const BookmarksFolderScreen = ({
 
 const BookmarksStack = createNativeStackNavigator<BookmarksStackParams>();
 
-const BookmarksStackScreen = () => {
+const BookmarksStackScreen = (
+  _: StaticScreenProps<NavigatorScreenParams<BookmarksStackParams>>,
+) => {
   return (
     <BookmarksStack.Navigator screenOptions={{ headerShown: false }}>
       <BookmarksStack.Screen name='all' component={AllBookmarksScreen} />

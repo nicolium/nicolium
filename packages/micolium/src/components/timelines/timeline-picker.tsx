@@ -100,6 +100,7 @@ const useTimelineHeadingAndIcon = (
 const useMenuItems = (
   active: ITimelinePicker['active'],
   handleCreateDialog: (name: 'bookmark_folder' | 'antenna' | 'circle' | 'list' | null) => void,
+  timelineNavigation: ITimelinePicker['navigation'],
 ) => {
   const intl = useIntl();
   const features = useFeatures();
@@ -120,7 +121,7 @@ const useMenuItems = (
   ): DropdownMenuItem => ({
     key: value,
     type: 'button',
-    onPress: () => navigation.popTo(value),
+    onPress: () => timelineNavigation.popTo(value),
     label: intl.formatMessage(title),
     appleIcon,
     androidIcon,
@@ -232,7 +233,7 @@ const useMenuItems = (
         ...lists.map((list): DropdownMenuItem => ({
           key: `${name}:${list.id}`,
           type: 'button',
-          onPress: () => navigation.navigate(name, { id: list.id }),
+          onPress: () => timelineNavigation.navigate(name, { id: list.id }),
           label: list.title,
           appleIcon: sfIcon,
           androidIcon,
@@ -331,7 +332,7 @@ interface ITimelinePicker {
     | `instance:${string}`;
 }
 
-const TimelinePicker: React.FC<ITimelinePicker> = ({ active = 'home' }) => {
+const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home' }) => {
   const glassEffect = useEnableLiquidGlass();
 
   const MaybeGlassView = glassEffect ? GlassView : View;
@@ -375,7 +376,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active = 'home' }) => {
             </Pressable>
           }
           useItems={useMenuItems}
-          hookArgs={[active, setCreateDialog]}
+          hookArgs={[active, setCreateDialog, navigation]}
         />
       </View>
       {createDialog && (

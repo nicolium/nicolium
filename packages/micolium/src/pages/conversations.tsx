@@ -28,7 +28,8 @@ import { useSetting } from '@/stores/settings';
 import { useShowComposeButton } from './home';
 
 import type { MinifiedConversation } from '@/queries/utils/minify-list';
-import type { RootStackParams, ConversationsStackParams } from '@/router/router';
+import type { ConversationsStackParams } from '@/router/router';
+import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   heading: { id: 'column.direct', defaultMessage: 'Conversations' },
@@ -190,7 +191,7 @@ const ConversationMentionsScreen = ({
 const ConversationsStack = createNativeStackNavigator<ConversationsStackParams>();
 
 const ConversationsStackScreen = (
-  _props: NativeStackScreenProps<RootStackParams, 'conversations'>,
+  _props: StaticScreenProps<NavigatorScreenParams<ConversationsStackParams>>,
 ) => {
   const intl = useIntl();
   return (

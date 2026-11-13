@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import TimelineIcon from 'lucide-react-native/icons/timeline';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
@@ -64,6 +65,8 @@ const messages = defineMessages({
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
   const features = useFeatures();
   const intl = useIntl();
+
+  const rootNavigation = useNavigation('settings');
 
   const { signOut } = useAuthStoreActions();
   const { openAccountSwitcher } = useUiStoreActions();
@@ -149,7 +152,7 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
           label: intl.formatMessage(messages.signOut),
           onPress: () => {
             signOut();
-            navigation.reset({
+            rootNavigation.reset({
               index: 0,
               routes: [{ name: 'app' }],
             });

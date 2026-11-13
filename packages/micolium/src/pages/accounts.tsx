@@ -19,6 +19,7 @@ import { useFavourites } from '@/queries/status-lists/use-favourites';
 import { useSetting } from '@/stores/settings';
 
 import type { AccountStackParams } from '@/router/router';
+import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   followingHeader: { id: 'column.following', defaultMessage: 'Following' },
@@ -193,7 +194,7 @@ const AccountFavouritesScreen = ({
 
 const AccountsStack = createNativeStackNavigator<AccountStackParams>();
 
-const AccountsStackScreen = () => {
+const AccountsStackScreen = (_: StaticScreenProps<NavigatorScreenParams<AccountStackParams>>) => {
   return (
     <AccountsStack.Navigator screenOptions={{ header: AccountsHeader }}>
       <AccountsStack.Screen
