@@ -101,6 +101,7 @@ type LoginStackParams = {
 };
 
 const useIsLoggedIn = () => useAuthStore(({ currentAccount }) => !!currentAccount);
+const useNotIsLoggedIn = () => !useIsLoggedIn();
 
 const RootStack = createNativeStackNavigator({
   screenOptions: { headerShown: false },
@@ -141,9 +142,14 @@ const RootStack = createNativeStackNavigator({
           screen: ConversationsStackScreen,
           layout: TabScreenLayout,
         }),
+        login: createNativeStackScreen({
+          screen: LoginStackScreen,
+          options: { animationTypeForReplace: 'pop' },
+        }),
       },
     },
     auth: {
+      if: useNotIsLoggedIn,
       screens: {
         login: createNativeStackScreen({
           screen: LoginStackScreen,
