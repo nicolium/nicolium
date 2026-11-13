@@ -30,8 +30,5 @@
   "packageManager": "pnpm@11.17.0",
   "engines": {
     "node": ">=22"
-  },
-  "dependencies": {
-    "expo-haptics": "^58.0.8"
   }
 }
