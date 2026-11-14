@@ -1,4 +1,4 @@
-import { BottomNavigation } from '@mkljczk/react-native-paper';
+import { BottomNavigation, useTheme } from '@mkljczk/react-native-paper';
 import { type BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   CommonActions,
@@ -11,7 +11,7 @@ import { HouseIcon } from 'phosphor-react-native/src/icons/House';
 import { MagnifyingGlassIcon } from 'phosphor-react-native/src/icons/MagnifyingGlass';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Platform, useWindowDimensions, View } from 'react-native';
+import { Platform, useColorScheme, useWindowDimensions, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
@@ -22,6 +22,7 @@ import { NotificationsStackScreen } from '@/pages/notifications';
 import { ProfileStackScreen } from '@/pages/profile';
 import { SearchScreen } from '@/pages/search';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
+import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import type { TabsParams } from './router';
@@ -136,6 +137,10 @@ if (Platform.OS === 'ios') {
 }
 
 const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
+  const { colors } = useTheme();
+  const colorScheme = useColorScheme();
+  const blackTheme = useSetting('appearance.black');
+
   const insets = useSafeAreaInsets();
   const { openAccountSwitcher } = useUiStoreActions();
 
@@ -192,6 +197,13 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
             ? options.title
             : route.name;
       }}
+      style={
+        colorScheme === 'dark' &&
+        blackTheme && {
+          borderTopWidth: 1,
+          borderTopColor: colors.surfaceContainerHighest,
+        }
+      }
     />
   );
 };
