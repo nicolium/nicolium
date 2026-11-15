@@ -1712,7 +1712,10 @@ const useUploadCompose = (composeId: string) => {
           (data) =>
             updateCompose(composeId, (draft) => {
               uploaded += 1;
-              if (uploaded === files.length) draft.isUploading = false;
+              if (uploaded === files.length) {
+                draft.isUploading = false;
+                haptics.confirm();
+              }
               appendMedia(draft, data);
             }),
           () =>
