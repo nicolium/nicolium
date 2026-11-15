@@ -26,6 +26,8 @@
   "account.unmute": "Não silenciar @{name}",
   "account_note.fail": "Falha ao guardar nota",
   "account_note.placeholder": "Click to add a note",
+  "account_note.save": "Guardar nota",
+  "account_note.success": "Nota guardada",
   "admin.statuses.actions.delete_status": "Apagar publicação",
   "announcements.title": "Announcements",
   "auth.invalid_credentials": "Wrong username or password",

@@ -21,6 +21,8 @@
   "account.unfollow": "Deixar de seguir",
   "account.unmute": "Não silenciar @{name}",
   "account_note.placeholder": "Click to add a note",
+  "account_note.save": "Salvar nota",
+  "account_note.success": "Nota salva",
   "admin.statuses.actions.delete_status": "Delete post",
   "announcements.title": "Announcements",
   "auth.invalid_credentials": "Wrong username or password",

@@ -5,7 +5,7 @@ import { shareAsync } from 'expo-sharing';
 import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
@@ -16,6 +16,7 @@ import {
   useUnblockAccountMutation,
   useUnfollowAccountMutation,
   useUnmuteAccountMutation,
+  useUpdateAccountNoteMutation,
 } from '@/queries/accounts/use-relationship';
 import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
 import { Alert } from '@/stores/alerts';
@@ -25,6 +26,7 @@ import { haptics } from '@/utils/haptics';
 import { toast } from '@/utils/toast';
 import { openUrl } from '@/utils/url';
 
+import { TextFieldDialog } from '../text-field-dialog';
 import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { HeaderIconButton } from '../ui/header-icon-button';
 import { iconHelper } from '../ui/icon';
@@ -56,6 +58,7 @@ const messages = defineMessages({
     id: 'account.bite.fail.not_allowed',
     defaultMessage: '@{acct} does not accept bites',
   },
+  note: { id: 'account_note.modal.header', defaultMessage: 'Edit note for @{name}' },
   removeFromFollowers: {
     id: 'account.remove_from_followers',
     defaultMessage: 'Remove this follower',
@@ -115,6 +118,10 @@ const messages = defineMessages({
   notifyReplies: { id: 'account.notify_replies.short', defaultMessage: 'Subscribe to replies' },
   notifyReblogs: { id: 'account.notify_reblogs.short', defaultMessage: 'Subscribe to reposts' },
   menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
+  notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
+  saveNote: { id: 'account_note.save', defaultMessage: 'Save note' },
+  noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
+  noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
 });
 
 const useMenuItems = (
@@ -123,6 +130,7 @@ const useMenuItems = (
   openReportDialog: () => void,
   openBlockMuteDialog: (action: 'block' | 'mute') => void,
   openAddToListDialog: () => void,
+  openAccountNoteDialog: () => void,
 ) => {
   const client = useClient();
   const features = useFeatures();
@@ -485,6 +493,17 @@ const useMenuItems = (
       });
     }
 
+    if (features.notes) {
+      composeItems.push({
+        key: 'note',
+        type: 'button',
+        label: intl.formatMessage(messages.note, { name: account.username }),
+        appleIcon: 'square.and.pencil',
+        androidIcon: 'ph_note_pencil',
+        onPress: openAccountNoteDialog,
+      });
+    }
+
     const moderationItems: Array<DropdownMenuItem> = [];
 
     if (features.removeFromFollowers && account.relationship?.followed_by) {
@@ -570,7 +589,9 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
   const [reportDialog, setReportDialog] = React.useState(false);
   const [addToListDialog, setAddToListDialog] = React.useState(false);
-  const [accountNoteDialog, setAccountNodeDialog] = React.useState(false);
+  const [accountNoteDialog, setAccountNoteDialog] = React.useState(false);
+
+  const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(account.id);
 
   return (
     <>
@@ -617,6 +638,32 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
           accountId={account.id}
           visible
           onDismiss={() => setAddToListDialog(false)}
+        />
+      )}
+      {accountNoteDialog && (
+        <TextFieldDialog
+          heading={
+            <FormattedMessage
+              id='account_note.modal.header'
+              defaultMessage='Edit note for @{name}'
+              values={{ name: account.acct }}
+            />
+          }
+          placeholder={intl.formatMessage(messages.notePlaceholder)}
+          confirm={intl.formatMessage(messages.saveNote)}
+          text={account.relationship?.note ?? ''}
+          onConfirm={(value) => {
+            updateAccountNote(value, {
+              onSuccess: () => {
+                toast.success(intl.formatMessage(messages.noteSaved));
+              },
+              onError: () => {
+                toast.error(intl.formatMessage(messages.noteSaveFailed));
+              },
+            });
+          }}
+          visible
+          onDismiss={() => setAccountNoteDialog(false)}
         />
       )}
     </>
