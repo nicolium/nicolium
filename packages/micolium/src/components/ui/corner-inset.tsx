@@ -3,4 +3,6 @@ import { Platform } from 'react-native';
 
 const CornerInset = Platform.OS === 'ios' ? UNSTABLE_CornerInset : () => null;
 
+CornerInset.displayName = 'Appbar.BackAction';
+
 export { CornerInset };
