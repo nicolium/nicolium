@@ -1,5 +1,4 @@
 import { Appbar, Button, Divider, List, TextInput, useTheme } from '@mkljczk/react-native-paper';
-import { UNSTABLE_CornerInset } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import { GlobeSimpleXIcon } from 'phosphor-react-native/src/icons/GlobeSimpleX';
 import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
@@ -7,6 +6,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useColorScheme } from 'react-native';
 
+import { CornerInset } from '@/components/ui/corner-inset';
 import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
@@ -144,7 +144,7 @@ const DomainBlocksScreen = ({
             },
         ]}
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         <HeaderBackButton onPress={navigation.goBack} />
         <Appbar.Content title={intl.formatMessage(messages.heading)} />
         <HeaderIconButton

@@ -1,11 +1,11 @@
 import { Appbar, useTheme } from '@mkljczk/react-native-paper';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { UNSTABLE_CornerInset } from '@react-navigation/native';
 import React from 'react';
 import { useColorScheme } from 'react-native';
 
 import { useSetting } from '@/stores/settings';
 
+import { CornerInset } from './corner-inset';
 import { HeaderBackButton } from './header-icon-button';
 
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
@@ -30,7 +30,7 @@ const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) =>
           },
       ]}
     >
-      <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+      <CornerInset direction='horizontal' edge='left' />
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       <Appbar.Content title={title} />
     </Appbar.Header>

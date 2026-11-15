@@ -1,5 +1,5 @@
 import { Appbar, Card, Icon, Text, useTheme } from '@mkljczk/react-native-paper';
-import { UNSTABLE_CornerInset, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { ArrowSquareOutIcon } from 'phosphor-react-native/src/icons/ArrowSquareOut';
 import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
@@ -7,6 +7,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useColorScheme, View } from 'react-native';
 
 import { Timeline } from '@/components/timelines/timeline';
+import { CornerInset } from '@/components/ui/corner-inset';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { iconHelper } from '@/components/ui/icon';
 import { useClient } from '@/contexts/current-account-context';
@@ -79,7 +80,7 @@ const LinksScreen = ({
             },
         ]}
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         <HeaderBackButton onPress={navigation.goBack} />
         <Appbar.Content
           title={intl.formatMessage(messages.header, {

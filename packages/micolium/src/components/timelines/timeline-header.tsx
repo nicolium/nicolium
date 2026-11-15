@@ -1,5 +1,5 @@
 import { Appbar, useTheme } from '@mkljczk/react-native-paper';
-import { UNSTABLE_CornerInset, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { ProgressiveBlurView } from '@sbaiahmed1/react-native-blur';
 import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
@@ -24,6 +24,8 @@ import { useDeleteList } from '@/queries/accounts/use-lists';
 import { Alert } from '@/stores/alerts';
 import { type TIMELINE_FILTER_KEYS, useSetting, useSettingsActions } from '@/stores/settings';
 import { toast } from '@/utils/toast';
+
+import { CornerInset } from '../ui/corner-inset';
 
 import { TimelinePicker, type ITimelinePicker } from './timeline-picker';
 
@@ -388,7 +390,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
           },
       ]}
     >
-      <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+      <CornerInset direction='horizontal' edge='left' />
       <Appbar.Content
         title={
           <TimelinePicker

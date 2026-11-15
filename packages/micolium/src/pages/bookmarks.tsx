@@ -1,10 +1,5 @@
 import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
-  UNSTABLE_CornerInset,
-  type NavigatorScreenParams,
-  type StaticScreenProps,
-} from '@react-navigation/native';
-import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
@@ -16,6 +11,7 @@ import { Platform, useColorScheme, View } from 'react-native';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { StatusesList } from '@/components/statuses/statuses-list';
+import { CornerInset } from '@/components/ui/corner-inset';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Emoji } from '@/components/ui/emoji';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
@@ -30,6 +26,7 @@ import { useSetting } from '@/stores/settings';
 import { toast } from '@/utils/toast';
 
 import type { BookmarksStackParams } from '@/router/router';
+import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
@@ -77,7 +74,7 @@ const AllBookmarksScreen = ({
           }
         }
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content
@@ -155,7 +152,7 @@ const BookmarksFolderScreen = ({
           }
         }
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content

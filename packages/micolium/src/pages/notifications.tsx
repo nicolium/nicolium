@@ -3,7 +3,6 @@ import { Appbar, Checkbox, Divider, List, Text, useTheme } from '@mkljczk/react-
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import {
   getFocusedRouteNameFromRoute,
-  UNSTABLE_CornerInset,
   useNavigation,
   useScrollToTop,
 } from '@react-navigation/native';
@@ -20,6 +19,7 @@ import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } fro
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Notification } from '@/components/notification';
+import { CornerInset } from '@/components/ui/corner-inset';
 import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
@@ -247,7 +247,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
           backgroundColor: colors.surfaceContainer,
         }}
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         <Appbar.Content
           title={
             <Text variant='titleLarge'>

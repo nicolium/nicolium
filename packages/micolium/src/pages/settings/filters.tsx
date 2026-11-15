@@ -11,7 +11,6 @@ import {
   TextInput,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import { UNSTABLE_CornerInset } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
@@ -22,6 +21,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { CornerInset } from '@/components/ui/corner-inset';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { GlassButton } from '@/components/ui/glass-button';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
@@ -161,7 +161,7 @@ const FiltersScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParam
             },
         ]}
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         <HeaderBackButton onPress={navigation.goBack} />
         <Appbar.Content title={intl.formatMessage(messages.filtersHeading)} />
         <HeaderIconButton icon={PlusIcon} onPress={() => navigation.navigate('filter', {})} />

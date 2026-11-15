@@ -6,7 +6,6 @@ import {
   TextInput,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import { UNSTABLE_CornerInset } from '@react-navigation/native';
 import { File } from 'expo-file-system';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
@@ -20,6 +19,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 
+import { CornerInset } from '@/components/ui/corner-inset';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { DropdownMenu, type DropdownMenuItem } from '@/components/ui/dropdown-menu';
@@ -924,7 +924,7 @@ const EditProfileScreen = ({
             },
         ]}
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         <HeaderBackButton onPress={handleBackButton} />
         <Appbar.Content title={intl.formatMessage(messages.heading)} />
         <HeaderIconButton icon={CheckIcon} disabled={isLoading} onPress={handleSubmit} />

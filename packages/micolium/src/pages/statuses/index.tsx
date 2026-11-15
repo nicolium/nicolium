@@ -1,10 +1,5 @@
 import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
-  UNSTABLE_CornerInset,
-  type NavigatorScreenParams,
-  type StaticScreenProps,
-} from '@react-navigation/native';
-import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
 } from '@react-navigation/native-stack';
@@ -12,6 +7,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useColorScheme, View } from 'react-native';
 
+import { CornerInset } from '@/components/ui/corner-inset';
 import { Emojify } from '@/components/ui/emojify';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useStatus } from '@/queries/statuses/use-status';
@@ -29,6 +25,7 @@ import {
 import { ThreadExpandPostsButton, ThreadScreen } from './thread';
 
 import type { StatusStackParams } from '@/router/router';
+import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
 
 const messages = defineMessages({
   statusHeader: { id: 'column.status', defaultMessage: 'Post' },
@@ -117,7 +114,7 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
           },
       ]}
     >
-      <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+      <CornerInset direction='horizontal' edge='left' />
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       {subtitle ? (
         <View>

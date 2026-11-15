@@ -1,5 +1,5 @@
 import { Appbar, Button, Text, useTheme } from '@mkljczk/react-native-paper';
-import { UNSTABLE_CornerInset, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { UserMinusIcon } from 'phosphor-react-native/src/icons/UserMinus';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
@@ -19,6 +19,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Timeline } from '@/components/timelines/timeline';
+import { CornerInset } from '@/components/ui/corner-inset';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import {
@@ -99,7 +100,7 @@ const HashtagsScreen = ({
         ]}
         elevated={isScrolled}
       >
-        <UNSTABLE_CornerInset direction='horizontal' edge='left' />
+        <CornerInset direction='horizontal' edge='left' />
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
         <AnimatedAppbarContent title={`#${tag}`} style={headerStyle} />
         {features.followHashtags && (

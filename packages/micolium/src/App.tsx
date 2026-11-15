@@ -4,7 +4,6 @@ import { getMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
-import { createURL } from 'expo-linking';
 import { useCalendars, useLocales } from 'expo-localization';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
