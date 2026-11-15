@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Добавяне или премахване от списъци",
   "account.bite": "Ухапване на @{name}",
   "account.bite.fail": "Неуспешно ухапване на @{acct}",
   "account.bite.success": "Ухапахте @{acct}",
@@ -207,6 +208,7 @@
   "interaction_policies.tabs.private": "Само за последователи",
   "intervals.full.minutes": "{number, plural, one {# минута} other {# минути}}",
   "lightbox.close": "Затваряне",
+  "list_adder.header.title": "Добавяне или премахване от списъци",
   "lists.account.add": "Добавяне към списък",
   "lists.account.remove": "Премахване от списъка",
   "lists.delete": "Изтриване на списъка",
@@ -223,6 +225,7 @@
   "lists.replies_policy.followed": "Всеки следван потребител",
   "lists.replies_policy.list": "Членове на списъка",
   "lists.replies_policy.none": "Никой",
+  "lists.subheading": "Вашите списъци",
   "loading_indicator.label": "Зарежда се…",
   "login.fields.email.label": "Адрес за ел. поща",
   "login.fields.password.placeholder": "Парола",

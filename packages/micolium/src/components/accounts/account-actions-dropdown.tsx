@@ -27,6 +27,7 @@ import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { HeaderIconButton } from '../ui/header-icon-button';
 import { iconHelper } from '../ui/icon';
 
+import { AddToListDialog } from './add-to-list-dialog';
 import { BlockMuteDialog } from './block-mute-dialog';
 import { ReportDialog } from './report-dialog';
 
@@ -42,6 +43,10 @@ const messages = defineMessages({
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   mention: { id: 'account.mention', defaultMessage: 'Mention' },
   direct: { id: 'account.direct', defaultMessage: 'Direct message @{name}' },
+  addOrRemoveFromList: {
+    id: 'account.add_or_remove_from_list',
+    defaultMessage: 'Add or remove from lists',
+  },
   removeFromFollowers: {
     id: 'account.remove_from_followers',
     defaultMessage: 'Remove this follower',
@@ -108,6 +113,7 @@ const useMenuItems = (
   headerButton: boolean | undefined,
   openReportDialog: () => void,
   openBlockMuteDialog: (action: 'block' | 'mute') => void,
+  openAddToListDialog: () => void,
 ) => {
   const features = useFeatures();
   const intl = useIntl();
@@ -431,6 +437,17 @@ const useMenuItems = (
       });
     }
 
+    if (account.relationship?.following || (features.lists && features.unrestrictedLists)) {
+      composeItems.push({
+        key: 'add-or-remove-from-list',
+        type: 'button',
+        label: intl.formatMessage(messages.addOrRemoveFromList),
+        appleIcon: 'list.dash',
+        androidIcon: 'ph_list_dashes',
+        onPress: openAddToListDialog,
+      });
+    }
+
     const moderationItems: Array<DropdownMenuItem> = [];
 
     if (features.removeFromFollowers && account.relationship?.followed_by) {
@@ -515,6 +532,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
   const [reportDialog, setReportDialog] = React.useState(false);
+  const [addToListDialog, setAddToListDialog] = React.useState(false);
 
   return (
     <>
@@ -541,6 +559,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
           headerButton,
           () => setReportDialog(true),
           (action) => setBlockMuteDialog(action),
+          () => setAddToListDialog(true),
         ]}
       />
       {blockMuteDialog && (
@@ -553,6 +572,13 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
       )}
       {reportDialog && (
         <ReportDialog accountId={account.id} visible onDismiss={() => setReportDialog(false)} />
+      )}
+      {addToListDialog && (
+        <AddToListDialog
+          accountId={account.id}
+          visible
+          onDismiss={() => setAddToListDialog(false)}
+        />
       )}
     </>
   );

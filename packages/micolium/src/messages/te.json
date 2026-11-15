@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "జాబితాల నుండి చేర్చు లేదా తీసివేయి",
   "account.block": "@{name} ను బ్లాక్ చేయి",
   "account.block_domain": "{domain} నుంచి అన్నీ దాచిపెట్టు",
   "account.blocked": "బ్లాక్ అయినవి",
@@ -84,6 +85,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "కొత్త జాబితా శీర్షిక",
   "lists.search": "మీరు అనుసరించే వ్యక్తులలో శోధించండి",
+  "lists.subheading": "మీ జాబితాలు",
   "login.fields.password.placeholder": "Password",
   "mute_modal.hide_notifications": "ఈ వినియోగదారు నుండి నోటిఫికేషన్లను దాచాలా?",
   "navigation_bar.compose": "కొత్త టూట్ను రాయండి",

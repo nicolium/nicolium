@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Adden or remeven fro rolles",
   "account.bite": "Biten @{name}",
   "account.bite.fail": "Failed for to biten @{acct}",
   "account.bite.success": "Thou bote @{acct}",

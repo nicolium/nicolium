@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Listeye ekle veya kaldır",
   "account.block": "@{name} adlı hesabı engelle",
   "account.block_domain": "{domain} alan adından her şeyi gizle",
   "account.blocked": "Engellenmiş",
@@ -173,6 +174,7 @@
   "intervals.full.hours": "saat",
   "intervals.full.minutes": "dakika",
   "lightbox.close": "Kapat",
+  "list_adder.header.title": "Listelere Ekle veya Listelerden Çıkar",
   "lists.account.add": "Listeye ekle",
   "lists.account.remove": "Listeden kaldır",
   "lists.delete": "Listeyi sil",
@@ -181,6 +183,7 @@
   "lists.new.create.title": "Liste ekle",
   "lists.new.title.placeholder": "Yeni liste başlığı",
   "lists.search": "Takip ettiğiniz kişiler arasından arayın",
+  "lists.subheading": "Listeleriniz",
   "loading_indicator.label": "Yükleniyor…",
   "login.fields.email.label": "E-posta adresi",
   "login.fields.password.placeholder": "Şifre",

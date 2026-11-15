@@ -65,4 +65,5 @@ export {
   CombinedDarkTheme as DarkTheme,
   multiplyFontSizes,
   getSegmentedMenuStyles,
+  type SurfaceColorVariant,
 };

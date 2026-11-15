@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Toevoegen of verwijderen vanuit lijsten",
   "account.block": "Blokkeer @{name}",
   "account.block_domain": "Verberg alles van {domain}",
   "account.blocked": "Geblokkeerd",
@@ -90,6 +91,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Naam nieuwe lijst",
   "lists.search": "Zoek naar mensen die je volgt",
+  "lists.subheading": "Jouw lijsten",
   "loading_indicator.label": "Laden…",
   "login.fields.password.placeholder": "Password",
   "missing_description_modal.continue": "Post",

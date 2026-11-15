@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Gestisci nelle liste",
   "account.bite": "Mordi @{name}",
   "account.bite.fail": "Impossibile mordere @{acct}",
   "account.bite.success": "Hai morso @{acct}",
@@ -219,6 +220,7 @@
   "intervals.full.hours": "{number, plural, one {# ora} other {# ore}}",
   "intervals.full.minutes": "{number, plural, one {# minuto} other {# minuti}}",
   "lightbox.close": "Chiudi",
+  "list_adder.header.title": "Gestione delle liste di profili",
   "lists.account.add": "Aggiungi alla lista",
   "lists.account.remove": "Togli dalla lista",
   "lists.delete": "Elimina lista",
@@ -227,6 +229,7 @@
   "lists.new.create.title": "Crea nuova lista",
   "lists.new.title.placeholder": "Titolo della nuova lista",
   "lists.search": "Digita @nome ... Premi il bottone",
+  "lists.subheading": "Le tue liste",
   "loading_indicator.label": "Caricamento…",
   "login.fields.email.label": "Indirizzo email",
   "login.fields.password.placeholder": "Password",

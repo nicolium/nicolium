@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Додати або видалити зі списків",
   "account.block": "Заблокувати @{name}",
   "account.block_domain": "Заглушити {domain}",
   "account.blocked": "Заблоковані",
@@ -110,6 +111,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Нова назва списку",
   "lists.search": "Шукати серед людей, на яких ви підписані",
+  "lists.subheading": "Ваші списки",
   "login.fields.password.placeholder": "Пароль",
   "mute_modal.hide_notifications": "Приховати сповіщення від користувача?",
   "navigation_bar.compose": "Написати новий дмух",

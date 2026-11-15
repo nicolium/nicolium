@@ -63,7 +63,7 @@ const GlassActionButton: React.FC<DialogOrSheetAction> = ({
 interface IDialogOrSheet {
   children: React.ReactNode;
   title: React.JSX.Element;
-  actions: Array<DialogOrSheetAction>;
+  actions: Array<DialogOrSheetAction | null>;
   visible: boolean;
   handleDismiss?: () => void;
   forceSheet?: boolean;
@@ -92,8 +92,8 @@ const Sheet: React.FC<IDialogOrSheet> = ({
     }
   }, [visible]);
 
-  const [firstAction, secondAction] = actions.filter(({ icon }) => icon);
-  const remainingActions = actions.filter(({ icon }) => !icon);
+  const [firstAction, secondAction] = actions.filter((action) => action === null || action.icon);
+  const remainingActions = actions.filter((action) => action && !action.icon);
 
   return (
     <TrueSheet
@@ -123,7 +123,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({
               disabled={firstAction.disabled}
             />
           ) : (
-            <View />
+            <View style={{ width: 44 }} />
           )}
           <Text variant='titleMedium'>{title}</Text>
           {glassEffect && secondAction ? (
@@ -135,39 +135,45 @@ const Sheet: React.FC<IDialogOrSheet> = ({
               disabled={secondAction.disabled}
             />
           ) : (
-            <View />
+            <View style={{ width: 44 }} />
           )}
         </View>
       }
       footer={
         !glassEffect && actions.length ? (
           <View style={{ flexDirection: 'row', gap: 8, marginHorizontal: 16, marginTop: 16 }}>
-            {actions.map((action, i) => (
-              <React.Fragment key={i}>
-                <Button
-                  onPress={action.onPress}
-                  loading={action.loading}
-                  disabled={action.disabled}
-                  textColor={action.destructive ? colors.error : undefined}
-                >
-                  {action.label}
-                </Button>
-                {i === 0 && <View style={{ flex: 1 }} />}
-              </React.Fragment>
-            ))}
+            {actions.map(
+              (action, i) =>
+                action && (
+                  <React.Fragment key={i}>
+                    <Button
+                      onPress={action.onPress}
+                      loading={action.loading}
+                      disabled={action.disabled}
+                      textColor={action.destructive ? colors.error : undefined}
+                    >
+                      {action.label}
+                    </Button>
+                    {i === 0 && <View style={{ flex: 1 }} />}
+                  </React.Fragment>
+                ),
+            )}
           </View>
         ) : remainingActions.length ? (
           <Host style={{ marginTop: 8, alignSelf: 'center', marginHorizontal: 16 }} matchContents>
             <HStack spacing={8}>
-              {remainingActions.map((action, i) => (
-                <SwiftUIButton
-                  key={i}
-                  label={action.label}
-                  onPress={action.onPress}
-                  modifiers={action.disabled ? [disabled()] : []}
-                  role={action.destructive ? 'destructive' : 'default'}
-                />
-              ))}
+              {remainingActions.map(
+                (action, i) =>
+                  action && (
+                    <SwiftUIButton
+                      key={i}
+                      label={action.label}
+                      onPress={action.onPress}
+                      modifiers={action.disabled ? [disabled()] : []}
+                      role={action.destructive ? 'destructive' : 'default'}
+                    />
+                  ),
+              )}
             </HStack>
           </Host>
         ) : undefined
@@ -201,19 +207,22 @@ const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, h
       </PaperDialog.ScrollArea>
       {actions.length > 0 && (
         <PaperDialog.Actions>
-          {actions.map((action, i) => (
-            <React.Fragment key={i}>
-              <Button
-                onPress={action.onPress}
-                loading={action.loading}
-                disabled={action.disabled}
-                textColor={action.destructive ? colors.error : undefined}
-              >
-                {action.label}
-              </Button>
-              {i === 0 && <View style={{ flex: 1 }} />}
-            </React.Fragment>
-          ))}
+          {actions.map(
+            (action, i) =>
+              action && (
+                <React.Fragment key={i}>
+                  <Button
+                    onPress={action.onPress}
+                    loading={action.loading}
+                    disabled={action.disabled}
+                    textColor={action.destructive ? colors.error : undefined}
+                  >
+                    {action.label}
+                  </Button>
+                  {i === 0 && <View style={{ flex: 1 }} />}
+                </React.Fragment>
+              ),
+          )}
         </PaperDialog.Actions>
       )}
     </PaperDialog>

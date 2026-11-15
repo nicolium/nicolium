@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Dodavanje ili uklanjanje s popisa",
   "account.block": "Blokiraj @{name}",
   "account.block_domain": "Sakrij sve sa {domain}",
   "account.blocked": "Blokiran",
@@ -154,6 +155,7 @@
   "intervals.full.hours": "{number, plural, one {# hour} other {# hours}}",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",
   "lightbox.close": "Zatvori",
+  "list_adder.header.title": "Add or Remove from Lists",
   "lists.account.add": "Add to list",
   "lists.account.remove": "Remove from list",
   "lists.delete": "Delete list",
@@ -162,6 +164,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "New list title",
   "lists.search": "Pretražujte među ljudima koje pratite",
+  "lists.subheading": "Your lists",
   "loading_indicator.label": "Učitavam…",
   "login.fields.password.placeholder": "Lozinka",
   "login.fields.username.label": "Email or username",

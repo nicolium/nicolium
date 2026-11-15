@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Shtoni ose Hiqni prej listash",
   "account.block": "Blloko @{name}",
   "account.block_domain": "Fshih gjithçka prej {domain}",
   "account.blocked": "E bllokuar",
@@ -85,6 +86,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Titull liste të re",
   "lists.search": "Kërkoni mes personash që ndiqni",
+  "lists.subheading": "Listat tuaja",
   "loading_indicator.label": "Po ngarkohet…",
   "login.fields.password.placeholder": "Password",
   "missing_description_modal.continue": "Post",

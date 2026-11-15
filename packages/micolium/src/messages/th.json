@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "เพิ่มหรือเอาออกจากรายการ",
   "account.block": "ปิดกั้น @{name}",
   "account.block_domain": "ซ่อนทุกอย่างจาก {domain}",
   "account.blocked": "ปิดกั้นอยู่",
@@ -88,6 +89,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "ชื่อเรื่องรายการใหม่",
   "lists.search": "ค้นหาในหมู่ผู้คนที่คุณติดตาม",
+  "lists.subheading": "รายการของคุณ",
   "login.fields.password.placeholder": "Password",
   "missing_description_modal.continue": "Post",
   "mute_modal.hide_notifications": "ซ่อนการแจ้งเตือนจากผู้ใช้นี้?",

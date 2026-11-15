@@ -82,9 +82,9 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
       : { ...lightTheme, colors: theme.light };
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <NavigationContainer theme={paperTheme} linking={linking} {...props} />
-    </PaperProvider>
+    <NavigationContainer theme={paperTheme} linking={linking}>
+      <PaperProvider theme={paperTheme} {...props} />
+    </NavigationContainer>
   );
 };
 
@@ -122,10 +122,10 @@ export const App = () => {
       onError={() => {}}
     >
       <SafeAreaProvider>
-        <ThemeProvider>
-          <KeyboardProvider>
-            <DefaultCurrentAccountProvider>
-              <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <DefaultCurrentAccountProvider>
+            <ThemeProvider>
+              <KeyboardProvider>
                 <GestureHandlerRootView>
                   <TrueSheetProvider>
                     <RootNavigator />
@@ -138,10 +138,10 @@ export const App = () => {
                     <AlertRoot />
                   </TrueSheetProvider>
                 </GestureHandlerRootView>
-              </QueryClientProvider>
-            </DefaultCurrentAccountProvider>
-          </KeyboardProvider>
-        </ThemeProvider>
+              </KeyboardProvider>
+            </ThemeProvider>
+          </DefaultCurrentAccountProvider>
+        </QueryClientProvider>
       </SafeAreaProvider>
     </IntlProvider>
   );

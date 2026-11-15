@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "𐑨𐑛 𐑹 𐑮𐑦𐑥𐑵𐑝 𐑮𐑦𐑥𐑵𐑝 𐑤𐑦𐑕𐑑𐑕",
   "account.block": "𐑚𐑤𐑪𐑒 @{name}",
   "account.block_domain": "𐑣𐑲𐑛 𐑧𐑝𐑮𐑦𐑔𐑦𐑙 𐑓𐑮𐑪𐑥 {domain}",
   "account.blocked": "𐑚𐑤𐑪𐑒𐑑",
@@ -148,6 +149,7 @@
   "intervals.full.hours": "{number, plural, one {# hour} other {# hours}}",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",
   "lightbox.close": "𐑒𐑤𐑴𐑟",
+  "list_adder.header.title": "𐑨𐑛 𐑹 𐑮𐑦𐑥𐑵𐑝 𐑓𐑮𐑪𐑥 𐑤𐑦𐑕𐑑𐑕",
   "lists.account.add": "𐑨𐑛 𐑑 𐑤𐑦𐑕𐑑",
   "lists.account.remove": "𐑮𐑦𐑥𐑵𐑝 𐑓𐑮𐑪𐑥 𐑤𐑦𐑕𐑑",
   "lists.delete": "Delete list",
@@ -156,6 +158,7 @@
   "lists.new.create.title": "𐑒𐑮𐑦𐑱𐑑",
   "lists.new.title.placeholder": "𐑯𐑿 𐑤𐑦𐑕𐑑 𐑑𐑲𐑑𐑩𐑤",
   "lists.search": "𐑕𐑻𐑗 𐑩𐑥𐑳𐑙 𐑐𐑰𐑐𐑩𐑤 𐑿 𐑓𐑪𐑤𐑴",
+  "lists.subheading": "𐑘𐑹 𐑤𐑦𐑕𐑑𐑕",
   "loading_indicator.label": "𐑤𐑴𐑛𐑦𐑙...",
   "login.fields.password.placeholder": "𐑐𐑭𐑕𐑢𐑻𐑛",
   "login.fields.username.label": "Email or username",

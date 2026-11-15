@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Add or Remove from lists",
   "account.block": "Blokusar @{name}",
   "account.block_domain": "Hide everything from {domain}",
   "account.blocked": "Blocked",
@@ -148,6 +149,7 @@
   "intervals.full.hours": "{number, plural, one {# hour} other {# hours}}",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",
   "lightbox.close": "Klozar",
+  "list_adder.header.title": "Add or Remove from Lists",
   "lists.account.add": "Add to list",
   "lists.account.remove": "Remove from list",
   "lists.delete": "Delete list",
@@ -156,6 +158,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "New list title",
   "lists.search": "Search among people you follow",
+  "lists.subheading": "Your lists",
   "loading_indicator.label": "Kargante...",
   "login.fields.password.placeholder": "Password",
   "login.fields.username.label": "Email or username",

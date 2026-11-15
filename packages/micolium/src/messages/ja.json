@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "リストから追加または外す",
   "account.block": "@{name}さんをブロック",
   "account.block_domain": "{domain}全体を非表示",
   "account.blocked": "ブロック済み",
@@ -168,6 +169,7 @@
   "intervals.full.hours": "{number}時間",
   "intervals.full.minutes": "{number}分",
   "lightbox.close": "閉じる",
+  "list_adder.header.title": "リストから追加もしくは外す",
   "lists.account.add": "リストに追加",
   "lists.account.remove": "リストから外す",
   "lists.delete": "Delete list",
@@ -176,6 +178,7 @@
   "lists.new.create.title": "作成",
   "lists.new.title.placeholder": "新規リスト名",
   "lists.search": "フォローしている人の中から検索",
+  "lists.subheading": "あなたのリスト",
   "loading_indicator.label": "読み込み中…",
   "login.fields.email.label": "Eメールアドレス",
   "login.fields.password.placeholder": "パスワード",

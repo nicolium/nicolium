@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Hinzufügen oder Entfernen von Listen",
   "account.bite": "@{name} beißen",
   "account.bite.fail": "Konnte @{acct} nicht beissen",
   "account.bite.success": "Du hast @{acct} gebissen",
@@ -209,6 +210,7 @@
   "intervals.full.hours": "{number, plural, one {# Stunde} other {# Stunden}}",
   "intervals.full.minutes": "{number, plural, one {# Minute} other {# Minuten}}",
   "lightbox.close": "Schließen",
+  "list_adder.header.title": "Nutzer hinzufügen oder entfernen",
   "lists.account.add": "Zur Liste hinzufügen",
   "lists.account.remove": "Von der Liste entfernen",
   "lists.delete": "Liste löschen",
@@ -217,6 +219,7 @@
   "lists.new.create.title": "Erstellen",
   "lists.new.title.placeholder": "Neuer Titel der Liste",
   "lists.search": "Suche nach Leuten, denen du folgst",
+  "lists.subheading": "Deine Listen",
   "loading_indicator.label": "Wird geladen …",
   "login.fields.password.placeholder": "Passwort",
   "login.fields.username.label": "E-Mail oder Nutzername",

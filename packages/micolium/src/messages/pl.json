@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Dodaj lub usuń z list",
   "account.bite": "Ugryź @{name}",
   "account.bite.fail": "Nie udało się ugryźć @{acct}",
   "account.bite.success": "Ugryziono @{acct}",
@@ -320,6 +321,7 @@
   "intervals.full.hours": "{number, plural, one {# godzina} few {# godziny} many {# godzin} other {# godzin}}",
   "intervals.full.minutes": "{number, plural, one {# minuta} few {# minuty} many {# minut} other {# minut}}",
   "lightbox.close": "Zamknij",
+  "list_adder.header.title": "Dodaj lub usuń z list",
   "lists.account.add": "Dodaj do listy",
   "lists.account.members": "Członkowie listy",
   "lists.account.remove": "Usunąć z listy",
@@ -340,6 +342,7 @@
   "lists.replies_policy.list": "Członków tej listy",
   "lists.replies_policy.none": "Nikogo",
   "lists.search": "Szukaj wśród osób które obserwujesz",
+  "lists.subheading": "Twoje listy",
   "loading_indicator.label": "Ładowanie…",
   "login.fields.email.label": "Adres e-mail",
   "login.fields.password.placeholder": "Hasło",

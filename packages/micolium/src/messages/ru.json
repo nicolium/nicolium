@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Добавить/удалить из списков",
   "account.bite": "Укусить @{name}",
   "account.bite.fail": "Неудалось укусить @{acct}",
   "account.bite.success": "Вы укусили @{acct}",
@@ -185,6 +186,7 @@
   "intervals.full.hours": "{number, plural, one {# час} few {# часа} other {# часов}}",
   "intervals.full.minutes": "{number, plural, one {# минута} few {# минуты} other {# минут}}",
   "lightbox.close": "Закрыть",
+  "list_adder.header.title": "Add or Remove from Lists",
   "lists.account.add": "Добавить в список",
   "lists.account.remove": "Убрать из списка",
   "lists.delete": "Delete list",
@@ -193,6 +195,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Заголовок списка",
   "lists.search": "Искать из ваших подписок",
+  "lists.subheading": "Ваши списки",
   "loading_indicator.label": "Загрузка...",
   "login.fields.email.label": "Адрес электронной почты",
   "login.fields.password.placeholder": "Password",

@@ -214,7 +214,7 @@ const useMenuItems = (
         createTitle = messages.addCircle;
         break;
       default:
-        sfIcon = 'list.bullet';
+        sfIcon = 'list.dash';
         androidIcon = 'ph_list_dashes';
         emptyMessage = messages.noLists;
         title = messages.lists;

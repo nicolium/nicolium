@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "إضافة أو إزالة من القوائم",
   "account.block": "حظر @{name}",
   "account.block_domain": "إخفاء النطاق {domain}",
   "account.blocked": "محظور",
@@ -173,6 +174,7 @@
   "intervals.full.hours": "{number, plural, one {# ساعة} other {# ساعات}}",
   "intervals.full.minutes": "{number, plural, one {# دقيقة} other {# دقائق}}",
   "lightbox.close": "إغلاق",
+  "list_adder.header.title": "إضافة أو إزالة من القوائم",
   "lists.account.add": "الإضافة إلى القائمة",
   "lists.account.remove": "الحذف من القائمة",
   "lists.delete": "حذف القائمة",
@@ -181,6 +183,7 @@
   "lists.new.create.title": "إضافة قائمة",
   "lists.new.title.placeholder": "عنوان القائمة الجديدة",
   "lists.search": "إبحث في قائمة الحسابات التي تُتابِعها",
+  "lists.subheading": "القوائم",
   "loading_indicator.label": "جارِ التحميل…",
   "login.fields.email.label": "البريد الإلكتروني",
   "login.fields.password.placeholder": "كلمة المرور",

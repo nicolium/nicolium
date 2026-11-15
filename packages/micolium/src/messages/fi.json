@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Lisää tai poista listoilta",
   "account.block": "Estä @{name}",
   "account.block_domain": "Piilota kaikki sisältö verkkotunnuksesta {domain}",
   "account.blocked": "Estetty",
@@ -87,6 +88,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Uuden listan nimi",
   "lists.search": "Etsi seuraamistasi henkilöistä",
+  "lists.subheading": "Omat listat",
   "loading_indicator.label": "Ladataan...",
   "login.fields.password.placeholder": "Password",
   "missing_description_modal.continue": "Post",

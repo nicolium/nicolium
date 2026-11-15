@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Tilføj eller fjern fra lister",
   "account.block": "Bloker @{name}",
   "account.block_domain": "Skjul alt fra {domain}",
   "account.blocked": "Blokeret",
@@ -89,6 +90,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Ny liste titel",
   "lists.search": "Søg iblandt folk du følger",
+  "lists.subheading": "Dine lister",
   "loading_indicator.label": "Indlæser...",
   "login.fields.password.placeholder": "Password",
   "missing_description_modal.continue": "Post",

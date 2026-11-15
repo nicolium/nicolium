@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Agregar o quitar de las listas",
   "account.block": "Bloquear a @{name}",
   "account.block_domain": "Ocultar todo de {domain}",
   "account.blocked": "Bloqueado",
@@ -89,6 +90,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Nuevo título de lista",
   "lists.search": "Buscar entre la gente que seguís",
+  "lists.subheading": "Tus listas",
   "loading_indicator.label": "Cargando…",
   "login.fields.password.placeholder": "Password",
   "mute_modal.hide_notifications": "¿Querés ocultar las notificaciones de este usuario?",

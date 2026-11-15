@@ -144,7 +144,6 @@ const RootStack = createNativeStackNavigator({
         }),
         login: createNativeStackScreen({
           screen: LoginStackScreen,
-          options: { animationTypeForReplace: 'pop' },
         }),
       },
     },

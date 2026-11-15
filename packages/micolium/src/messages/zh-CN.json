@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "从列表中添加或删除",
   "account.bite": "咬 @{name}",
   "account.bite.fail": "未能咬 @{acct}",
   "account.bite.success": "您已咬了 @{acct}",
@@ -314,6 +315,7 @@
   "intervals.full.hours": "{number} 小时",
   "intervals.full.minutes": "{number} 分钟",
   "lightbox.close": "关闭",
+  "list_adder.header.title": "从列表中添加或删除账号",
   "lists.account.add": "添加到列表",
   "lists.account.members": "列表成员",
   "lists.account.remove": "从列表中移除",
@@ -334,6 +336,7 @@
   "lists.replies_policy.list": "列表成员",
   "lists.replies_policy.none": "没有人",
   "lists.search": "搜索您关注的人",
+  "lists.subheading": "您的列表",
   "loading_indicator.label": "加载中……",
   "login.fields.email.label": "电子邮箱地址",
   "login.fields.password.placeholder": "密码",

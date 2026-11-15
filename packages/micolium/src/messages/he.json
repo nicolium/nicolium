@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "הוסף או הסר מהרשימות",
   "account.block": "חסימת @{name}",
   "account.block_domain": "להסתיר הכל מהקהילה {domain}",
   "account.blocked": "חסום",
@@ -167,6 +168,7 @@
   "intervals.full.hours": "{number, plural, one {# שעה} other {# שעות}}",
   "intervals.full.minutes": "{number, plural, one {# דקה} other {# דקות}}",
   "lightbox.close": "סגור",
+  "list_adder.header.title": "הוסף או הסר מהרשימה",
   "lists.account.add": "הוסף לרשימה",
   "lists.account.remove": "הסר מהרשימה",
   "lists.delete": "Delete list",
@@ -175,6 +177,7 @@
   "lists.new.create.title": "צור כותרת",
   "lists.new.title.placeholder": "כותרת רשימה חדשה",
   "lists.search": "חפש בין אנשים שאתה עוקב אחריהם",
+  "lists.subheading": "הרשימות שלך",
   "loading_indicator.label": "טוען…",
   "login.fields.password.placeholder": "סיסמא",
   "login.fields.username.label": "שם משתמש או אימייל",

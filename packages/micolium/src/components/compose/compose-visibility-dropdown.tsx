@@ -185,7 +185,7 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
     name: 'list' | 'circle',
     lists?: Array<{ id: string; title: string }>,
   ): DropdownMenuItem => {
-    const appleIcon: SFSymbol = name === 'circle' ? 'circle.grid.2x2' : 'list.bullet';
+    const appleIcon: SFSymbol = name === 'circle' ? 'circle.grid.2x2' : 'list.dash';
     const androidIcon = name === 'circle' ? 'ph_circles_four' : 'ph_list_dashes';
     const title = name === 'circle' ? messages.circleShort : messages.listShort;
     const subtitle = name === 'circle' ? messages.circleLong : messages.listLong;

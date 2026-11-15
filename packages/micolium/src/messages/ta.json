@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "பட்டியல்களில் இருந்து சேர் அல்லது நீக்குக",
   "account.bite": "கடி @{name}",
   "account.bite.fail": "{{acct} கடிக்கத் தவறிவிட்டது",
   "account.bite.success": "உங்களிடம் பிட் @{acct} உள்ளது",
@@ -257,6 +258,7 @@
   "intervals.full.hours": "{number, plural, one {# hour} மற்ற {# hours}}",
   "intervals.full.minutes": "{number, plural, one {# minute} மற்ற {# minutes}}",
   "lightbox.close": "நெருக்கமாக",
+  "list_adder.header.title": "பட்டியல்களிலிருந்து சேர்க்கவும் அல்லது அகற்றவும்",
   "lists.account.add": "பட்டியலில் சேர்",
   "lists.account.remove": "பட்டியலில் இருந்து அகற்று",
   "lists.delete": "பட்டியலை நீக்கு",
@@ -272,6 +274,7 @@
   "lists.replies_policy.list": "பட்டியலின் உறுப்பினர்கள்",
   "lists.replies_policy.none": "யாரும் இல்லை",
   "lists.search": "நீங்கள் பின்தொடரும் நபர்கள் மத்தியில் தேடுதல்",
+  "lists.subheading": "உங்கள் பட்டியல்கள்",
   "loading_indicator.label": "ஏற்றுகிறது…",
   "login.fields.email.label": "மின்னஞ்சல் முகவரி",
   "login.fields.password.placeholder": "கடவுச்சொல்",

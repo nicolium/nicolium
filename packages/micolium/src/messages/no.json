@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Legg til eller fjern fra lister",
   "account.block": "Blokker @{name}",
   "account.block_domain": "Skjul alt fra {domain}",
   "account.blocked": "Blokkert",
@@ -167,6 +168,7 @@
   "intervals.full.hours": "{number, plural, one {# hour} other {# hours}}",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",
   "lightbox.close": "Lukk",
+  "list_adder.header.title": "Legg til eller fjern fra lister",
   "lists.account.add": "Legg til i listen",
   "lists.account.remove": "Fjern fra listen",
   "lists.delete": "Delete list",
@@ -175,6 +177,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Ny listetittel",
   "lists.search": "Søk blant personer du følger",
+  "lists.subheading": "Dine lister",
   "loading_indicator.label": "Laster…",
   "login.fields.password.placeholder": "Password",
   "login.fields.username.label": "E-post eller brukernavn",

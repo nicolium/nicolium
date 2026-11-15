@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Agregar o eliminar de listas",
   "account.block": "Bloquear a @{name}",
   "account.block_domain": "Ocultar todo de {domain}",
   "account.blocked": "Bloqueado",
@@ -187,6 +188,7 @@
   "intervals.full.hours": "{number, plural, one {# hora} other {# horas}}",
   "intervals.full.minutes": "{number, plural, one {# minuto} other {# minutos}}",
   "lightbox.close": "Cerrar",
+  "list_adder.header.title": "Add or Remove from Lists",
   "lists.account.add": "Añadir a lista",
   "lists.account.remove": "Quitar de lista",
   "lists.delete": "Delete list",
@@ -195,6 +197,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Título de la nueva lista",
   "lists.search": "Buscar entre la gente a la que sigues",
+  "lists.subheading": "Tus listas",
   "loading_indicator.label": "Cargando…",
   "login.fields.email.label": "Correo electrónico",
   "login.fields.password.placeholder": "Password",

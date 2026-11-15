@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Lägg till eller ta bort från listor",
   "account.block": "Blockera @{name}",
   "account.block_domain": "Dölj allt från {domain}",
   "account.blocked": "Blockerad",
@@ -87,6 +88,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Ny listrubrik",
   "lists.search": "Sök bland personer du följer",
+  "lists.subheading": "Dina listor",
   "login.fields.password.placeholder": "Password",
   "mute_modal.hide_notifications": "Dölj notifikationer från denna användare?",
   "navigation_bar.compose": "Författa ny toot",

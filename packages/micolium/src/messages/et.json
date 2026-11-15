@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Lisa või Eemalda nimekirjadest",
   "account.block": "Blokeeri @{name}",
   "account.block_domain": "Peida kõik domeenist {domain}",
   "account.blocked": "Blokeeritud",
@@ -89,6 +90,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Uus nimistu pealkiri",
   "lists.search": "Otsi sinu poolt jälgitavate inimese hulgast",
+  "lists.subheading": "Sinu nimistud",
   "loading_indicator.label": "Laeb..",
   "login.fields.password.placeholder": "Password",
   "missing_description_modal.continue": "Post",

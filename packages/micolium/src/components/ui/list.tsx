@@ -13,7 +13,7 @@ import { Pressable, type StyleProp, View, type ViewStyle } from 'react-native';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
-import { getSegmentedMenuStyles } from '@/utils/themes';
+import { getSegmentedMenuStyles, type SurfaceColorVariant } from '@/utils/themes';
 
 import { DateTimePicker } from './date-time-picker';
 import { DropdownMenu } from './dropdown-menu';
@@ -80,11 +80,12 @@ interface IList {
     >;
   }>;
   style?: StyleProp<ViewStyle>;
+  colorVariant?: SurfaceColorVariant;
 }
 
 type IListSections = IList['sections'];
 
-const List: React.FC<IList> = ({ sections, style }) => {
+const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
   const glassEffect = useEnableLiquidGlass();
   const theme = useTheme();
   const intl = useIntl();
@@ -100,7 +101,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
       <View style={{ gap: 2 }}>
         {section.items.map((item, index) => {
           const styles = [
-            getSegmentedMenuStyles(theme, false, index, section.items.length),
+            getSegmentedMenuStyles(theme, false, index, section.items.length, colorVariant),
             { marginHorizontal: 16 },
           ];
 

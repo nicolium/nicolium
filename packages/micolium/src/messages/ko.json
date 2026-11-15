@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "리스트에 추가 혹은 삭제",
   "account.block": "@{name}을 차단",
   "account.block_domain": "{domain} 전체를 숨김",
   "account.blocked": "차단 됨",
@@ -148,6 +149,7 @@
   "intervals.full.hours": "{number} 시간",
   "intervals.full.minutes": "{number} 분",
   "lightbox.close": "닫기",
+  "list_adder.header.title": "Add or Remove from Lists",
   "lists.account.add": "리스트에 추가",
   "lists.account.remove": "리스트에서 제거",
   "lists.delete": "Delete list",
@@ -156,6 +158,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "새 리스트의 이름",
   "lists.search": "팔로우 중인 사람들 중에서 찾기",
+  "lists.subheading": "당신의 리스트",
   "loading_indicator.label": "불러오는 중...",
   "login.fields.password.placeholder": "Password",
   "login.fields.username.label": "Email or username",

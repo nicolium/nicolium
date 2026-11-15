@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Bæta við eða Fjarlægja af listum",
   "account.block": "Útiloka @{name}",
   "account.block_domain": "Fela allt frá {domain}",
   "account.blocked": "Útilokaður",
@@ -148,6 +149,7 @@
   "intervals.full.hours": "Fyrir {number, plural, one {# klukkustund} other {# klukkustundum}} síðan",
   "intervals.full.minutes": "Fyrir {number, plural, one {# mínútu} other {# mínútum}} síðan",
   "lightbox.close": "Loka",
+  "list_adder.header.title": "Bæta við er fjarlægja af listum",
   "lists.account.add": "Bæta við á lista",
   "lists.account.remove": "Fjarlægja af lista",
   "lists.delete": "Eyða lista",
@@ -156,6 +158,7 @@
   "lists.new.create.title": "Skapa",
   "lists.new.title.placeholder": "Heiti á nýjum lista",
   "lists.search": "Leita meðal þeirra sem þú fylgist með",
+  "lists.subheading": "Listar þínir",
   "loading_indicator.label": "Hleð inn…",
   "login.fields.password.placeholder": "Lykilorð",
   "login.fields.username.label": "Email or username",

@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Přidat nebo odstranit ze seznamů",
   "account.block": "Zablokovat @{name}",
   "account.block_domain": "Zablokovat doménu {domain}",
   "account.blocked": "Blokován/a",
@@ -120,6 +121,7 @@
   "intervals.full.hours": "{number, plural, one {# hodina} few {# hodiny} many {# hodiny} other {# hodin}}",
   "intervals.full.minutes": "{number, plural, one {# minuta} few {# minuty} many {# minuty} other {# minut}}",
   "lightbox.close": "Zavřít",
+  "list_adder.header.title": "Přidat nebo odstranit ze seznamů",
   "lists.account.add": "Přidat do seznamu",
   "lists.account.remove": "Odebrat ze seznamu",
   "lists.delete": "Delete list",
@@ -128,6 +130,7 @@
   "lists.new.create.title": "Vytvořit",
   "lists.new.title.placeholder": "Název nového seznamu",
   "lists.search": "Hledejte mezi lidmi, které sledujete",
+  "lists.subheading": "Vaše seznamy",
   "loading_indicator.label": "Načítám…",
   "login.fields.password.placeholder": "Heslo",
   "login.fields.username.label": "E-mail nebo uživatelské jméno",

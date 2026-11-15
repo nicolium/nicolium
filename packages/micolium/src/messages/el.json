@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Προσθήκη ή Αφαίρεση από λίστες",
   "account.block": "Αποκλεισμός @{name}",
   "account.block_domain": "Απόκρυψε τα πάντα από το {domain}",
   "account.blocked": "Αποκλεισμένος/η",
@@ -148,6 +149,7 @@
   "intervals.full.hours": "{number, plural, one {# ώρα} other {# ώρες}}",
   "intervals.full.minutes": "{number, plural, one {# λεπτό} other {# λεπτά}}",
   "lightbox.close": "Κλείσιμο",
+  "list_adder.header.title": "Add or Remove from Lists",
   "lists.account.add": "Πρόσθεσε στη λίστα",
   "lists.account.remove": "Βγάλε από τη λίστα",
   "lists.delete": "Delete list",
@@ -156,6 +158,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Τίτλος νέας λίστα",
   "lists.search": "Αναζήτησε μεταξύ των ανθρώπων που ακουλουθείς",
+  "lists.subheading": "Οι λίστες σου",
   "loading_indicator.label": "Φορτώνει...",
   "login.fields.password.placeholder": "Password",
   "login.fields.username.label": "Email or username",

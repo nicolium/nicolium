@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Gehitu edo kendu zerrendetatik",
   "account.block": "Blokeatu @{name}",
   "account.block_domain": "Ezkutatu {domain} domeinuko guztia",
   "account.blocked": "Blokeatuta",
@@ -89,6 +90,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Zerrenda berriaren izena",
   "lists.search": "Bilatu jarraitzen dituzun pertsonen artean",
+  "lists.subheading": "Zure zerrendak",
   "loading_indicator.label": "Kargatzen...",
   "login.fields.password.placeholder": "Password",
   "missing_description_modal.continue": "Post",

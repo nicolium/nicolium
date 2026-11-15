@@ -431,9 +431,16 @@ interface ICreateListDialog {
   id?: string;
   visible: boolean;
   onDismiss: () => void;
+  backAction?: boolean;
 }
 
-const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDismiss }) => {
+const CreateListDialog: React.FC<ICreateListDialog> = ({
+  type,
+  id,
+  visible,
+  onDismiss,
+  backAction,
+}) => {
   const { colors } = useTheme();
   const intl = useIntl();
   const queryClient = useQueryClient();
@@ -708,7 +715,7 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
         handleDismiss={onDismiss}
         actions={[
           {
-            icon: 'xmark',
+            icon: backAction ? 'arrow.left' : 'xmark',
             label: intl.formatMessage(messages.cancel),
             onPress: handleClose,
           },

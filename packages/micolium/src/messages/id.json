@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Tambah atau Hapus dari daftar",
   "account.block": "Blokir @{name}",
   "account.block_domain": "Sembunyikan segalanya dari {domain}",
   "account.blocked": "Terblokir",
@@ -173,6 +174,7 @@
   "intervals.full.hours": "{number, plural, other {# jam}}",
   "intervals.full.minutes": "{number, plural, other {# menit}}",
   "lightbox.close": "Tutup",
+  "list_adder.header.title": "Tambah atau Hapus dari Daftar",
   "lists.account.add": "Tambah ke daftar",
   "lists.account.remove": "Hapus dari daftar",
   "lists.delete": "Delete list",
@@ -181,6 +183,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Judul daftar baru",
   "lists.search": "Cari di antara orang yang Anda ikuti",
+  "lists.subheading": "Daftar Anda",
   "loading_indicator.label": "Memuat…",
   "login.fields.email.label": "Alamat email",
   "login.fields.password.placeholder": "Password",

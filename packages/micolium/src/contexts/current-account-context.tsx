@@ -33,7 +33,7 @@ const useCurrentAccount = () => useContext(CurrentAccountContext) || '';
 
 const useClient = () => {
   const currentAccount = useCurrentAccount();
-  return useAuthStore((state) => state.clients[currentAccount!]);
+  return useAuthStore((state) => state.clients[currentAccount]);
 };
 
 const useInstance = () => useClient().instanceInformation;

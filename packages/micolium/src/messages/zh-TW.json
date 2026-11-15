@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "從清單中新增或移除",
   "account.block": "封鎖 @{name}",
   "account.block_domain": "隱藏來自 {domain} 的所有內容",
   "account.blocked": "已封鎖",
@@ -173,6 +174,7 @@
   "intervals.full.hours": "{number} 小時",
   "intervals.full.minutes": "{number} 分鐘",
   "lightbox.close": "關閉",
+  "list_adder.header.title": "從清單中添加或刪除帳戶",
   "lists.account.add": "新增至清單",
   "lists.account.remove": "從清單中移除",
   "lists.delete": "刪除清單",
@@ -181,6 +183,7 @@
   "lists.new.create.title": "新增清單",
   "lists.new.title.placeholder": "新清單標題",
   "lists.search": "在您追隨的人中搜尋",
+  "lists.subheading": "您的清單",
   "loading_indicator.label": "讀取中…",
   "login.fields.email.label": "電子郵件地址",
   "login.fields.password.placeholder": "密碼",

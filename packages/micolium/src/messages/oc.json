@@ -1,4 +1,5 @@
 {
+  "account.add_or_remove_from_list": "Ajustar o tirar de las listas",
   "account.block": "Blocar @{name}",
   "account.block_domain": "Tot amagar del domeni {domain}",
   "account.blocked": "Blocat",
@@ -148,6 +149,7 @@
   "intervals.full.hours": "{number, plural, one {# ora} other {# oras}}",
   "intervals.full.minutes": "{number, plural, one {# minuta} other {# minutas}}",
   "lightbox.close": "Tampar",
+  "list_adder.header.title": "Add or Remove from Lists",
   "lists.account.add": "Ajustar a la lista",
   "lists.account.remove": "Levar de la lista",
   "lists.delete": "Delete list",
@@ -156,6 +158,7 @@
   "lists.new.create.title": "Add list",
   "lists.new.title.placeholder": "Títol de la nòva lista",
   "lists.search": "Cercar demest lo monde que seguètz",
+  "lists.subheading": "Vòstras listas",
   "loading_indicator.label": "Cargament…",
   "login.fields.password.placeholder": "Password",
   "login.fields.username.label": "Email or username",
