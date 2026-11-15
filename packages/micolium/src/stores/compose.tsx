@@ -1671,7 +1671,12 @@ const useUploadCompose = (composeId: string) => {
 
   return useCallback(
     (files: Array<PickedFile>, descriptions?: Array<string>) => {
-      if (files.length === 0) return;
+      if (files.length === 0) {
+        updateCompose(composeId, (draft) => {
+          draft.isUploading = false;
+        });
+        return;
+      }
 
       const compose =
         useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
@@ -1685,6 +1690,10 @@ const useUploadCompose = (composeId: string) => {
 
       if (files.length + mediaCount > attachmentLimit) {
         toast.error(intl.formatMessage(messages.uploadErrorLimit));
+
+        updateCompose(composeId, (draft) => {
+          draft.isUploading = false;
+        });
         return;
       }
 

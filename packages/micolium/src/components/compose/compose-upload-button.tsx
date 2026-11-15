@@ -8,7 +8,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { Alert } from '@/stores/alerts';
-import { useCompose, useUploadCompose } from '@/stores/compose';
+import { useCompose, useComposeActions, useUploadCompose } from '@/stores/compose';
 
 import { DropdownMenu } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
@@ -42,6 +42,7 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
   const { configuration } = useInstance();
   const { isUploading, mediaAttachments, poll } = useCompose(composeId);
   const uploadCompose = useUploadCompose(composeId);
+  const { updateCompose } = useComposeActions();
 
   const attachmentTypes = configuration.media_attachments.supported_mime_types;
 
@@ -49,9 +50,18 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
     let type = attachmentTypes;
     if (type?.join(',') === 'application/octet-stream') type = undefined;
 
+    updateCompose(composeId, (draft) => {
+      draft.isUploading = true;
+    });
+
     const result = await DocumentPicker.getDocumentAsync({ type, multiple: true });
 
-    if (result.canceled) return;
+    if (result.canceled) {
+      updateCompose(composeId, (draft) => {
+        draft.isUploading = false;
+      });
+      return;
+    }
 
     uploadCompose(
       result.assets.map((asset) => ({
@@ -85,6 +95,10 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
 
     const fn = camera ? ImagePicker.launchCameraAsync : ImagePicker.launchImageLibraryAsync;
 
+    updateCompose(composeId, (draft) => {
+      draft.isUploading = true;
+    });
+
     const result = await fn({
       mediaTypes: onlyImages(attachmentTypes) ? ['images'] : ['images', 'videos'],
       allowsMultipleSelection: true,
@@ -93,7 +107,12 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
       selectionLimit: configuration.statuses.max_media_attachments - mediaAttachments.length,
     });
 
-    if (result.canceled) return;
+    if (result.canceled) {
+      updateCompose(composeId, (draft) => {
+        draft.isUploading = false;
+      });
+      return;
+    }
 
     uploadCompose(
       result.assets.map((asset) => ({
