@@ -12,10 +12,12 @@ import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import {
   useFollowAccountMutation,
+  usePinAccountMutation,
   useRemoveAccountFromFollowersMutation,
   useUnblockAccountMutation,
   useUnfollowAccountMutation,
   useUnmuteAccountMutation,
+  useUnpinAccountMutation,
   useUpdateAccountNoteMutation,
 } from '@/queries/accounts/use-relationship';
 import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
@@ -50,6 +52,16 @@ const messages = defineMessages({
   addOrRemoveFromList: {
     id: 'account.add_or_remove_from_list',
     defaultMessage: 'Add or remove from lists',
+  },
+  endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
+  unendorse: { id: 'account.unendorse', defaultMessage: 'Don’t feature on profile' },
+  userEndorsed: {
+    id: 'account.endorse.success',
+    defaultMessage: 'You are now featuring @{acct} on your profile',
+  },
+  userUnendorsed: {
+    id: 'account.unendorse.success',
+    defaultMessage: 'You are no longer featuring @{acct}',
   },
   bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
   userBit: { id: 'account.bite.success', defaultMessage: 'You have bitten @{acct}' },
@@ -144,6 +156,8 @@ const useMenuItems = (
   const { mutate: unfollowAccount } = useUnfollowAccountMutation(account.id);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account.id);
+  const { mutate: pinAccount } = usePinAccountMutation(account.id);
+  const { mutate: unpinAccount } = useUnpinAccountMutation(account.id);
   const { mutate: blockDomain } = useBlockDomainMutation();
   const { mutate: unblockDomain } = useUnblockDomainMutation();
   const { mutate: removeFromFollowers } = useRemoveAccountFromFollowersMutation(account.id);
@@ -215,6 +229,22 @@ const useMenuItems = (
   const handleMention = () => {
     mentionCompose(account);
     openCompose();
+  };
+
+  const handleEndorseToggle = () => {
+    if (account.relationship?.endorsed) {
+      unpinAccount(undefined, {
+        onSuccess: () => {
+          toast.success(intl.formatMessage(messages.userUnendorsed, { acct: account.acct }));
+        },
+      });
+    } else {
+      pinAccount(undefined, {
+        onSuccess: () => {
+          toast.success(intl.formatMessage(messages.userEndorsed, { acct: account.acct }));
+        },
+      });
+    }
   };
 
   const handleBite = () => {
@@ -479,6 +509,19 @@ const useMenuItems = (
         appleIcon: 'list.dash',
         androidIcon: 'ph_list_dashes',
         onPress: openAddToListDialog,
+      });
+    }
+
+    if (account.relationship?.following && features.accountEndorsements) {
+      composeItems.push({
+        key: 'endorse',
+        type: 'button',
+        label: intl.formatMessage(
+          account.relationship?.endorsed ? messages.unendorse : messages.endorse,
+        ),
+        appleIcon: account.relationship?.endorsed ? 'person.badge.minus' : 'person.badge.plus',
+        androidIcon: account.relationship?.endorsed ? 'ph_user_minus' : 'ph_user_plus',
+        onPress: handleEndorseToggle,
       });
     }
 

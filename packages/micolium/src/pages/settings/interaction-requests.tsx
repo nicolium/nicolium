@@ -45,7 +45,7 @@ const messages = defineMessages({
   },
   authorize: {
     id: 'interaction_request.authorize',
-    defaultMessage: 'Authorize',
+    defaultMessage: 'Accept',
   },
   authorized: {
     id: 'interaction_request.authorize.success',

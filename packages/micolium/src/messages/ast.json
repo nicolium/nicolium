@@ -2,6 +2,7 @@
   "account.block": "Bloquiar a @{name}",
   "account.block_domain": "Anubrir tolo de {domain}",
   "account.direct": "Unviar un mensaxe direutu a @{name}",
+  "account.endorse": "Destacar nel perfil",
   "account.followers.empty": "Naide sigue a esti usuariu entá.",
   "account.follows.empty": "Esti usuariu entá nun sigue a naide.",
   "account.follows_you": "Síguete",
