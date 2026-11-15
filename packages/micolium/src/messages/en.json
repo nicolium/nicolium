@@ -787,6 +787,7 @@
   "status_list.queue.label.inline": "{count} new {count, plural, one {post} other {posts}}",
   "statuses.quote_tombstone": "Post is unavailable.",
   "streamfield.remove": "Remove",
+  "text_field_modal.clear": "Clear",
   "textarea.counter.label": "{count, plural, one {# character} other {# characters}} remaining",
   "time_remaining.days": "{number, plural, one {# day} other {# days}} left",
   "time_remaining.hours": "{number, plural, one {# hour} other {# hours}} left",

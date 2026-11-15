@@ -19,9 +19,9 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 
+import { TextFieldDialog } from '@/components/text-field-dialog';
 import { CornerInset } from '@/components/ui/corner-inset';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
-import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { DropdownMenu, type DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { iconHelper } from '@/components/ui/icon';
@@ -252,10 +252,6 @@ const messages = defineMessages({
     id: 'alt_text_modal.placeholder',
     defaultMessage: 'Media description',
   },
-  charactersRemaining: {
-    id: 'textarea.counter.label',
-    defaultMessage: '{count, plural, one {# character} other {# characters}} remaining',
-  },
   uploadPermissionRequiredTitle: {
     id: 'upload_button.permission_required.title',
     defaultMessage: 'Permission required',
@@ -265,74 +261,6 @@ const messages = defineMessages({
     defaultMessage: 'Permission to access the media library is required.',
   },
 });
-
-interface IAltTextEditor {
-  text: string;
-  onSave: (value: string) => void;
-  visible: boolean;
-  onDismiss: () => void;
-}
-
-const AltTextEditor: React.FC<IAltTextEditor> = ({ text, onSave, visible, onDismiss }) => {
-  const intl = useIntl();
-  const {
-    configuration: {
-      media_attachments: { description_limit: descriptionLimit },
-    },
-  } = useInstance();
-
-  const [closing, setClosing] = React.useState(false);
-  const [description, setDescription] = React.useState(text);
-
-  const handleClose = () => setClosing(true);
-
-  const handleSave = () => {
-    setClosing(true);
-    onSave(description);
-  };
-
-  React.useEffect(() => {
-    if (visible) setClosing(false);
-  }, [visible]);
-
-  return (
-    <DialogOrSheet
-      visible={visible && !closing}
-      handleDismiss={onDismiss}
-      title={<FormattedMessage id='alt_text_modal.header' defaultMessage='Add alt text' />}
-      actions={[
-        {
-          icon: 'arrow.left',
-          label: intl.formatMessage(messages.cancel),
-          onPress: handleClose,
-        },
-        {
-          icon: 'checkmark',
-          label: intl.formatMessage(messages.save),
-          onPress: handleSave,
-          confirm: true,
-        },
-      ]}
-      forceSheet
-    >
-      <View>
-        <TextInput
-          value={description}
-          onChangeText={setDescription}
-          variant='outlined'
-          placeholder={intl.formatMessage(messages.placeholder)}
-          multiline
-          numberOfLines={4}
-          maxLength={descriptionLimit}
-          supportingText={intl.formatMessage(messages.charactersRemaining, {
-            count: descriptionLimit - description.length,
-          })}
-          style={{ minHeight: 80 }}
-        />
-      </View>
-    </DialogOrSheet>
-  );
-};
 
 type UpdateCredentials = UpdateCredentialsParams & {
   fields: Array<{
@@ -1142,12 +1070,16 @@ const EditProfileScreen = ({
         )}
       </ScrollView>
       {showAltTextEditor && (
-        <AltTextEditor
+        <TextFieldDialog
+          heading={<FormattedMessage id='alt_text_modal.header' defaultMessage='Add alt text' />}
+          placeholder={intl.formatMessage(messages.placeholder)}
+          confirm={intl.formatMessage(messages.save)}
           text={
             (showAltTextEditor === 'avatar' ? data.avatar_description : data.header_description) ||
             ''
           }
-          onSave={(text) => {
+          maxLength={instance.configuration.media_attachments.description_limit}
+          onConfirm={(text) => {
             updateData(
               showAltTextEditor === 'avatar' ? 'avatar_description' : 'header_description',
               text,

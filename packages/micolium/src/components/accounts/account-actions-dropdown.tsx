@@ -8,7 +8,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
 
-import { useFeatures } from '@/contexts/current-account-context';
+import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import {
   useFollowAccountMutation,
@@ -21,6 +21,8 @@ import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/sett
 import { Alert } from '@/stores/alerts';
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
+import { haptics } from '@/utils/haptics';
+import { toast, ToastRoot } from '@/utils/toast';
 import { openUrl } from '@/utils/url';
 
 import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
@@ -46,6 +48,13 @@ const messages = defineMessages({
   addOrRemoveFromList: {
     id: 'account.add_or_remove_from_list',
     defaultMessage: 'Add or remove from lists',
+  },
+  bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
+  userBit: { id: 'account.bite.success', defaultMessage: 'You have bitten @{acct}' },
+  userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
+  userBiteFailNotAllowed: {
+    id: 'account.bite.fail.not_allowed',
+    defaultMessage: '@{acct} does not accept bites',
   },
   removeFromFollowers: {
     id: 'account.remove_from_followers',
@@ -115,6 +124,7 @@ const useMenuItems = (
   openBlockMuteDialog: (action: 'block' | 'mute') => void,
   openAddToListDialog: () => void,
 ) => {
+  const client = useClient();
   const features = useFeatures();
   const intl = useIntl();
   const { mentionCompose, directCompose } = useComposeActions();
@@ -197,6 +207,21 @@ const useMenuItems = (
   const handleMention = () => {
     mentionCompose(account);
     openCompose();
+  };
+
+  const handleBite = () => {
+    client.accounts
+      .biteAccount(account.id)
+      .then(() => {
+        toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
+      })
+      .catch((error) => {
+        if (error.response?.json?.message === 'This user does not accept bites') {
+          toast.error(intl.formatMessage(messages.userBiteFailNotAllowed, { acct: account.acct }));
+        } else {
+          toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
+        }
+      });
   };
 
   const handleRemoveFromFollowers = () => {
@@ -448,6 +473,17 @@ const useMenuItems = (
       });
     }
 
+    if (features.bites && account.can_bite !== false) {
+      composeItems.push({
+        key: 'bite',
+        type: 'button',
+        label: intl.formatMessage(messages.bite, { name: account.username }),
+        appleIcon: 'cat',
+        androidIcon: 'ph_tooth',
+        onPress: handleBite,
+      });
+    }
+
     const moderationItems: Array<DropdownMenuItem> = [];
 
     if (features.removeFromFollowers && account.relationship?.followed_by) {
@@ -533,6 +569,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
   const [reportDialog, setReportDialog] = React.useState(false);
   const [addToListDialog, setAddToListDialog] = React.useState(false);
+  const [accountNoteDialog, setAccountNodeDialog] = React.useState(false);
 
   return (
     <>
@@ -560,6 +597,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
           () => setReportDialog(true),
           (action) => setBlockMuteDialog(action),
           () => setAddToListDialog(true),
+          () => setAccountNoteDialog(true),
         ]}
       />
       {blockMuteDialog && (
