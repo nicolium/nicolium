@@ -22,7 +22,7 @@ import { Alert } from '@/stores/alerts';
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
 import { haptics } from '@/utils/haptics';
-import { toast, ToastRoot } from '@/utils/toast';
+import { toast } from '@/utils/toast';
 import { openUrl } from '@/utils/url';
 
 import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
@@ -213,6 +213,7 @@ const useMenuItems = (
     client.accounts
       .biteAccount(account.id)
       .then(() => {
+        haptics.toggleOn();
         toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
       })
       .catch((error) => {

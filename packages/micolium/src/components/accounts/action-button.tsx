@@ -13,6 +13,7 @@ import {
   useAcceptFollowRequestMutation,
   useRejectFollowRequestMutation,
 } from '@/queries/accounts/use-follow-requests';
+import { haptics } from '@/utils/haptics';
 import { toast } from '@/utils/toast';
 
 import { iconHelper } from '../ui/icon';
@@ -49,6 +50,7 @@ const ActionButton: React.FC<IActionButton> = ({ id, actionType }) => {
     client.accounts
       .biteAccount(id)
       .then(() => {
+        haptics.toggleOn();
         toast.success(intl.formatMessage(messages.userBit, { acct: account?.acct }));
       })
       .catch((error: any) => {
