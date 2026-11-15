@@ -375,7 +375,12 @@ const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
         key={media.id}
         source={{ uri: media.preview_url }}
         placeholder={{ blurhash: (Platform.OS !== 'web' && media.blurhash) || undefined }}
-        style={{ height: 64, width: 64, borderRadius: theme.shapes.corner.medium }}
+        style={{
+          height: 64,
+          width: 64,
+          borderRadius: theme.shapes.corner.medium,
+          backgroundColor: theme.colors.surfaceVariant,
+        }}
       />
     );
 
