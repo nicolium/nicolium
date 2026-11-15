@@ -209,6 +209,7 @@
   "interaction_policies.entry.mentioned": "Споменати",
   "interaction_policies.entry.public": "Всички",
   "interaction_policies.tabs.private": "Само за последователи",
+  "interaction_request.authorize": "Приемане",
   "intervals.full.minutes": "{number, plural, one {# минута} other {# минути}}",
   "lightbox.close": "Затваряне",
   "list_adder.header.title": "Добавяне или премахване от списъци",

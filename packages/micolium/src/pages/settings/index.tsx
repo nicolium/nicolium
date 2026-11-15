@@ -15,6 +15,7 @@ import { FilterEditorScreen, FiltersScreen } from './filters';
 import { FollowRequestsScreen } from './follow-requests';
 import { FollowedTagsScreen } from './followed-tags';
 import { InteractionPoliciesScreen } from './interaction-policies';
+import { InteractionRequestsScreen } from './interaction-requests';
 import { MutedThreadsScreen } from './muted-threads';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
 import { NotificationsSettingsScreen } from './notifications-settings';
@@ -66,6 +67,10 @@ const messages = defineMessages({
   newFilter: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
   scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
+  interactionRequests: {
+    id: 'column.interaction_requests',
+    defaultMessage: 'Interaction requests',
+  },
 });
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
@@ -173,6 +178,11 @@ const SettingsStackScreen = (
         name='scheduled_statuses'
         component={ScheduledStatusesScreen}
         options={{ title: intl.formatMessage(messages.scheduledStatuses) }}
+      />
+      <SettingsStack.Screen
+        name='interaction_requests'
+        component={InteractionRequestsScreen}
+        options={{ title: intl.formatMessage(messages.interactionRequests) }}
       />
     </SettingsStack.Navigator>
   );

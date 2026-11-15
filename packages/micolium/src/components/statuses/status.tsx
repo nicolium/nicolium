@@ -130,6 +130,7 @@ interface IStatus {
   detailed?: boolean;
   compact?: boolean;
   textOnly?: boolean;
+  actions?: React.JSX.Element;
 }
 
 const Status: React.FC<IStatus> = ({
@@ -141,6 +142,7 @@ const Status: React.FC<IStatus> = ({
   withLink,
   withActions = true,
   style,
+  actions,
   ...props
 }) => {
   const { data: status } = useStatus(id, { withFilteredResults: true });
@@ -216,6 +218,7 @@ const Status: React.FC<IStatus> = ({
             fullWidthPressable={false}
           />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {actions}
             {showFiltered && warnFilters.length > 0 && (
               <IconButton
                 icon={iconHelper(EyeSlashIcon)}

@@ -1322,7 +1322,7 @@ const submitCompose = async (
   }
 
   try {
-    const { createStatus } = await import('@/queries/statuses/status-actions');
+    const { createStatus } = require('@/queries/statuses/status-actions');
     const data = await createStatus(
       client,
       params,
@@ -1439,7 +1439,6 @@ const submitCompose = async (
     //     columnId,
     //     scopeUrl,
     //   };
-
     toast.error((error as any).response?.json?.error || intl.formatMessage(messages.submitError));
     //   if (propagate) {
     //     toast.propagate('error', message, toastOptions);

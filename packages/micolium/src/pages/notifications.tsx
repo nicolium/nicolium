@@ -13,6 +13,7 @@ import {
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { ChecksIcon } from 'phosphor-react-native/src/icons/Checks';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
+import { HeartHalfIcon } from 'phosphor-react-native/src/icons/HeartHalf';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
@@ -36,6 +37,7 @@ import {
   useNotifications,
   useNotificationsUnreadCount,
 } from '@/queries/notifications/use-notifications';
+import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { compareId } from '@/utils/comparators';
 
@@ -49,6 +51,10 @@ const messages = defineMessages({
   followRequests: {
     id: 'navigation_bar.follow_requests.count',
     defaultMessage: '{count, plural, one {# follow request} other {# follow requests}}',
+  },
+  interactionRequests: {
+    id: 'navigation_bar.interaction_requests.count',
+    defaultMessage: '{count, plural, one {# interaction request} other {# interaction requests}}',
   },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   reset: { id: 'notifications.filters.reset', defaultMessage: 'Reset' },
@@ -188,6 +194,27 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
   );
 };
 
+const InteractionRequestsButton = () => {
+  const intl = useIntl();
+  const count = useInteractionRequestsCount().data ?? 0;
+  const navigation = useNavigation();
+
+  if (!count) return null;
+
+  return (
+    <HeaderIconButton
+      icon={HeartHalfIcon}
+      onPress={() =>
+        navigation.navigate('settings', {
+          screen: 'interaction_requests',
+        })
+      }
+      accessibilityLabel={intl.formatMessage(messages.interactionRequests, { count })}
+      badge={count}
+    />
+  );
+};
+
 const FollowRequestsButton = () => {
   const intl = useIntl();
   const count = useFollowRequestsCount();
@@ -262,6 +289,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
             accessibilityLabel={intl.formatMessage(messages.showFilters)}
           />
         )}
+        <InteractionRequestsButton />
         <FollowRequestsButton />
         <NotificationsMarkReadButton />
       </Appbar.Header>

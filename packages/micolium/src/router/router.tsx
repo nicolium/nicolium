@@ -62,6 +62,7 @@ type SettingsStackParams = {
   scheduled_statuses: undefined;
   edit_profile: undefined;
   about: undefined;
+  interaction_requests: undefined;
 };
 type StatusStackParams = {
   view: { id: string };

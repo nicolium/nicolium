@@ -2,5 +2,7 @@
   "account.add_or_remove_from_list": "Add or remove from lists",
   "column.wrenched": "Recent spanners timeline",
   "follow_request.authorize": "Authorise",
+  "interaction_request.authorize.fail": "Failed to authorise @{acct} interaction request",
+  "interaction_request.authorize.success": "Authorised @{acct} interaction request",
   "preferences.fields.missing_description_modal.label": "Show confirmation dialogue before sending a post without media descriptions"
 }
