@@ -69,7 +69,7 @@ const ReplyBox: React.FC<IReplyBox> = ({ status }) => {
   const content = (
     <>
       <CurrentAccountAvatar />
-      <Text>
+      <Text numberOfLines={1}>
         <FormattedMessage
           id='compose.reply_indicator'
           defaultMessage='Reply to @{acct}'
