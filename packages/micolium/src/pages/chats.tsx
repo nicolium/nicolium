@@ -1,5 +1,4 @@
 import {
-  Appbar,
   Avatar,
   Badge,
   Divider,
@@ -11,21 +10,20 @@ import {
 import { useScrollToTop } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
-  type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { Image } from 'expo-image';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import RelativeTimestamp from '@/components/relative-timestamp';
-import { CornerInset } from '@/components/ui/corner-inset';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
+import { Header } from '@/components/ui/header';
 import { LoadMore } from '@/components/ui/load-more';
 import { useChats } from '@/queries/chats';
 import { useSetting } from '@/stores/settings';
@@ -33,27 +31,9 @@ import { useSetting } from '@/stores/settings';
 import type { ChatsStackParams } from '@/router/router';
 import type { Chat as ChatEntity } from 'pl-api';
 
-const ChatsHeader = (_: NativeStackHeaderProps) => {
-  const { colors } = useTheme();
-
-  return (
-    <Appbar.Header
-      mode='small'
-      style={{
-        backgroundColor: colors.surfaceContainer,
-      }}
-    >
-      <CornerInset direction='horizontal' edge='left' />
-      <Appbar.Content
-        title={
-          <Text variant='titleLarge'>
-            <FormattedMessage id='column.chats' defaultMessage='Chats' />
-          </Text>
-        }
-      />
-    </Appbar.Header>
-  );
-};
+const messages = defineMessages({
+  chats: { id: 'column.chats', defaultMessage: 'Chats' },
+});
 
 interface IChat {
   chat: ChatEntity;
@@ -209,9 +189,15 @@ const ChatsScreen = (_: NativeStackScreenProps<ChatsStackParams, 'all'>) => {
 const ChatsStack = createNativeStackNavigator<ChatsStackParams>();
 
 const ChatsStackScreen = () => {
+  const intl = useIntl();
+
   return (
-    <ChatsStack.Navigator>
-      <ChatsStack.Screen name='all' component={ChatsScreen} options={{ header: ChatsHeader }} />
+    <ChatsStack.Navigator screenOptions={{ header: Header }}>
+      <ChatsStack.Screen
+        name='all'
+        component={ChatsScreen}
+        options={{ title: intl.formatMessage(messages.chats) }}
+      />
     </ChatsStack.Navigator>
   );
 };
