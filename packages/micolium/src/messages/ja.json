@@ -247,6 +247,8 @@
   "relative_time.just_now": "今",
   "relative_time.minutes": "{number}分前",
   "relative_time.seconds": "{number}秒前",
+  "reply_mentions.account.add": "メンションに追加する",
+  "reply_mentions.account.remove": "メンションから削除する",
   "reply_mentions.reply": "{accounts} に返信中",
   "reply_mentions.reply_empty": "投票に返信",
   "report.block": "{target}さんをブロック",

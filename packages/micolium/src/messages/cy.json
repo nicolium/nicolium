@@ -136,6 +136,7 @@
   "navigation_bar.compose": "Ysgrifennu neges",
   "navigation_bar.compose_direct": "Neges breifat",
   "navigation_bar.compose_edit": "Golygu'r neges",
+  "navigation_bar.in_reply_to": "Mewn ymateb i",
   "notification.favourite": "Hoffodd {name} eich neges",
   "notification.follow": "Dilynodd {name} chi",
   "notification.follow_request": "Hoffai {name} eich dilyn chi",

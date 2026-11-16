@@ -23,6 +23,10 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
     return null;
   }
 
+  if (!compose.parentRebloggedById && to.length === 0) {
+    return null;
+  }
+
   const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
 
@@ -30,10 +34,6 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
       composeId,
     });
   };
-
-  if (!compose.parentRebloggedById && to.length === 0) {
-    return null;
-  }
 
   if (to.length === 0) {
     return (

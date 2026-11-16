@@ -327,21 +327,21 @@ const statusToMentionsArray = (
   ];
 };
 
-// const statusToMentionsAccountIdsArray = (
-//   status: Pick<Status, 'mentions' | 'account_id'>,
-//   account: Pick<Account, 'id'>,
-//   parentRebloggedBy?: string | null,
-// ) => {
-//   const mentions = status.mentions.map((m) => m.id);
+const statusToMentionsAccountIdsArray = (
+  status: Pick<SelectedStatus, 'mentions' | 'account_id'>,
+  account: Pick<Account, 'id'>,
+  parentRebloggedBy?: string | null,
+) => {
+  const mentions = status.mentions.map((m) => m.id);
 
-//   return [
-//     ...new Set(
-//       [status.account_id, ...(parentRebloggedBy ? [parentRebloggedBy] : []), ...mentions].filter(
-//         (id) => id !== account.id,
-//       ),
-//     ),
-//   ];
-// };
+  return [
+    ...new Set(
+      [status.account_id, ...(parentRebloggedBy ? [parentRebloggedBy] : []), ...mentions].filter(
+        (id) => id !== account.id,
+      ),
+    ),
+  ];
+};
 
 const privacyPreference = (
   a: string,
@@ -1826,7 +1826,7 @@ export {
   appendMedia,
   checkComposeContent,
   newPoll,
-  //   statusToMentionsAccountIdsArray,
+    statusToMentionsAccountIdsArray,
   useComposeStore,
   useCompose,
   //   useThread,

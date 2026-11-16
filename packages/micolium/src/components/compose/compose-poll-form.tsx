@@ -29,6 +29,8 @@ import { formatDuration, DURATIONS as TOO_MANY_DURATIONS } from '../accounts/blo
 import { DropdownMenu } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
+import type { ICompose } from './compose';
+
 const DURATIONS = TOO_MANY_DURATIONS.slice(0, -1);
 
 const messages = defineMessages({
@@ -177,11 +179,7 @@ const Option: React.FC<IOption> = ({
   );
 };
 
-interface IComposePollForm {
-  composeId: string;
-}
-
-const ComposePollForm: React.FC<IComposePollForm> = ({ composeId }) => {
+const ComposePollForm: React.FC<ICompose> = ({ composeId }) => {
   const intl = useIntl();
   const { configuration } = useInstance();
   const { updateCompose } = useComposeActions();

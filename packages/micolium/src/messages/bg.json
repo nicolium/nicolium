@@ -250,6 +250,7 @@
   "navigation_bar.compose_direct": "Лично съобщение",
   "navigation_bar.compose_edit": "Редактиране на публикацията",
   "navigation_bar.compose_reply": "Отговор към публикацията",
+  "navigation_bar.in_reply_to": "В отговор до",
   "notification.favourite": "{name} хареса вашата публикация",
   "notification.follow": "{name} ви последва",
   "notification.mention": "{name} ви спомена",

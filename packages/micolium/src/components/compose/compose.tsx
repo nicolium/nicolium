@@ -54,6 +54,7 @@ import { ComposeLanguageDropdown } from './compose-language-dropdown';
 import { ComposePollForm } from './compose-poll-form';
 import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
+import { ComposeReplyMentions } from './compose-reply-mentions';
 import { ComposeScheduleButton } from './compose-schedule-button';
 import { ComposeScheduleForm } from './compose-schedule-form';
 import { ComposeSuggestions } from './compose-suggestions';
@@ -595,6 +596,7 @@ const ComposeBody: React.FC<IComposeBody> = ({
             </Text>
           </Card>
         )}
+        <ComposeReplyMentions composeId={COMPOSE_ID} />
         {features.spoilers && (
           <TextInput
             value={spoilerText}

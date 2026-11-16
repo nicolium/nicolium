@@ -27,6 +27,8 @@ const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
   title: { id: 'list_adder.header.title', defaultMessage: 'Add or remove from lists' },
   addList: { id: 'lists.new.create', defaultMessage: 'Add list' },
+  removeAccount: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
+  addAccount: { id: 'lists.account.add', defaultMessage: 'Add to list' },
 });
 
 interface IUserList {
@@ -63,9 +65,9 @@ const UserList: React.FC<IUserList> = ({ accountId, list, added, style }) => {
             (added ? removeFromList : addToList)([accountId]);
             haptics.selection();
           }}
-          // accessibilityLabel={intl.formatMessage(
-          //   added ? messages.removeAccount : messages.addAccount,
-          // )}
+          accessibilityLabel={intl.formatMessage(
+            added ? messages.removeAccount : messages.addAccount,
+          )}
         />
       )}
       key={list.id}
