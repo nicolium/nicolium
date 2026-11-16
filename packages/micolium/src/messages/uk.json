@@ -25,6 +25,7 @@
   "account_note.success": "Примітка збережена",
   "admin.statuses.actions.delete_status": "Видалити пост",
   "column.bookmarks": "Закладки",
+  "column.chats": "Чат",
   "column.community": "Локальна стрічка",
   "column.direct": "Прямі повідомлення",
   "column.domain_blocks": "Приховані домени",

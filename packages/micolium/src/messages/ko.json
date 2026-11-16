@@ -31,6 +31,7 @@
   "auth.logged_out": "Logged out.",
   "card.back.label": "Back",
   "column.bookmarks": "Bookmarks",
+  "column.chats": "Chats",
   "column.community": "로컬 타임라인",
   "column.direct": "다이렉트 메시지",
   "column.domain_blocks": "숨겨진 도메인",

@@ -21,6 +21,7 @@
   "account.unmute": "Deixar de silenciar @{name}",
   "admin.statuses.actions.delete_status": "Suprimeix la publicació",
   "column.bookmarks": "Marcadors",
+  "column.chats": "Xats",
   "column.community": "Línia de temps local",
   "column.direct": "Missatges directes",
   "column.domain_blocks": "Dominis ocults",

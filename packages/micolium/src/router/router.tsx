@@ -39,6 +39,10 @@ type NotificationsTabsParams = {
 type NotificationsStackParams = {
   view: NavigatorScreenParams<NotificationsTabsParams> | undefined;
 };
+type ChatsStackParams = {
+  all: undefined;
+  chat: { id: string };
+};
 type ProfileStackParams = {
   view: undefined;
 };
@@ -93,6 +97,7 @@ type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;
   notifications: NavigatorScreenParams<NotificationsStackParams>;
   search: { query: string } | undefined;
+  chats: NavigatorScreenParams<ChatsStackParams>;
   profile: NavigatorScreenParams<ProfileStackParams>;
 };
 type LoginStackParams = {
@@ -166,6 +171,7 @@ export {
   type TimelineStackParams,
   type NotificationsTabsParams,
   type NotificationsStackParams,
+  type ChatsStackParams,
   type ProfileStackParams,
   type SettingsStackParams,
   type StatusStackParams,

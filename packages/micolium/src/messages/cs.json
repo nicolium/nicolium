@@ -23,6 +23,7 @@
   "admin.statuses.actions.delete_status": "Smazat příspěvek",
   "auth.logged_out": "Odhlásili jste se.",
   "column.bookmarks": "Záložky",
+  "column.chats": "Chaty",
   "column.community": "Místní časová osa",
   "column.direct": "Přímé zprávy",
   "column.domain_blocks": "Skryté domény",

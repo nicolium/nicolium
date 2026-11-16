@@ -31,6 +31,7 @@
   "auth.logged_out": "Logged out.",
   "card.back.label": "Back",
   "column.bookmarks": "Bookmarks",
+  "column.chats": "Chats",
   "column.community": "Helyi idővonal",
   "column.direct": "Közvetlen üzenetek",
   "column.domain_blocks": "Rejtett domainek",

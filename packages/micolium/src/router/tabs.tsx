@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/native';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { CaretUpDownIcon } from 'phosphor-react-native/src/icons/CaretUpDown';
+import { ChatsTeardropIcon } from 'phosphor-react-native/src/icons/ChatsTeardrop';
 import { HouseIcon } from 'phosphor-react-native/src/icons/House';
 import { MagnifyingGlassIcon } from 'phosphor-react-native/src/icons/MagnifyingGlass';
 import React from 'react';
@@ -15,8 +16,10 @@ import { Platform, useColorScheme, useWindowDimensions, View } from 'react-nativ
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
+import { useFeatures } from '@/contexts/current-account-context';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
+import { ChatsStackScreen } from '@/pages/chats';
 import { HomeStackScreen } from '@/pages/home';
 import { NotificationsStackScreen } from '@/pages/notifications';
 import { ProfileStackScreen } from '@/pages/profile';
@@ -31,6 +34,7 @@ const messages = defineMessages({
   home: { id: 'column.home', defaultMessage: 'Home' },
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   search: { id: 'column.search', defaultMessage: 'Search' },
+  chats: { id: 'column.chats', defaultMessage: 'Chats' },
   profile: { id: 'column.profile', defaultMessage: 'Profile' },
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
 });
@@ -47,6 +51,7 @@ let NativeTabs: React.FC | undefined = undefined;
 
 if (Platform.OS === 'ios') {
   NativeTabs = () => {
+    const features = useFeatures();
     const intl = useIntl();
     const unreadCount = useNotificationsUnreadCount();
     const { openAccountSwitcher, openCompose } = useUiStoreActions();
@@ -97,6 +102,20 @@ if (Platform.OS === 'ios') {
             tabBarBadge: unreadCount || undefined,
           }}
         />
+        {features.chats && (
+          <Tab.Screen
+            name='chats'
+            component={ChatsStackScreen}
+            options={{
+              tabBarLabel: intl.formatMessage(messages.chats),
+              tabBarIcon: {
+                type: 'sfSymbol',
+                name: 'bubble.left.and.bubble.right',
+              },
+              // tabBarBadge: unreadCount || undefined,
+            }}
+          />
+        )}
         <Tab.Screen
           name='profile'
           component={ProfileStackScreen}
@@ -220,6 +239,7 @@ const ProfileIcon: React.FC<IProfileIcon> = ({ color }) => (
 );
 
 const PaperTabs = () => {
+  const features = useFeatures();
   const intl = useIntl();
   const unreadCount = useNotificationsUnreadCount();
 
@@ -261,6 +281,19 @@ const PaperTabs = () => {
           tabBarBadge: unreadCount || undefined,
         }}
       />
+      {features.chats && (
+        <Tab.Screen
+          name='chats'
+          component={ChatsStackScreen}
+          options={{
+            tabBarLabel: intl.formatMessage(messages.chats),
+            tabBarIcon: ({ color, focused }) => (
+              <ChatsTeardropIcon color={color} weight={focused ? 'fill' : undefined} />
+            ),
+            // tabBarBadge: unreadChatsCount || undefined,
+          }}
+        />
+      )}
       <Tab.Screen
         name='profile'
         component={ProfileStackScreen}

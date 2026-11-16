@@ -29,5 +29,7 @@
   "announcements.title": "Najave",
   "auth.invalid_credentials": "Pogrešno korisničko ime ili lozinka",
   "auth.logged_out": "Odjavljen.",
-  "card.back.label": "Nazad"
+  "card.back.label": "Nazad",
+  "chats.main.blankslate.subtitle": "Potražite nekoga za razgovor",
+  "chats.main.blankslate.title": "Još nema poruka"
 }
