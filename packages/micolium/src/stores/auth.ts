@@ -62,6 +62,7 @@ interface AuthStore {
     fetchInstance: (instance: string) => Promise<void>;
     createApp: (grantType: 'password' | 'authorization_code') => Promise<void>;
     signIn: (username: string, password: string, intl?: IntlShape) => Promise<void | 'canceled'>;
+    verifyOtp: (code: string, mfaToken: string, intl?: IntlShape) => Promise<void | 'canceled'>;
     signInWithCode: (
       code: string,
       codeVerifier: string,
@@ -180,6 +181,36 @@ const useAuthStore = create<AuthStore>()(
       addAccount();
     };
 
+    const addSession = (
+      client: PlApiClient,
+      pendingAuth: PendingAuth,
+      accessToken: string,
+      intl?: IntlShape,
+    ) => {
+      client.accessToken = accessToken;
+
+      const addAccount = () => {
+        set((state) => {
+          const sessionUUID = uuid();
+
+          state.sessions[sessionUUID] = {
+            instance: pendingAuth.instance,
+            client_id: pendingAuth.client_id!,
+            client_secret: pendingAuth.client_secret!,
+            access_token: accessToken,
+            iceshrimp_access_token: null,
+          };
+          state.clients[sessionUUID] = client;
+          state.currentAccount = sessionUUID;
+          state.pendingAuth = null;
+
+          persistSessions(state);
+        });
+      };
+
+      return checkDuplicatedAccount(client, pendingAuth, addAccount, intl);
+    };
+
     return {
       sessions,
       clients: Object.fromEntries(
@@ -263,28 +294,23 @@ const useAuthStore = create<AuthStore>()(
             scope: getInstanceScopes(client.instanceInformation),
           });
 
-          client.accessToken = access_token;
+          return addSession(client, pendingAuth, access_token, intl);
+        },
+        verifyOtp: async (code, mfaToken, intl) => {
+          const { pendingAuth, pendingAuthClient: client } = get();
 
-          const addAccount = () => {
-            set((state) => {
-              const sessionUUID = uuid();
+          if (!client || !pendingAuth?.instance) return;
 
-              state.sessions[sessionUUID] = {
-                instance: pendingAuth.instance,
-                client_id: pendingAuth.client_id!,
-                client_secret: pendingAuth.client_secret!,
-                access_token,
-                iceshrimp_access_token: null,
-              };
-              state.clients[sessionUUID] = client;
-              state.currentAccount = sessionUUID;
-              state.pendingAuth = null;
+          const { access_token } = await client.oauth.mfaChallenge({
+            client_id: pendingAuth.client_id!,
+            client_secret: pendingAuth.client_secret!,
+            mfa_token: mfaToken,
+            code,
+            challenge_type: 'totp',
+            scope: getInstanceScopes(client.instanceInformation),
+          });
 
-              persistSessions(state);
-            });
-          };
-
-          return checkDuplicatedAccount(client, pendingAuth, addAccount, intl);
+          return addSession(client, pendingAuth, access_token, intl);
         },
         signInWithCode: async (code, codeVerifier, intl) => {
           const { pendingAuth, pendingAuthClient: client } = get();
@@ -304,28 +330,7 @@ const useAuthStore = create<AuthStore>()(
             code_verifier: codeVerifier,
           });
 
-          client.accessToken = access_token;
-
-          const addAccount = () => {
-            set((state) => {
-              const sessionUUID = uuid();
-
-              state.sessions[sessionUUID] = {
-                instance: pendingAuth.instance,
-                client_id: pendingAuth.client_id!,
-                client_secret: pendingAuth.client_secret!,
-                access_token,
-                iceshrimp_access_token: null,
-              };
-              state.clients[sessionUUID] = client;
-              state.currentAccount = sessionUUID;
-              state.pendingAuth = null;
-
-              persistSessions(state);
-            });
-          };
-
-          return checkDuplicatedAccount(client, pendingAuth, addAccount, intl);
+          return addSession(client, pendingAuth, access_token, intl);
         },
         signOut: () => {
           const { currentAccount, clients, sessions } = get();

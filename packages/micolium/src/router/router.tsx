@@ -107,6 +107,7 @@ type TabsParams = {
 type LoginStackParams = {
   instance: undefined;
   credentials: undefined;
+  otp: { mfaToken: string };
   oauth_flow: undefined;
 };
 
