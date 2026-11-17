@@ -61,6 +61,7 @@ const ComposeReplyMentionAccount: React.FC<IComposeReplyMentionAccount> = ({
     });
 
   const handlePress = () => {
+    console.log('pressing', added);
     if (added) onRemove();
     else onAdd();
   };
@@ -98,6 +99,8 @@ const ComposeReplyMentionsDialog: React.FC<IComposeReplyMentionsDialog> = ({
   const theme = useTheme();
   const compose = useCompose(composeId);
 
+  const [closing, setClosing] = React.useState(false);
+  
   const { data: status } = useStatus(compose.inReplyToId ?? undefined);
   const { data: ownAccount } = useCredentialAccount();
 
@@ -111,13 +114,13 @@ const ComposeReplyMentionsDialog: React.FC<IComposeReplyMentionsDialog> = ({
 
   return (
     <DialogOrSheet
-      visible={visible}
+      visible={visible && !closing}
       handleDismiss={onDismiss}
       actions={[
         {
           icon: 'arrow.left',
           label: intl.formatMessage(messages.close),
-          onPress: onDismiss,
+          onPress: () => setClosing(true),
         },
         null,
       ]}
@@ -158,10 +161,6 @@ const ComposeReplyMentions: React.FC<ICompose> = ({ composeId }) => {
   const explicitAddressing = features.createStatusExplicitAddressing && !forceImplicitAddressing;
 
   if (!explicitAddressing || !compose.inReplyToId || !to) {
-    return null;
-  }
-
-  if (!compose.parentRebloggedById && to.length === 0) {
     return null;
   }
 
