@@ -38,6 +38,9 @@ type NotificationsTabsParams = {
 };
 type NotificationsStackParams = {
   view: NavigatorScreenParams<NotificationsTabsParams> | undefined;
+  requests: undefined;
+  request: { id: string };
+  policy: undefined;
 };
 type ChatsStackParams = {
   all: undefined;

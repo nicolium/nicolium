@@ -2,7 +2,9 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ScrollView } from 'react-native';
 
+import { NotificationRequestsSettings } from '@/components/settings/notification-requests-settings';
 import { List } from '@/components/ui/list';
+import { useFeatures } from '@/contexts/current-account-context';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 
 import type { SettingsStackParams } from '@/router/router';
@@ -22,6 +24,7 @@ const messages = defineMessages({
 const NotificationsSettingsScreen = (
   _: NativeStackScreenProps<SettingsStackParams, 'notifications'>,
 ) => {
+  const features = useFeatures();
   const intl = useIntl();
   const { update } = useSettingsActions();
 
@@ -50,6 +53,7 @@ const NotificationsSettingsScreen = (
           },
         ]}
       />
+      {features.notificationsPolicy && <NotificationRequestsSettings />}
     </ScrollView>
   );
 };

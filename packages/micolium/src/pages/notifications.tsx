@@ -11,6 +11,7 @@ import {
   type NativeStackHeaderProps,
 } from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
+import { ArchiveIcon } from 'phosphor-react-native/src/icons/Archive';
 import { ChecksIcon } from 'phosphor-react-native/src/icons/Checks';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { HeartHalfIcon } from 'phosphor-react-native/src/icons/HeartHalf';
@@ -23,6 +24,7 @@ import { Notification } from '@/components/notification';
 import { CornerInset } from '@/components/ui/corner-inset';
 import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { EmptyMessage } from '@/components/ui/empty-message';
+import { Header } from '@/components/ui/header';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { LoadMore } from '@/components/ui/load-more';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
@@ -32,6 +34,7 @@ import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import { useNotificationsMarker } from '@/queries/markers/use-markers';
+import { useNotificationPolicy } from '@/queries/notifications/use-notification-policy';
 import {
   useMarkNotificationsReadMutation,
   useNotifications,
@@ -40,6 +43,8 @@ import {
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { compareId } from '@/utils/comparators';
+
+import { NotificationRequestScreen, NotificationRequestsScreen } from './notification-requests';
 
 import type { NotificationsStackParams, NotificationsTabsParams } from '@/router/router';
 import type { NotificationGroup } from 'pl-api';
@@ -64,6 +69,16 @@ const messages = defineMessages({
     defaultMessage: 'Mark notifications read',
   },
   showFilters: { id: 'notifications.filter.menu', defaultMessage: 'Filter notifications' },
+  requestsHeading: {
+    id: 'column.notification_requests',
+    defaultMessage: 'Filtered notifications',
+  },
+  requestHeading: { id: 'column.notification_request', defaultMessage: 'Pending notifications' },
+  pendingRequests: {
+    id: 'filtered_notifications_banner.pending_requests',
+    defaultMessage:
+      'You have {notifications, plural, =0 {no pending notifications} one {one pending notification} other {# pending notifications}} from {requests, plural, =0 {no one} one {one person} other {# people}} you may know',
+  },
 });
 
 const filtersMessages: Record<(typeof ALL_FILTERS)[number], MessageDescriptor> = defineMessages({
@@ -236,6 +251,31 @@ const FollowRequestsButton = () => {
   );
 };
 
+const FilteredNotificationsButton = () => {
+  const intl = useIntl();
+  const navigation = useNavigation();
+  const { data: policy } = useNotificationPolicy();
+
+  if (!policy || !policy.summary.pending_requests_count) return null;
+
+  return (
+    <HeaderIconButton
+      icon={ArchiveIcon}
+      onPress={() =>
+        navigation.navigate('app', {
+          screen: 'notifications',
+          params: { screen: 'requests' },
+        })
+      }
+      accessibilityLabel={intl.formatMessage(messages.pendingRequests, {
+        notifications: policy.summary.pending_notifications_count,
+        requests: policy.summary.pending_requests_count,
+      })}
+      badge={policy.summary.pending_requests_count}
+    />
+  );
+};
+
 const NotificationsMarkReadButton = () => {
   const intl = useIntl();
 
@@ -291,6 +331,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
         )}
         <InteractionRequestsButton />
         <FollowRequestsButton />
+        <FilteredNotificationsButton />
         <NotificationsMarkReadButton />
       </Appbar.Header>
       <FiltersDialog visible={showFiltersDialog} setVisible={setShowFiltersDialog} />
@@ -396,12 +437,24 @@ const NotificationsScreen = () => {
 const NotificationsStack = createNativeStackNavigator<NotificationsStackParams>();
 
 const NotificationsStackScreen = () => {
+  const intl = useIntl();
+
   return (
-    <NotificationsStack.Navigator>
+    <NotificationsStack.Navigator screenOptions={{ header: Header }}>
       <NotificationsStack.Screen
         name='view'
         component={NotificationsScreen}
         options={{ header: NotificationsHeader }}
+      />
+      <NotificationsStack.Screen
+        name='requests'
+        component={NotificationRequestsScreen}
+        options={{ title: intl.formatMessage(messages.requestsHeading) }}
+      />
+      <NotificationsStack.Screen
+        name='request'
+        component={NotificationRequestScreen}
+        options={{ title: intl.formatMessage(messages.requestHeading) }}
       />
     </NotificationsStack.Navigator>
   );

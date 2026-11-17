@@ -33,6 +33,7 @@ const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) =>
       <CornerInset direction='horizontal' edge='left' />
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       <Appbar.Content title={title} />
+      {options.headerRight?.({ canGoBack: !!back })}
     </Appbar.Header>
   );
 };
