@@ -180,6 +180,7 @@
   "empty_column.mutes": "Aún no has silenciado a ningún usuario.",
   "empty_column.notifications": "No tienes ninguna notificación aún. Interactúa con otros para empezar una conversación.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "¡No hay nada aquí! Escribe algo públicamente, o sigue usuarios de otras instancias manualmente para llenarlo",
   "empty_column.quotes": "Esta publicación no ha sido citada aún.",
   "empty_column.scheduled_statuses": "You don't have any scheduled statuses yet. When you add one, it will show up here.",
   "empty_column.search.accounts": "There are no people results for \"{term}\"",

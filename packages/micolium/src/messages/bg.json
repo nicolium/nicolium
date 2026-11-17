@@ -205,6 +205,7 @@
   "empty_column.followed_tags": "Все още не сте последвали нито един хаштаг.",
   "empty_column.hashtag": "Все още няма нищо в този хаштаг.",
   "empty_column.home.title": "Все още не следвате никого",
+  "empty_column.public": "There is nothing here! Write something publicly, or manually follow users from other instances to fill it up",
   "empty_column.search.accounts": "Няма резултати за хора за „{term}“",
   "empty_column.search.statuses": "Няма резултати за публикации за „{term}“",
   "group.upload_avatar": "Качване на аватар",

@@ -76,6 +76,7 @@
   "empty_column.hashtag": "V tem ključniku še ni nič.",
   "empty_column.mutes": "Niste utišali še nobenega uporabnika.",
   "empty_column.notifications": "Nimate še nobenih obvestil. Povežite se z drugimi, da začnete pogovor.",
+  "empty_column.public": "Tukaj ni ničesar! Da ga napolnite, napišite nekaj javnega ali pa ročno sledite uporabnikom iz drugih strežnikov",
   "follow_request.authorize": "Overi",
   "follow_request.reject": "Zavrni",
   "intervals.full.days": "{number, plural, one {# dan} two {# dni} few {# dni} other {# dni}}",

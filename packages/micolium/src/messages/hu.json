@@ -143,6 +143,7 @@
   "empty_column.mutes": "Még egy felhasználót sem némítottál le.",
   "empty_column.notifications": "Jelenleg nincsenek értesítéseid. Lépj kapcsolatba másokkal, hogy elindítsd a beszélgetést.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "Jelenleg itt nincs semmi! Írj valamit nyilvánosan vagy kövess más szervereken levő felhasználókat, hogy megtöltsd",
   "empty_column.scheduled_statuses": "You don't have any scheduled statuses yet. When you add one, it will show up here.",
   "empty_column.search.accounts": "There are no people results for \"{term}\"",
   "empty_column.search.statuses": "There are no posts results for \"{term}\"",

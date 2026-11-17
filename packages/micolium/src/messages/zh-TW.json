@@ -166,6 +166,7 @@
   "empty_column.mutes": "您尚未將任何使用者靜音。",
   "empty_column.notifications": "您尚未收到任何通知，和別人互動開啟對話吧。",
   "empty_column.notifications_filtered": "您還沒有任何此類通知。",
+  "empty_column.public": "這裡什麼都沒有！嘗試寫些公開的貼文，或著追隨其他伺服器的使用者後就會出現了",
   "empty_column.quotes": "這篇文章尚未被引用。",
   "empty_column.scheduled_statuses": "暫時沒有定時貼文。當你發布定時貼文後，它們會顯示在這裡。",
   "empty_column.search.accounts": "沒有匹配的帳戶 \"{term}\"",

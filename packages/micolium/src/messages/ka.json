@@ -69,6 +69,7 @@
   "empty_column.favourites": "No one has favorited this post yet. When someone does, they will show up here.",
   "empty_column.hashtag": "ამ ჰეშტეგში ჯერ არაფერია.",
   "empty_column.notifications": "ჯერ შეტყობინებები არ გაქვთ. საუბრის დასაწყებად იურთიერთქმედეთ სხვებთან.",
+  "empty_column.public": "აქ არაფერია! შესავსებად, დაწერეთ რაიმე ღიად ან ხელით გაჰყევით მომხმარებლებს სხვა ინსტანციებისგან",
   "follow_request.authorize": "ავტორიზაცია",
   "follow_request.reject": "უარყოფა",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",

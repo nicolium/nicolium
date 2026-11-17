@@ -166,6 +166,7 @@
   "empty_column.mutes": "Anda belum membisukan siapapun.",
   "empty_column.notifications": "Anda tidak memiliki notifikasi apapun. Berinteraksi dengan orang lain untuk memulai percakapan.",
   "empty_column.notifications_filtered": "Anda belum mendapat pemberitahuan seperti ini.",
+  "empty_column.public": "Tidak ada apapun disini! Tulis sesuatu, atau ikuti pengguna lain dari server lain untuk mengisi ini",
   "empty_column.quotes": "Postingan ini belum dikutip.",
   "empty_column.scheduled_statuses": "Anda belum memiliki status terjadwal. Saat Anda menambahkannya, itu akan muncul di sini.",
   "empty_column.search.accounts": "Tidak ada hasil untuk orang \"{term}\"",

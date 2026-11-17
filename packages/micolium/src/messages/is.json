@@ -143,6 +143,7 @@
   "empty_column.mutes": "Þú hefur ekki þagað neina notendur.",
   "empty_column.notifications": "Þú hefur engar tilkynningar. Hafðu samskipti við aðra til að hefja samtalið.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "Hér er ekkert! Skrifaðu eitthvað opinberlega eða fylgdu notendum frá öðrum netþjónum handvirkt til að fá færslur hér.",
   "empty_column.scheduled_statuses": "Þú ert ekki með neinar skipulagðar stöður. Þegar þú bætir eina við birtist hún hér.",
   "empty_column.search.accounts": "Ekkert fólk fannst fyrir „{term}“",
   "empty_column.search.statuses": "Engar færslur fannst fyrir „{term}“",

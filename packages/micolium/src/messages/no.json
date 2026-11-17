@@ -163,6 +163,7 @@
   "empty_column.mutes": "Du har ikke ignorert noen brukere ennå.",
   "empty_column.notifications": "Du har ingen varsler ennå. Kommuniser med andre for å begynne samtalen.",
   "empty_column.notifications_filtered": "Du har ingen varsler av denne typen ennå.",
+  "empty_column.public": "Det er ingenting her! Skriv noe offentlig, eller følg brukere manuelt fra andre instanser for å fylle den opp",
   "empty_column.quotes": "Dette innlegget har ikke blitt sitert ennå.",
   "empty_column.scheduled_statuses": "Du har ingen planlagte statuser ennå. Når du legger til en, vil den vises her.",
   "empty_column.search.accounts": "Det er ingen personresultater for \"{term}\"",

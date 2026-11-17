@@ -78,6 +78,7 @@
   "empty_column.hashtag": "এই হেসটাগে এখনো কিছু নেই।",
   "empty_column.mutes": "আপনি এখনো কোনো ব্যবহারকারীকে সরাননি।",
   "empty_column.notifications": "আপনার এখনো কোনো প্রজ্ঞাপন নেই। কথোপকথন শুরু করতে,  অন্যদের সাথে মেলামেশা করতে পারেন।",
+  "empty_column.public": "এখানে এখনো কিছু নেই! প্রকাশ্য ভাবে কিছু লিখুন বা অন্য সার্ভার থেকে কাওকে অনুসরণ করে এই জায়গা ভরে ফেলুন",
   "follow_request.authorize": "অনুমতি দিন",
   "follow_request.reject": "প্রত্যাখ্যান করুন",
   "intervals.full.hours": "{number, plural, one {# ঘটা} other {# ঘটা}}",

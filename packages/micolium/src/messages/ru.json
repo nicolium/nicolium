@@ -178,6 +178,7 @@
   "empty_column.mutes": "Вы ещё никого не скрывали.",
   "empty_column.notifications": "У вас пока нет уведомлений. Взаимодействуйте с другими, чтобы завести разговор.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "Здесь ничего нет! Опубликуйте что-нибудь или подпишитесь на пользователей с других узлов, чтобы заполнить ленту.",
   "empty_column.quotes": "Этот пост еще не цитировался.",
   "empty_column.scheduled_statuses": "You don't have any scheduled statuses yet. When you add one, it will show up here.",
   "empty_column.search.accounts": "There are no people results for \"{term}\"",

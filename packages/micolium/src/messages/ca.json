@@ -94,6 +94,7 @@
   "empty_column.hashtag": "Encara no hi ha res en aquesta etiqueta.",
   "empty_column.mutes": "Encara no has silenciat cap usuari.",
   "empty_column.notifications": "Encara no tens notificació. Interactua amb altres usuaris per iniciar una conversa.",
+  "empty_column.public": "No hi ha res aquí! Escriu públicament alguna cosa o manualment segueix usuaris d'altres servidors per omplir-ho",
   "filters.context.header": "Filtra els contextos",
   "filters.filters_list_context.label": "Filtra els contextos:",
   "follow_request.authorize": "Autoritzar",

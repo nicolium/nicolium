@@ -166,6 +166,7 @@
   "empty_column.mutes": "لم تقم بكتم أي مستخدم بعد.",
   "empty_column.notifications": "لم تتلق أي إشعار بعدُ. تفاعل مع المستخدمين الآخرين لإنشاء محادثة.",
   "empty_column.notifications_filtered": "لم تتلقَ أيّ إشعارٍ من هذا النوع بعد.",
+  "empty_column.public": "لا يوجد أي شيء هنا! قم بنشر شيء ما، أو اتبع المستخدمين الآخرين لملء الخط الزمني",
   "empty_column.quotes": "لم يتم اقتباس هذا المنشور بعد.",
   "empty_column.scheduled_statuses": "ليس لديك أي حالات مجدولة حتى الآن. ستظهر هنا عندما تضيفها.",
   "empty_column.search.accounts": "لم يتم العثور على تطابق مع {term}",

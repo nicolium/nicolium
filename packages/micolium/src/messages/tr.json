@@ -166,6 +166,7 @@
   "empty_column.mutes": "Henüz hiçbir kullanıcıyı sessize almadınız.",
   "empty_column.notifications": "Henüz hiçbir bildiriminiz yok. Diğer insanlarla sohbet edebilmek için etkileşime geçebilirsiniz.",
   "empty_column.notifications_filtered": "Henüz bu tür için bir bildiriminiz yok.",
+  "empty_column.public": "Burada hiçbir şey yok! Herkese açık bir şeyler yazın veya burayı doldurmak için diğer sunuculardaki kullanıcıları takip edin",
   "empty_column.quotes": "Bu gönderi henüz alıntılanmadı.",
   "empty_column.scheduled_statuses": "Henüz zamanlanmış gönderiniz yok. Bir tane eklediğinizde, burada görünecektir.",
   "empty_column.search.accounts": "\"{term}\" için kişi sonucu yok",

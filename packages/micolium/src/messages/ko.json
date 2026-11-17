@@ -143,6 +143,7 @@
   "empty_column.mutes": "아직 아무도 뮤트하지 않았습니다.",
   "empty_column.notifications": "아직 알림이 없습니다. 다른 사람과 대화를 시작해 보세요.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "여기엔 아직 아무 것도 없습니다! 공개적으로 무언가 포스팅하거나, 다른 서버의 유저를 팔로우 해서 채워보세요",
   "empty_column.scheduled_statuses": "You don't have any scheduled statuses yet. When you add one, it will show up here.",
   "empty_column.search.accounts": "There are no people results for \"{term}\"",
   "empty_column.search.statuses": "There are no posts results for \"{term}\"",

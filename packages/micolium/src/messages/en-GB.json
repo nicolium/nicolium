@@ -1,6 +1,7 @@
 {
   "account.add_or_remove_from_list": "Add or remove from lists",
   "column.wrenched": "Recent spanners timeline",
+  "empty_column.wrenched": "There is nothing here! 🔧 a public post to fill it up",
   "follow_request.authorize": "Authorise",
   "interaction_request.authorize.fail": "Failed to authorise @{acct} interaction request",
   "interaction_request.authorize.success": "Authorised @{acct} interaction request",

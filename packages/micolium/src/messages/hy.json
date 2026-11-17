@@ -63,6 +63,7 @@
   "empty_column.favourites": "No one has favorited this post yet. When someone does, they will show up here.",
   "empty_column.hashtag": "Այս պիտակով դեռ ոչինչ չկա։",
   "empty_column.notifications": "Ոչ մի ծանուցում դեռ չունես։ Բզիր մյուսներին՝ խոսակցությունը սկսելու համար։",
+  "empty_column.public": "Այստեղ բան չկա՛։ Հրապարակային մի բան գրիր կամ հետեւիր այլ հանգույցներից էակների՝ այն լցնելու համար։",
   "follow_request.authorize": "Վավերացնել",
   "follow_request.reject": "Մերժել",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",

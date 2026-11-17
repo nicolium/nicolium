@@ -143,6 +143,7 @@
   "empty_column.mutes": "Encara avètz pas mes en silenci degun.",
   "empty_column.notifications": "Avètz pas encara de notificacions. Respondètz a qualqu’un per començar una conversacion.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "I a pas res aquí ! Escrivètz quicòm de public, o seguètz de personas d’autres servidors per garnir lo flux public",
   "empty_column.scheduled_statuses": "You don't have any scheduled statuses yet. When you add one, it will show up here.",
   "empty_column.search.accounts": "There are no people results for \"{term}\"",
   "empty_column.search.statuses": "There are no posts results for \"{term}\"",

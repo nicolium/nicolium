@@ -143,6 +143,7 @@
   "empty_column.mutes": "شما هنوز هیچ کاربری را بی‌صدا نکرده‌اید.",
   "empty_column.notifications": "هنوز هیچ اعلانی ندارید. به نوشته‌های دیگران واکنش نشان دهید تا گفتگو آغاز شود.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "این‌جا هنوز چیزی نیست! خودتان چیزی بنویسید یا کاربران سرورهای دیگر را پی بگیرید تا این‌جا پر شود",
   "empty_column.scheduled_statuses": "You don't have any scheduled statuses yet. When you add one, it will show up here.",
   "empty_column.search.accounts": "There are no people results for \"{term}\"",
   "empty_column.search.statuses": "There are no posts results for \"{term}\"",

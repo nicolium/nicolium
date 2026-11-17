@@ -143,6 +143,7 @@
   "empty_column.mutes": "𐑿 𐑣𐑨𐑝𐑩𐑯𐑑 𐑥𐑿𐑑𐑩𐑛 𐑧𐑯𐑦 𐑿𐑟𐑼𐑟 𐑘𐑧𐑑.",
   "empty_column.notifications": "𐑿 𐑛𐑴𐑯𐑑 𐑣𐑨𐑝 𐑧𐑯𐑦 𐑯𐑴𐑑𐑦𐑓𐑦𐑒𐑱𐑖𐑩𐑯𐑟 𐑘𐑧𐑑. 𐑦𐑯𐑑𐑼𐑨𐑒𐑑 𐑢𐑦𐑞 𐑳𐑞𐑼𐑟 𐑑 𐑕𐑑𐑸𐑑 𐑞 𐑒𐑪𐑯𐑝𐑼𐑕𐑱𐑖𐑩𐑯.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "𐑞𐑺 𐑦𐑟 𐑯𐑳𐑔𐑦𐑙 𐑣𐑽! 𐑮𐑲𐑑 𐑕𐑳𐑥𐑔𐑦𐑙 𐑐𐑳𐑚𐑤𐑦𐑒𐑤𐑦, 𐑹 𐑥𐑨𐑯𐑘𐑫𐑩𐑤𐑦 𐑓𐑪𐑤𐑴 𐑿𐑟𐑼𐑟 𐑓𐑮𐑪𐑥 𐑳𐑞𐑼 𐑕𐑻𐑝𐑼𐑟 𐑑 𐑓𐑦𐑤 𐑦𐑑 𐑳𐑐",
   "empty_column.scheduled_statuses": "𐑿 𐑛𐑴𐑯𐑑 𐑣𐑨𐑝 𐑧𐑯𐑦 𐑖𐑧𐑡𐑵𐑤𐑛 𐑕𐑑𐑱𐑑𐑩𐑕𐑩𐑟 𐑘𐑧𐑑. 𐑢𐑧𐑯 𐑿 𐑨𐑛 𐑢𐑳𐑯, 𐑦𐑑 𐑢𐑦𐑤 𐑖𐑴 𐑳𐑐 𐑣𐑽.",
   "empty_column.search.accounts": "𐑞𐑺 𐑸 𐑯𐑴 𐑐𐑰𐑐𐑩𐑤 𐑮𐑦𐑟𐑳𐑤𐑑𐑕 𐑓 \"{term}\"",
   "empty_column.search.statuses": "𐑞𐑺 𐑸 𐑯𐑴 𐑐𐑴𐑕𐑑𐑕 𐑮𐑦𐑟𐑳𐑤𐑑𐑕 𐑓 \"{term}\"",

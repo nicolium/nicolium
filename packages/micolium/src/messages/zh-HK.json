@@ -135,6 +135,7 @@
   "empty_column.hashtag": "這個主題標籤下什麼也沒有。",
   "empty_column.mutes": "你尚未隱藏任何使用者。",
   "empty_column.notifications": "您尚未收到任何通知，和別人互動開啟對話吧。",
+  "empty_column.public": "這裡什麼都沒有！嘗試寫些公開的帖文，或著自己追蹤其他伺服器的使用者後就會有帖文出現了",
   "empty_column.scheduled_statuses": "暫時沒有定時帖文。當你發佈定時帖文後，它們會顯示在這裡。",
   "empty_column.search.accounts": "沒有匹配的帳户 \"{term}\"",
   "empty_column.search.statuses": "沒有匹配的帖文 \"{term}\"",

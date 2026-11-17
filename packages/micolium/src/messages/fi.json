@@ -78,6 +78,7 @@
   "empty_column.hashtag": "Tällä hashtagilla ei ole vielä mitään.",
   "empty_column.mutes": "Et ole mykistänyt vielä yhtään käyttäjää.",
   "empty_column.notifications": "Sinulle ei ole vielä ilmoituksia. Aloita keskustelu juttelemalla muille.",
+  "empty_column.public": "Täällä ei ole mitään! Saat sisältöä, kun kirjoitat jotain julkisesti tai käyt seuraamassa muiden instanssien käyttäjiä",
   "follow_request.authorize": "Valtuuta",
   "follow_request.reject": "Hylkää",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",

@@ -78,6 +78,7 @@
   "empty_column.hashtag": "Selle sildiga pole veel midagi.",
   "empty_column.mutes": "Sa pole veel ühtegi kasutajat vaigistanud.",
   "empty_column.notifications": "Sul ei ole veel teateid. Suhtle teistega alustamaks vestlust.",
+  "empty_column.public": "Siin pole midagi! Kirjuta midagi avalikut või jälgi ise kasutajaid täitmaks seda ruumi",
   "follow_request.authorize": "Autoriseeri",
   "follow_request.reject": "Hülga",
   "intervals.full.days": "{number, plural, one {# päev} other {# päevad}}",

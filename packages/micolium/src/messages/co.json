@@ -78,6 +78,7 @@
   "empty_column.hashtag": "Ùn c'hè ancu nunda quì.",
   "empty_column.mutes": "Per avà ùn avete manc'un utilizatore piattatu.",
   "empty_column.notifications": "Ùn avete ancu nisuna nutificazione. Interact with others to start the conversation.",
+  "empty_column.public": "Ùn c'hè nunda quì! Scrivete qualcosa in pubblicu o seguitate utilizatori d'altri servori per empie a linea pubblica",
   "follow_request.authorize": "Auturizà",
   "follow_request.reject": "Righjittà",
   "intervals.full.days": "{number, plural, one {# ghjornu} other {# ghjorni}}",

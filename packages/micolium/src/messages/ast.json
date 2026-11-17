@@ -64,6 +64,7 @@
   "empty_column.follow_requests": "Entá nun tienes denguna solicitú de siguimientu. Cuando recibas una, va amosase equí.",
   "empty_column.mutes": "Entá nun silenciesti a dengún usuariu.",
   "empty_column.notifications": "Entá nun tienes dengún avisu. Interactua con otros p'aniciar la conversación.",
+  "empty_column.public": "There is nothing here! Write something publicly, or manually follow users from other instances to fill it up",
   "follow_request.authorize": "Autorizar",
   "follow_request.reject": "Refugar",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",

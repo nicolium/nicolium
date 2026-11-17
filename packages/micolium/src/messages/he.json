@@ -162,6 +162,7 @@
   "empty_column.mutes": "עדיין לא השתקת אף משתמש.",
   "empty_column.notifications": "אין התראות.",
   "empty_column.notifications_filtered": "You don't have any notifications of this type yet.",
+  "empty_column.public": "אין פה כלום! כדי למלא את הטור הזה אפשר לכתוב משהו, או להתחיל לעקוב אחרי אנשים מקהילות אחרות",
   "empty_column.scheduled_statuses": "עדיין אין לך סטטוסים מתוזמנים. כאשר אתה מוסיף אחד, הוא יופיע כאן.",
   "empty_column.search.accounts": "אין תוצאות של אנשים עבור \"{term}\"",
   "empty_column.search.statuses": "אין תוצאות פוסטים עבור \"{term}\"",

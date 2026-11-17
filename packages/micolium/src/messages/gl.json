@@ -78,6 +78,7 @@
   "empty_column.hashtag": "Aínda non hai nada con esta etiqueta.",
   "empty_column.mutes": "Non acalou ningunha usuaria polo de agora.",
   "empty_column.notifications": "Aínda non ten notificacións. Interactúe con outras para iniciar unha conversa.",
+  "empty_column.public": "Nada por aquí! Escriba algo de xeito público, ou siga manualmente usuarias de outros servidores para ir enchéndoa",
   "follow_request.authorize": "Autorizar",
   "follow_request.reject": "Rexeitar",
   "intervals.full.days": "{number, plural,one {# día} other {# días}}",

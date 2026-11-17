@@ -116,6 +116,7 @@
   "empty_column.mutes": "Ještě jste neskryli žádné uživatele.",
   "empty_column.notifications": "Ještě nemáte žádná oznámení. Začněte konverzaci komunikováním s ostatními.",
   "empty_column.notifications_filtered": "Žádná oznámení tohoto typu zatím nemáte.",
+  "empty_column.public": "Tady nic není! Napište něco veřejně, nebo začněte sledovat uživatele z jiných serverů, aby tu něco přibylo",
   "filters.context.header": "Filtrovat obsah",
   "filters.filters_list_context.label": "Kontexty filtru:",
   "follow_request.authorize": "Autorizovat",

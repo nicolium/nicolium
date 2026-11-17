@@ -206,6 +206,7 @@
   "empty_column.mutes": "Du hast keine Profile stummgeschaltet.",
   "empty_column.notifications": "Du hast noch keine Mitteilungen. Interagiere mit anderen, um ins Gespräch zu kommen.",
   "empty_column.notifications_filtered": "Du hast noch keine Benachrichtigungen dieser Art.",
+  "empty_column.public": "Hier ist nichts zu sehen! Schreibe etwas öffentlich oder folge Profilen von anderen Servern, um die Zeitleiste aufzufüllen",
   "empty_column.quotes": "Dieser Beitrag wurde noch nicht zitiert.",
   "empty_column.scheduled_statuses": "Bisher wurden keine vorbereiteten Beiträge erstellt. Vorbereitete Beiträge werden hier angezeigt.",
   "empty_column.search.accounts": "Es wurden keine Nutzer unter \"{term}\" gefunden",

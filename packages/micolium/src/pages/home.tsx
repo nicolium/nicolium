@@ -111,7 +111,17 @@ const BubbleTimelineScreen: React.FC<
 
   return (
     <>
-      <Timeline filtersKey='bubble' query={timelineQuery} onScroll={handleScroll} />
+      <Timeline
+        filtersKey='bubble'
+        query={timelineQuery}
+        onScroll={handleScroll}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.bubble'
+            defaultMessage='There is nothing here! Write something publicly to fill it up'
+          />
+        }
+      />
       <ComposeButton visible={showComposeButton} />
     </>
   );
@@ -131,7 +141,17 @@ const FederatedTimelineScreen: React.FC<
 
   return (
     <>
-      <Timeline filtersKey='public' query={timelineQuery} onScroll={handleScroll} />
+      <Timeline
+        filtersKey='public'
+        query={timelineQuery}
+        onScroll={handleScroll}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.public'
+            defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up'
+          />
+        }
+      />
       <ComposeButton visible={showComposeButton} />
     </>
   );
@@ -149,7 +169,17 @@ const WrenchedTimelineScreen: React.FC<
 
   return (
     <>
-      <Timeline filtersKey='public' query={timelineQuery} onScroll={handleScroll} />
+      <Timeline
+        filtersKey='public'
+        query={timelineQuery}
+        onScroll={handleScroll}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.wrenched'
+            defaultMessage='There is nothing here! 🔧 a public post to fill it up'
+          />
+        }
+      />
       <ComposeButton visible={showComposeButton} />
     </>
   );

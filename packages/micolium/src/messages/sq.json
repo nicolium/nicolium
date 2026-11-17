@@ -76,6 +76,7 @@
   "empty_column.hashtag": "Ende s’ka gjë nën këtë hashtag.",
   "empty_column.mutes": "S’keni heshtuar ende ndonjë përdorues.",
   "empty_column.notifications": "Ende s’keni ndonjë njoftim. Ndërveproni me të tjerët që të nisë biseda.",
+  "empty_column.public": "S’ka gjë këtu! Shkruani diçka publikisht, ose ndiqni dorazi përdorues prej instancash të tjera, që ta mbushni këtë zonë",
   "follow_request.authorize": "Autorizoje",
   "follow_request.reject": "Hidhe tej",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",

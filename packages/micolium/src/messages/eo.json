@@ -78,6 +78,7 @@
   "empty_column.hashtag": "Ankoraŭ estas nenio per ĉi tiu kradvorto.",
   "empty_column.mutes": "Vi ne ankoraŭ silentigis iun uzanton.",
   "empty_column.notifications": "Vi ankoraŭ ne havas sciigojn. Interagu kun aliaj por komenci konversacion.",
+  "empty_column.public": "Estas nenio ĉi tie! Publike skribu ion, aŭ mane sekvu uzantojn de aliaj serviloj por plenigi la publikan tempolinion",
   "follow_request.authorize": "Rajtigi",
   "follow_request.reject": "Rifuzi",
   "intervals.full.days": "{number, plural, one {# tago} other {# tagoj}}",

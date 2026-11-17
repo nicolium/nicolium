@@ -77,6 +77,7 @@
   "empty_column.hashtag": "ยังไม่มีสิ่งใดในแฮชแท็กนี้",
   "empty_column.mutes": "คุณยังไม่ได้ปิดเสียงผู้ใช้ใด ๆ",
   "empty_column.notifications": "คุณยังไม่มีการแจ้งเตือนใด ๆ โต้ตอบกับผู้อื่นเพื่อเริ่มการสนทนา",
+  "empty_column.public": "ไม่มีสิ่งใดที่นี่! เขียนบางอย่างเป็นสาธารณะ หรือติดตามผู้ใช้จากเซิร์ฟเวอร์อื่น ๆ ด้วยตนเองเพื่อเติมให้เต็ม",
   "follow_request.authorize": "อนุญาต",
   "follow_request.reject": "ปฏิเสธ",
   "intervals.full.days": "{number, plural, other {# วัน}}",
