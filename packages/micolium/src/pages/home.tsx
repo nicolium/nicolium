@@ -137,6 +137,24 @@ const FederatedTimelineScreen: React.FC<
   );
 };
 
+const WrenchedTimelineScreen: React.FC<
+  NativeStackScreenProps<TimelineStackParams, 'wrenched'>
+> = () => {
+  const client = useClient();
+  const { showComposeButton, handleScroll } = useShowComposeButton();
+
+  const timelineQuery = useTimeline('wrenched', (paginationParams) =>
+    client.timelines.wrenchedTimeline(paginationParams),
+  );
+
+  return (
+    <>
+      <Timeline filtersKey='public' query={timelineQuery} onScroll={handleScroll} />
+      <ComposeButton visible={showComposeButton} />
+    </>
+  );
+};
+
 const ListTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'list'>> = ({
   route,
 }) => {
@@ -259,6 +277,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen name='local' component={LocalTimelineScreen} />
       <HomeStack.Screen name='bubble' component={BubbleTimelineScreen} />
       <HomeStack.Screen name='federated' component={FederatedTimelineScreen} />
+      <HomeStack.Screen name='wrenched' component={WrenchedTimelineScreen} />
       <HomeStack.Screen name='list' component={ListTimelineScreen} />
       <HomeStack.Screen name='antenna' component={AntennaTimelineScreen} />
       <HomeStack.Screen name='circle' component={CircleTimelineScreen} />

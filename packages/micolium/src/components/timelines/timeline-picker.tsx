@@ -114,7 +114,7 @@ const useMenuItems = (
   const { data: circles } = useCircles();
 
   const getTimelineItem = (
-    value: 'home' | 'local' | 'bubble' | 'federated',
+    value: 'home' | 'local' | 'bubble' | 'federated' | 'wrenched',
     appleIcon: SFSymbol,
     androidIcon: string,
     title: MessageDescriptor,
@@ -276,6 +276,11 @@ const useMenuItems = (
   if (features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled') {
     timelines.push(
       getTimelineItem('federated', 'globe', 'ph_globe_simple', messages.federatedTimeline),
+    );
+  }
+  if (features.wrenchedTimeline && timelineAccess.live_feeds.wrenched !== 'disabled') {
+    timelines.push(
+      getTimelineItem('wrenched', 'wrench.adjustable', 'ph_wrench', messages.wrenchedTimeline),
     );
   }
 

@@ -28,6 +28,7 @@ type TimelineStackParams = {
   local: undefined;
   bubble: undefined;
   federated: undefined;
+  wrenched: undefined;
   list: { id: string };
   circle: { id: string };
   antenna: { id: string };
