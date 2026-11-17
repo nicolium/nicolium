@@ -8,6 +8,7 @@ import {
 } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
+  NativeStackScreenProps,
   type NativeStackHeaderProps,
 } from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
@@ -69,6 +70,7 @@ const messages = defineMessages({
     defaultMessage: 'Mark notifications read',
   },
   showFilters: { id: 'notifications.filter.menu', defaultMessage: 'Filter notifications' },
+  notificationsHeading: { id: 'column.notifications', defaultMessage: 'Notifications' },
   requestsHeading: {
     id: 'column.notification_requests',
     defaultMessage: 'Filtered notifications',
@@ -300,40 +302,28 @@ const NotificationsMarkReadButton = () => {
   );
 };
 
-const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
+interface INotificationsHeaderRight {
+  routeName: 'all' | 'mentions';
+}
+
+const NotificationsHeaderRight: React.FC<INotificationsHeaderRight> = ({ routeName }) => {
   const intl = useIntl();
-  const { colors } = useTheme();
 
   const [showFiltersDialog, setShowFiltersDialog] = React.useState(false);
 
   return (
     <>
-      <Appbar.Header
-        mode='small'
-        style={{
-          backgroundColor: colors.surfaceContainer,
-        }}
-      >
-        <CornerInset direction='horizontal' edge='left' />
-        <Appbar.Content
-          title={
-            <Text variant='titleLarge'>
-              <FormattedMessage id='column.notifications' defaultMessage='Notifications' />
-            </Text>
-          }
+      {routeName !== 'mentions' && (
+        <HeaderIconButton
+          icon={FunnelIcon}
+          onPress={() => setShowFiltersDialog(true)}
+          accessibilityLabel={intl.formatMessage(messages.showFilters)}
         />
-        {getFocusedRouteNameFromRoute(route) !== 'mentions' && (
-          <HeaderIconButton
-            icon={FunnelIcon}
-            onPress={() => setShowFiltersDialog(true)}
-            accessibilityLabel={intl.formatMessage(messages.showFilters)}
-          />
-        )}
-        <InteractionRequestsButton />
-        <FollowRequestsButton />
-        <FilteredNotificationsButton />
-        <NotificationsMarkReadButton />
-      </Appbar.Header>
+      )}
+      <InteractionRequestsButton />
+      <FollowRequestsButton />
+      <FilteredNotificationsButton />
+      <NotificationsMarkReadButton />
       <FiltersDialog visible={showFiltersDialog} setVisible={setShowFiltersDialog} />
     </>
   );
@@ -410,14 +400,23 @@ const MentionNotifications = () => <NotificationsList tab='mentions' />;
 
 const NotificationsTabs = createMaterialTopTabNavigator<NotificationsTabsParams>();
 
-const NotificationsScreen = () => {
+const NotificationsScreen = ({
+  navigation,
+}: NativeStackScreenProps<NotificationsStackParams, 'view'>) => {
   const intl = useIntl();
   const tabBarProps = useTabBarProps();
+  const [currentTab, setCurrentTab] = React.useState(0);
 
   const filters = useSetting('notifications.filters');
 
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <NotificationsHeaderRight routeName={currentTab ? 'mentions' : 'all'} />,
+    });
+  }, [navigation, currentTab]);
+
   return (
-    <NotificationsTabs.Navigator {...tabBarProps}>
+    <NotificationsTabs.Navigator onTabSelect={({ index }) => setCurrentTab(index)} {...tabBarProps}>
       <NotificationsTabs.Screen
         name='all'
         component={AllNotifications}
@@ -444,7 +443,10 @@ const NotificationsStackScreen = () => {
       <NotificationsStack.Screen
         name='view'
         component={NotificationsScreen}
-        options={{ header: NotificationsHeader }}
+        options={{
+          header: (props) => <Header {...props} withBottomBorder={false} />,
+          title: intl.formatMessage(messages.notificationsHeading),
+        }}
       />
       <NotificationsStack.Screen
         name='requests'

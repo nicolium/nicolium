@@ -10,7 +10,11 @@ import { HeaderBackButton } from './header-icon-button';
 
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
 
-const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) => {
+interface IHeader extends NativeStackHeaderProps {
+  withBottomBorder?: boolean;
+}
+
+const Header = ({ navigation, route, options, back, withBottomBorder = true }: IHeader) => {
   const { colors } = useTheme();
   const title = getHeaderTitle(options, route.name);
   const colorScheme = useColorScheme();
@@ -23,7 +27,8 @@ const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) =>
         {
           backgroundColor: colors.surfaceContainer,
         },
-        colorScheme === 'dark' &&
+        withBottomBorder &&
+          colorScheme === 'dark' &&
           blackTheme && {
             borderBottomWidth: 1,
             borderBottomColor: colors.surfaceContainerHighest,
