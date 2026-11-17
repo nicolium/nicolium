@@ -48,12 +48,12 @@ const TimelinesSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 
                 active: autoloadMore,
                 onPress: () => update('timelines.autoloadMore', !autoloadMore),
               },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.autoloadTimelines),
-                active: autoloadTimelines,
-                onPress: () => update('timelines.autoloadTimelines', !autoloadTimelines),
-              },
+              // {
+              //   type: 'toggle',
+              //   label: intl.formatMessage(messages.autoloadTimelines),
+              //   active: autoloadTimelines,
+              //   onPress: () => update('timelines.autoloadTimelines', !autoloadTimelines),
+              // },
               {
                 type: 'toggle',
                 label: intl.formatMessage(messages.boostModal),
