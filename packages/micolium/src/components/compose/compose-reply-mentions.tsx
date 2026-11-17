@@ -61,7 +61,6 @@ const ComposeReplyMentionAccount: React.FC<IComposeReplyMentionAccount> = ({
     });
 
   const handlePress = () => {
-    console.log('pressing', added);
     if (added) onRemove();
     else onAdd();
   };
@@ -100,7 +99,7 @@ const ComposeReplyMentionsDialog: React.FC<IComposeReplyMentionsDialog> = ({
   const compose = useCompose(composeId);
 
   const [closing, setClosing] = React.useState(false);
-  
+
   const { data: status } = useStatus(compose.inReplyToId ?? undefined);
   const { data: ownAccount } = useCredentialAccount();
 
