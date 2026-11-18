@@ -519,6 +519,8 @@
   "status.delete.success": "帖文已删除",
   "status.edit": "编辑",
   "status.edited": "编辑于 {date}",
+  "status.fake_news.heading": "虚假信息",
+  "status.fake_news.text": "此帖文已被第三方事实核查机构标记为虚假信息。{description}",
   "status.favourite": "点赞",
   "status.filtered": "已过滤",
   "status.followed_tag": "您正在关注 {tags}",

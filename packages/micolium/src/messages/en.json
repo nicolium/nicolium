@@ -778,6 +778,8 @@
   "status.dislike": "Dislike",
   "status.edit": "Edit",
   "status.edited": "Edited {date}",
+  "status.fake_news.heading": "False information",
+  "status.fake_news.text": "This post has been marked as false information by a third-party fact-checker. {description}",
   "status.favourite": "Like",
   "status.filtered": "Filtered",
   "status.followed_tag": "You’re following {tags}",

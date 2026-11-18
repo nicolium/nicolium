@@ -8,12 +8,12 @@ import { Status } from './status';
 
 import type { FilterContext } from 'pl-api';
 
-interface IQuote {
+interface IStatusQuote {
   id: string;
   context?: FilterContext;
 }
 
-const Quote: React.FC<IQuote> = ({ id, ...props }) => {
+const StatusQuote: React.FC<IStatusQuote> = ({ id, ...props }) => {
   const { isPending, isError } = useStatus(id);
 
   return (
@@ -31,4 +31,4 @@ const Quote: React.FC<IQuote> = ({ id, ...props }) => {
   );
 };
 
-export { Quote as StatusQuote };
+export { StatusQuote };

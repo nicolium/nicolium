@@ -11,7 +11,7 @@ import { EyeSlashIcon } from 'phosphor-react-native/src/icons/EyeSlash';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
 import React from 'react';
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
@@ -31,6 +31,7 @@ import {
   StatusRebloggedChip,
 } from './status-chips';
 import { StatusEmojiReactions } from './status-emoji-reactions';
+import StatusFakeNewsAlert from './status-fake-news-alert';
 import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
@@ -40,6 +41,22 @@ import StatusTranslateButton from './status-translate-button';
 import { StatusVisibilityIcon } from './status-visibility-icon';
 
 import type { FilterContext, FilterResult } from 'pl-api';
+
+/** Returns the hour if the text contains only an hour */
+const isOnlyHour = (text: string): string | false => {
+  try {
+    const rawHour = text
+      .trim()
+      ?.replace(/^[\s\u2000-\u200f]+|[\s\u2000-\u200f]+$/g, '')
+      .match(/^([01]?\d|2[0-3]):?[0-5]\d$/)?.[0];
+    if (!rawHour) return false;
+    const hour = rawHour?.includes(':') ? rawHour : `${rawHour.slice(0, -2)}:${rawHour.slice(-2)}`;
+    return hour;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
 
 interface IStatusDetailedInfo {
   status: SelectedStatus;
@@ -145,6 +162,8 @@ const Status: React.FC<IStatus> = ({
   actions,
   ...props
 }) => {
+  const intl = useIntl();
+
   const { data: status } = useStatus(id, { withFilteredResults: true });
 
   const { spoilerExpanded, showFiltered, mediaVisible, targetLanguage } = useStatusMeta(id);
@@ -186,6 +205,31 @@ const Status: React.FC<IStatus> = ({
 
     return [hideResults, warnResults, blurResults];
   }, [actualStatus?.filtered, context]);
+
+  const isTimeOff = React.useMemo(() => {
+    if (!actualStatus?.created_at) return;
+
+    const time = isOnlyHour(actualStatus.search_index);
+    const publishedHour = new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+      timeZone: intl.timeZone,
+    }).format(new Date(actualStatus.created_at));
+
+    if (!time || !publishedHour) {
+      return false;
+    }
+
+    const [hour, minute] = time.split(':').map(Number);
+    const [publishedHourValue, publishedMinute] = publishedHour.split(':').map(Number);
+
+    if (hour === publishedHourValue && Math.abs(minute - publishedMinute) === 1) {
+      return publishedHour;
+    } else {
+      return false;
+    }
+  }, [actualStatus]);
 
   if (!actualStatus || (hideFilters.length && !props.detailed)) return null;
 
@@ -299,6 +343,7 @@ const Status: React.FC<IStatus> = ({
               ) : (
                 <StatusQuote id={actualStatus.quote_id} context={context} />
               ))}
+            {isTimeOff && <StatusFakeNewsAlert publishedAt={isTimeOff} />}
             {!props.compact && <StatusLinkPreview status={actualStatus} />}
             {props.detailed && <StatusDetailedInfo status={actualStatus} />}
           </>

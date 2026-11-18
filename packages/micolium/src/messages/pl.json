@@ -526,6 +526,8 @@
   "status.delete.success": "Usunięto wpis",
   "status.edit": "Edytuj",
   "status.edited": "Zedytowano {date}",
+  "status.fake_news.heading": "Fałszywa informacja",
+  "status.fake_news.text": "Ten wpis został uznany za fałszywą informację przez niezależnych weryfikatorów. {description}",
   "status.favourite": "Ulubione",
   "status.filtered": "Filtrowany",
   "status.followed_tag": "Obserwujesz {tags}",
