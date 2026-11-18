@@ -32,6 +32,7 @@ minimumReleaseAgeExclude:
   - stylelint-config-recommended-scss@18.0.0
   - stylelint-config-standard-scss@18.0.0
   - stylelint-scss@7.5.0
+  - react-native-screens@4.31.0-nightly-20261117-3e13f16b1
 overrides:
   "@babel/core@7": ^7.29.13
   "@babel/runtime": ^7.26.10
