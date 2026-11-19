@@ -71,8 +71,8 @@ const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
           icon={iconHelper(mediaVisible ? EyeSlashIcon : EyeIcon)}
           style={{
             position: 'absolute',
-            top: 8,
-            right: 8,
+            top: 4,
+            right: 4,
             zIndex: 1,
             borderRadius: shapes.corner.medium,
           }}
