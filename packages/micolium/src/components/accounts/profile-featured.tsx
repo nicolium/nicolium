@@ -143,10 +143,10 @@ const ProfileFeatured: React.FC<IProfileFeatured> = ({
           {...listProps}
         />
       );
-    case 'collections':
+    case 'collections': {
       const collections: Array<string | Collection> = [];
 
-      if (collectionsQuery.data) {
+      if (collectionsQuery.data?.length) {
         collections.push(
           intl.formatMessage(ownAccount ? messages.createdByYou : messages.createdBy, {
             acct: account.acct,
@@ -155,7 +155,7 @@ const ProfileFeatured: React.FC<IProfileFeatured> = ({
         );
       }
 
-      if (featuringCollectionsQuery.data) {
+      if (featuringCollectionsQuery.data?.length) {
         collections.push(
           intl.formatMessage(ownAccount ? messages.featuringYou : messages.featuring, {
             acct: account.acct,
@@ -185,6 +185,7 @@ const ProfileFeatured: React.FC<IProfileFeatured> = ({
           }
         />
       );
+    }
   }
 };
 
