@@ -1,4 +1,4 @@
-import { normalizeChatMessage } from '@/queries/chats';
+import { normalizeChatMessage } from '@/queries/chats/normalizers';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';

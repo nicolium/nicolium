@@ -1,10 +1,5 @@
 import { keepPreviousData, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  type Chat,
-  type ChatMessage as BaseChatMessage,
-  PaginatedResponse,
-  chatMessageSchema,
-} from 'pl-api';
+import { type Chat, PaginatedResponse, chatMessageSchema } from 'pl-api';
 import * as v from 'valibot';
 
 import { batcher } from '@/api/batcher';
@@ -16,34 +11,13 @@ import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/quer
 import { flattenPages, updatePageItem } from '@/queries/utils';
 import { reorderChatListItems } from '@/utils/chats';
 
-import { useCredentialAccount } from './accounts/use-account-credentials';
-import { useRelationshipQuery } from './accounts/use-relationship';
-import { queryClient } from './client';
-import { queryKeys } from './keys';
-import { useImportEntities } from './utils/import-entities';
+import { useCredentialAccount } from '../accounts/use-account-credentials';
+import { useRelationshipQuery } from '../accounts/use-relationship';
+import { queryClient } from '../client';
+import { queryKeys } from '../keys';
+import { useImportEntities } from '../utils/import-entities';
 
-const normalizeChatMessage = (
-  chatMessage: BaseChatMessage & { pending?: boolean; deleting?: boolean },
-) => ({
-  type: 'message' as const,
-  pending: false,
-  deleting: false,
-  ...chatMessage,
-});
-
-type ChatMessage = ReturnType<typeof normalizeChatMessage>;
-
-const normalizeChatMessagesList = ({
-  previous,
-  next,
-  items,
-  ...response
-}: PaginatedResponse<BaseChatMessage>): PaginatedResponse<ChatMessage> =>
-  new PaginatedResponse(items.map(normalizeChatMessage), {
-    ...response,
-    previous: previous ? () => previous().then((res) => normalizeChatMessagesList(res)) : null,
-    next: next ? () => next().then((res) => normalizeChatMessagesList(res)) : null,
-  });
+import { type ChatMessage, normalizeChatMessage, normalizeChatMessagesList } from './normalizers';
 
 const useChatMessages = (chat: Chat) => {
   const client = useClient();
@@ -306,7 +280,6 @@ const useDeleteChatMessage = (chatId: string) => {
 };
 
 export {
-  normalizeChatMessage,
   useChat,
   useMarkChatAsRead,
   useCreateChatMessage,
@@ -314,5 +287,4 @@ export {
   useDeleteChatMessage,
   useChats,
   useChatMessages,
-  type ChatMessage,
 };
