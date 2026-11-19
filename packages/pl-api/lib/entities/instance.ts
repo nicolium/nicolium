@@ -346,6 +346,7 @@ const registrations = coerceObject({
   min_age: v.fallback(v.nullable(v.number()), null),
   reason_required: v.fallback(v.nullable(v.boolean()), null),
   url: v.fallback(v.nullable(v.pipe(v.string(), v.url())), null),
+  oauth: v.fallback(v.nullable(v.boolean()), null),
 });
 
 const statsSchema = coerceObject({
