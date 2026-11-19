@@ -9,8 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { type AccountGalleryAttachment, useAccountGallery } from '@/hooks/use-account-gallery';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import { useSetting } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { useUiStoreActions } from '@/stores/ui';

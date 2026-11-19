@@ -31,12 +31,11 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { selectAccount } from '@/queries/accounts/selectors';
 // import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import { haptics } from '@/utils/haptics';
 // import { queryClient } from '@/queries/client';
 // import { queryKeys } from '@/queries/keys';
-// import { scopedQueryKey } from '@/queries/query';
+// import { scopedQueryKey } from '@/queries/keys';
 import { toast } from '@/utils/toast';
 
 import { useSetting, useSettingsStore } from './settings';

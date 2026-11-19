@@ -42,8 +42,7 @@ import {
   useRemoveAccountsFromList,
   useUpdateList,
 } from '@/queries/accounts/use-lists';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import {
   useCreateBookmarkFolder,

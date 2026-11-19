@@ -1,7 +1,6 @@
 import { normalizeChatMessage } from '@/queries/chats/normalizers';
 import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from '@/queries/utils';
 
 import { compareDate } from './comparators';

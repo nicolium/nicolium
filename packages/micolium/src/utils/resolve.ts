@@ -1,6 +1,5 @@
 import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import { importEntities } from '@/queries/utils/import-entities';
 import { useAuthStore } from '@/stores/auth';
 

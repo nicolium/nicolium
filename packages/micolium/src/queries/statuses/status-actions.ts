@@ -1,6 +1,5 @@
 import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import { updateStatus } from '@/queries/statuses/use-status-interactions';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';

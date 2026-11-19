@@ -6,9 +6,8 @@ import { useCredentialAccountId } from '@/queries/accounts/use-account-credentia
 // import { updateReactions } from '@/queries/announcements/use-announcements';
 import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
-import { queryKeys } from '@/queries/keys';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
-import { scopedQueryKey } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 // import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 // import { useSettings } from '@/stores/settings';

@@ -1,5 +1,5 @@
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
-import type { InfiniteData } from '@tanstack/react-query';
+import type { DataTag, InfiniteData, QueryKey } from '@tanstack/react-query';
 import type {
   Account,
   AdminAnnouncement,
@@ -590,5 +590,12 @@ const queryKeys = {
   frontend,
 } as const;
 
-export { queryKeys };
+function scopedQueryKey<T extends QueryKey>(
+  queryKey: T,
+  scopeUrl: string,
+): DataTag<QueryKey, DataOf<T>> {
+  return [scopeUrl, ...queryKey] as unknown as DataTag<QueryKey, DataOf<T>>;
+}
+
+export { queryKeys, scopedQueryKey };
 export type { DataOf, TaggedKey };

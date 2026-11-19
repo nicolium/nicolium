@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
-  NativeStackScreenProps,
+  type NativeStackScreenProps,
   type NativeStackHeaderProps,
 } from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
