@@ -184,8 +184,8 @@ const messages = defineMessages({
   },
   customCSSLabel: { id: 'edit_profile.fields.custom_css.label', defaultMessage: 'Custom CSS' },
   customCSSRemainingCharacters: {
-    id: 'edit_profile.custom_css.remaining_characters',
-    defaultMessage: '{remaining, plural, one {# character} other {# characters}} remaining',
+    id: 'textarea.counter.label',
+    defaultMessage: '{count, plural, one {# character} other {# characters}} remaining',
   },
   success: {
     id: 'edit_profile.success',

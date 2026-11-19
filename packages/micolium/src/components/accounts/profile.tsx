@@ -39,9 +39,13 @@ import { GlassButton } from '@/components/ui/glass-button';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { StyledHtml } from '@/components/ui/styled-html';
+import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useAccountCollections } from '@/queries/accounts/use-collections';
+import {
+  useAccountCollections,
+  useCollectionsFeaturingAccount,
+} from '@/queries/accounts/use-collections';
 import { useEndorsedAccounts } from '@/queries/accounts/use-endorsed-accounts';
 import { useFeaturedTags } from '@/queries/accounts/use-featured-tags';
 import {
@@ -115,15 +119,19 @@ const messages = defineMessages({
 
 type ProfileTab = 'posts' | 'media' | 'hashtags' | 'accounts' | 'collections';
 
-const useProfileTabs = (accountId: string) => {
+const useProfileTabs = (accountId: string, ownAccount: boolean) => {
+  const features = useFeatures();
+
   const { data: featuredTags = [] } = useFeaturedTags(accountId);
   const { data: endorsedAccounts = [] } = useEndorsedAccounts(accountId);
-  const { data: collections = [] } = useAccountCollections(accountId);
+  const { data: collections = [] } = useAccountCollections(ownAccount ? undefined : accountId);
+  const { data: featuringCollections = [] } = useCollectionsFeaturingAccount(accountId);
 
   const tabs: Array<ProfileTab> = ['posts', 'media'];
   if (featuredTags.length) tabs.push('hashtags');
   if (endorsedAccounts.length) tabs.push('accounts');
-  if (collections.length) tabs.push('collections');
+  if ((features.collections && ownAccount) || collections.length || featuringCollections.length)
+    tabs.push('collections');
 
   return tabs;
 };
@@ -240,7 +248,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const [showComposeButton, setShowComposeButton] = React.useState(true);
   const [tab, setTab] = React.useState<ProfileTab>('posts');
 
-  const tabs = useProfileTabs(id);
+  const tabs = useProfileTabs(id, ownAccount || false);
 
   const headerMarginTop = useSharedValue(-128);
   const headerStyle = useAnimatedStyle(() => ({
@@ -744,7 +752,13 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
       ) : tab === 'media' ? (
         <ProfileMedia id={account.id} onScroll={handleScroll} header={header} />
       ) : (
-        <ProfileFeatured tab={tab} accountId={account.id} onScroll={handleScroll} header={header} />
+        <ProfileFeatured
+          tab={tab}
+          account={account}
+          onScroll={handleScroll}
+          header={header}
+          ownAccount={ownAccount}
+        />
       )}
       <ComposeButton visible={showComposeButton} />
     </>

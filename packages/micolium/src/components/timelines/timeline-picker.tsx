@@ -11,7 +11,7 @@ import { HouseIcon } from 'phosphor-react-native/src/icons/House';
 import { ListDashesIcon } from 'phosphor-react-native/src/icons/ListDashes';
 import { PlanetIcon } from 'phosphor-react-native/src/icons/Planet';
 import { WrenchIcon } from 'phosphor-react-native/src/icons/Wrench';
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
 
@@ -64,7 +64,7 @@ const useTimelineHeadingAndIcon = (
   const { data: circles } = useCircles(active?.startsWith('circle:'));
   const { data: antennas } = useAntennas(active?.startsWith('antenna:'));
 
-  return useMemo(() => {
+  return React.useMemo(() => {
     switch (active) {
       case 'home':
         return [intl.formatMessage(messages.homeTimeline), HouseIcon];
@@ -342,7 +342,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
 
   const MaybeGlassView = glassEffect ? GlassView : View;
 
-  const [createDialog, setCreateDialog] = useState<
+  const [createDialog, setCreateDialog] = React.useState<
     'bookmark_folder' | 'antenna' | 'circle' | 'list' | null
   >(null);
 

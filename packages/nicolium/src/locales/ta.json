@@ -666,7 +666,7 @@
   "edit_federation.success": "{host} கூட்டமைப்பு புதுப்பிக்கப்பட்டது",
   "edit_federation.unlisted": "கட்டாய இடுகைகள் பட்டியலிடப்படவில்லை",
   "edit_password.header": "கடவுச்சொல்லை மாற்றவும்",
-  "edit_profile.custom_css.remaining_characters": "{மீதமுள்ள, பன்மை, ஒன்று {# எழுத்துக்குறி} மற்ற {# எழுத்துக்கள்}} meation மீதமுள்ளவை",
+  "textarea.counter.label": "{மீதமுள்ள, பன்மை, ஒன்று {# எழுத்துக்குறி} மற்ற {# எழுத்துக்கள்}} meation மீதமுள்ளவை",
   "edit_profile.error": "சுயவிவர புதுப்பிப்பு தோல்வியடைந்தது",
   "edit_profile.fields.bio.label": "உயிர்",
   "edit_profile.fields.bio.placeholder": "உங்களைப் பற்றி சொல்லுங்கள்.",

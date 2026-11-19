@@ -226,7 +226,7 @@ const useDeleteFilter = () => {
     mutationFn: async (filterId: string) => {
       if (!features.filters && !features.filtersV2) {
         const updatedSettings = create(settingsFilters, (filters) => {
-          return (filters || []).filter((filter) => filter.id !== filterId);
+          return (filters ?? []).filter((filter) => filter.id !== filterId);
         });
 
         update('filters', updatedSettings);

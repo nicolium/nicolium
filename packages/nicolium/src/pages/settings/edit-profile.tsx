@@ -1010,8 +1010,8 @@ const EditProfilePage: React.FC = () => {
               />
               <p className='profile-form__hint'>
                 <FormattedMessage
-                  id='edit_profile.custom_css.remaining_characters'
-                  defaultMessage='{remaining, plural, one {# character} other {# characters}} remaining'
+                  id='textarea.counter.label'
+                  defaultMessage='{count, plural, one {# character} other {# characters}} remaining'
                   values={{ remaining: 5000 - (data.custom_css ?? '').length }}
                 />
               </p>

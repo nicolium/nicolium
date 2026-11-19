@@ -191,7 +191,7 @@ const CollectionAccountsForm: React.FC<ICollectionAccountsForm> = ({ collectionI
               title={
                 <FormattedMessage
                   id='collections.accounts_counter'
-                  defaultMessage='Colection members ({count}/{max} accounts)'
+                  defaultMessage='Collection members ({count}/{max} accounts)'
                   values={{ count: items.length, max: maxItems }}
                 />
               }
@@ -413,7 +413,9 @@ const EditCollectionForm: React.FC<IEditCollectionForm> = ({
           autoCapitalize='off'
           autoCorrect='off'
           onChange={(e) => {
-            setTagName(e.target.value);
+            let tag = e.target.value;
+            if (tag.trim().length && !tag.startsWith('#')) tag = `#${tag}`;
+            setTagName(tag);
           }}
         />
       </FormGroup>

@@ -1069,7 +1069,7 @@
   "edit_federation.success": "{host} 联邦设定已保存",
   "edit_federation.unlisted": "强制帖文为不公开",
   "edit_password.header": "修改密码",
-  "edit_profile.custom_css.remaining_characters": "{remaining, plural, one {# 个字符} other {# 个字符}}剩余",
+  "textarea.counter.label": "{count, plural, one {# 个字符} other {# 个字符}}剩余",
   "edit_profile.error": "更新个人资料失败",
   "edit_profile.fields.bio.label": "简介",
   "edit_profile.fields.bio.placeholder": "请介绍一下您自己。",

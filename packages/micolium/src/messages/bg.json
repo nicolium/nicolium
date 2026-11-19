@@ -158,7 +158,7 @@
   "confirmations.remove_from_followers.message": "Сигурни ли сте, че искате да премахнете {name} от вашите последователи?",
   "confirmations.unfollow.confirm": "Отследване",
   "edit_bookmark_folder_modal.header.title": "Редактиране на папката",
-  "edit_profile.custom_css.remaining_characters": "оставащи {remaining, plural, one {# знак} other {# знака}}",
+  "textarea.counter.label": "оставащи {count, plural, one {# знак} other {# знака}}",
   "edit_profile.error": "Неуспешно обновяване на профила",
   "edit_profile.fields.bio.label": "Биография",
   "edit_profile.fields.bio.placeholder": "Разкажете ни за себе си.",

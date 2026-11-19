@@ -27,6 +27,8 @@ import { ReportDialog } from '../accounts/report-dialog';
 import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
+import { CreateCollectionDialog } from './create-collection-dialog';
+
 import type { Collection } from 'pl-api';
 
 const messages = defineMessages({
@@ -35,6 +37,7 @@ const messages = defineMessages({
   openInBrowser: { id: 'account.open_in_browser.short', defaultMessage: 'Open in browser' },
   share: { id: 'collections.share', defaultMessage: 'Share' },
   menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
+  editDetails: { id: 'collections.edit', defaultMessage: 'Edit collection' },
   delete: { id: 'collections.delete_collection', defaultMessage: 'Delete collection' },
   deleteHeading: {
     id: 'confirmations.delete_collection.heading',
@@ -83,6 +86,7 @@ const messages = defineMessages({
 
 const useMenuItems = (
   collection: Collection,
+  openEditDialog: () => void,
   openReportDialog: (target: 'collection' | 'account') => void,
   openBlockMuteDialog: (action: 'block' | 'mute') => void,
 ) => {
@@ -207,6 +211,14 @@ const useMenuItems = (
         {
           key: 'delete',
           type: 'button',
+          label: intl.formatMessage(messages.editDetails),
+          appleIcon: 'pencil',
+          androidIcon: 'ph_pencil_simple',
+          onPress: () => openEditDialog(true),
+        },
+        {
+          key: 'delete',
+          type: 'button',
           label: intl.formatMessage(messages.delete),
           appleIcon: 'trash',
           androidIcon: 'ph_trash',
@@ -293,6 +305,7 @@ interface ICollectionActionsDropdown {
 const CollectionActionsDropdown: React.FC<ICollectionActionsDropdown> = ({ collection }) => {
   const intl = useIntl();
 
+  const [editDialog, setEditDialog] = React.useState(false);
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
   const [reportDialog, setReportDialog] = React.useState<'collection' | 'account' | null>(null);
 
@@ -310,10 +323,14 @@ const CollectionActionsDropdown: React.FC<ICollectionActionsDropdown> = ({ colle
         useItems={useMenuItems}
         hookArgs={[
           collection,
+          () => setEditDialog(true),
           (target) => setReportDialog(target),
           (action) => setBlockMuteDialog(action),
         ]}
       />
+      {editDialog && (
+        <CreateCollectionDialog id={collection.id} visible onDismiss={() => setEditDialog(false)} />
+      )}
       {reportDialog && (
         <ReportDialog
           accountId={collection.account_id}

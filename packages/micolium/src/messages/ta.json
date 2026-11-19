@@ -161,7 +161,7 @@
   "confirmations.unfollow.confirm": "பின்தொடராட்",
   "datepicker.hint": "இடுகையிட திட்டமிடப்பட்டுள்ளது…",
   "edit_bookmark_folder_modal.header.title": "கோப்புறையைத் திருத்து",
-  "edit_profile.custom_css.remaining_characters": "{மீதமுள்ள, பன்மை, ஒன்று {# எழுத்துக்குறி} மற்ற {# எழுத்துக்கள்}} meation மீதமுள்ளவை",
+  "textarea.counter.label": "{மீதமுள்ள, பன்மை, ஒன்று {# எழுத்துக்குறி} மற்ற {# எழுத்துக்கள்}} meation மீதமுள்ளவை",
   "edit_profile.error": "சுயவிவர புதுப்பிப்பு தோல்வியடைந்தது",
   "edit_profile.fields.bio.label": "உயிர்",
   "edit_profile.fields.bio.placeholder": "உங்களைப் பற்றி சொல்லுங்கள்.",

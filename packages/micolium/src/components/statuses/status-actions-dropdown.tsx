@@ -123,7 +123,7 @@ const messages = defineMessages({
 const useMenuItems = (
   status: SelectedStatus,
   detailed: boolean | undefined,
-  openReportDialog: () => void,
+  openReportDialog: (statusId?: string) => void,
   openBlockMuteDialog: (action: 'block' | 'mute') => void,
 ) => {
   const client = useClient();
@@ -262,6 +262,10 @@ const useMenuItems = (
   const handleMuteConversation = () => {
     if (status.muted) unmuteStatus();
     else muteStatus();
+  };
+
+  const handleReportStatus = () => {
+    openReportDialog(status.id);
   };
 
   const handleReport = () => {
@@ -482,7 +486,7 @@ const useMenuItems = (
           label: intl.formatMessage(messages.report),
           appleIcon: 'flag',
           androidIcon: 'ph_flag',
-          onPress: handleReport,
+          onPress: handleReportStatus,
         },
         {
           key: 'account-actions',
@@ -549,7 +553,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   const intl = useIntl();
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
-  const [reportDialog, setReportDialog] = React.useState(false);
+  const [reportDialog, setReportDialog] = React.useState<boolean | string>(false);
 
   return (
     <>
@@ -566,7 +570,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
         hookArgs={[
           status,
           detailed,
-          () => setReportDialog(true),
+          (statusId?: boolean) => setReportDialog(statusId || true),
           (action) => setBlockMuteDialog(action),
         ]}
       />
@@ -581,7 +585,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
       {reportDialog && (
         <ReportDialog
           accountId={status.account_id}
-          statusId={status.id}
+          statusId={typeof reportDialog === 'string' ? reportDialog : undefined}
           visible
           onDismiss={() => setReportDialog(false)}
         />

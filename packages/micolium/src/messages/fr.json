@@ -216,7 +216,7 @@
   "confirmations.unfollow.message": "Voulez-vous vraiment cesser de suivre {name} ?",
   "datepicker.hint": "Publication programmée le…",
   "edit_bookmark_folder_modal.header.title": "Modifier le dossier",
-  "edit_profile.custom_css.remaining_characters": "{remaining, plural, one {# caractère restant} other {# caractères restants}}",
+  "textarea.counter.label": "{count, plural, one {# caractère restant} other {# caractères restants}}",
   "edit_profile.error": "La mise à jour du profil a échoué",
   "edit_profile.fields.bio.label": "Biographie",
   "edit_profile.fields.bio.placeholder": "Dites-nous en plus à propos de vous.",
