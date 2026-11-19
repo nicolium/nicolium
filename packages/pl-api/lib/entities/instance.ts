@@ -223,6 +223,11 @@ const configurationSchema = coerceObject({
     enabled: v.fallback(v.boolean(), false),
     provider: v.fallback(v.nullable(v.string()), null),
   }),
+  collections: coerceObject({
+    max_items: v.fallback(v.number(), 0),
+    max_name_length: v.fallback(v.number(), 0),
+    max_description_length: v.fallback(v.number(), 0),
+  }),
 });
 
 const contactSchema = coerceObject({
