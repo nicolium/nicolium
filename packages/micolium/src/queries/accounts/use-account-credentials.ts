@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 import type { CredentialAccount, UpdateCredentialsParams } from 'pl-api';
 

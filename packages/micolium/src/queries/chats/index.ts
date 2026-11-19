@@ -7,14 +7,14 @@ import { useClient, useFeatures } from '@/contexts/current-account-context';
 // import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 // import { useStatContext } from '@/contexts/stat-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
+import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
 import { flattenPages, updatePageItem } from '@/queries/utils';
 import { reorderChatListItems } from '@/utils/chats';
 
 import { useCredentialAccount } from '../accounts/use-account-credentials';
 import { useRelationshipQuery } from '../accounts/use-relationship';
 import { queryClient } from '../client';
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 import { useImportEntities } from '../utils/import-entities';
 
 import { type ChatMessage, normalizeChatMessage, normalizeChatMessagesList } from './normalizers';

@@ -12,8 +12,7 @@ import {
   type TimelineEntry,
 } from '@/stores/timelines';
 
-import { queryKeys } from '../keys';
-import { scopedQueryKey } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
 
 import type { PaginatedResponse, PaginationParams, Status, StreamingParams } from 'pl-api';
 

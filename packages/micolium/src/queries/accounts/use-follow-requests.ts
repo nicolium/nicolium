@@ -4,7 +4,7 @@ import { PaginatedResponse, type PlApiClient } from 'pl-api';
 import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 import {
   defaultSelect,
   makePaginatedResponseQuery,
@@ -12,7 +12,6 @@ import {
 } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 
-import { scopedQueryKey } from '../query';
 import { filterById } from '../utils/filter-id';
 
 import { useCredentialAccount } from './use-account-credentials';

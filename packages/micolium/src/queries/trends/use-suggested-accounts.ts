@@ -7,9 +7,9 @@ import {
 
 import { batcher } from '@/api/batcher';
 import { useClient, useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useAppQuery } from '@/queries/query';
 
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 
 import type { Suggestion } from 'pl-api';
 

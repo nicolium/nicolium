@@ -4,8 +4,7 @@ import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import { queryClient } from '../client';
-import { queryKeys } from '../keys';
-import { scopedQueryKey } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
 import type { Account } from 'pl-api';

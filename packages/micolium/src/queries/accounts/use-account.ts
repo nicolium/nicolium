@@ -3,8 +3,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 import { useRelationshipQuery } from './use-relationship';
 

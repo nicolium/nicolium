@@ -13,7 +13,7 @@ import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 // import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
-import { scopedQueryKey, useAppInfiniteQuery } from '@/queries/query';
+import { useAppInfiniteQuery } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
 import { useSetting } from '@/stores/settings';
@@ -22,7 +22,7 @@ import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from '@/utils/notification';
 
 import { useAccount } from '../accounts/use-account';
 import { useAccounts } from '../accounts/use-accounts';
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 import { useNotificationsMarker } from '../markers/use-markers';
 import { useFiltersByContext } from '../settings/use-filters';
 import { useStatus } from '../statuses/use-status';

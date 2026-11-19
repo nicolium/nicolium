@@ -3,8 +3,8 @@ import { notifyManager, useQueryClient } from '@tanstack/react-query';
 import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
-import { queryKeys } from '../keys';
-import { scopedQueryKey, useAppInfiniteQuery } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
+import { useAppInfiniteQuery } from '../query';
 
 import type { SearchAccountParams } from 'pl-api';
 

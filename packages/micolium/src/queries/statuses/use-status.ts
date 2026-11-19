@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { scopedQueryKey, useAppQueries, useAppQuery } from '@/queries/query';
+import { useAppQueries, useAppQuery } from '@/queries/query';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { useContextsActions } from '@/stores/contexts';
@@ -13,7 +13,7 @@ import { useTimelinesActions } from '@/stores/timelines';
 import { toast } from '@/utils/toast';
 
 import { useAccount } from '../accounts/use-account';
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 import { useFilters } from '../settings/use-filters';
 import { checkFiltered } from '../utils/filters';
 

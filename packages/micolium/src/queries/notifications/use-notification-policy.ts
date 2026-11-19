@@ -3,8 +3,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
-import { queryKeys } from '../keys';
-import { scopedQueryKey, useAppQuery } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
+import { useAppQuery } from '../query';
 
 import type { UpdateNotificationPolicyRequest } from 'pl-api';
 

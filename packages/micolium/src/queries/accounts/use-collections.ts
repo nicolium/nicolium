@@ -3,8 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { importEntities } from '../utils/import-entities';

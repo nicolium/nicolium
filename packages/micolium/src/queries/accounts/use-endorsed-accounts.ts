@@ -3,8 +3,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { batcher } from '@/api/batcher';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 const useEndorsedAccounts = (accountId?: string) => {
   const client = useClient();

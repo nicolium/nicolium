@@ -2,8 +2,8 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey, useAppQueries } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
+import { useAppQueries } from '@/queries/query';
 
 import type { Account } from 'pl-api';
 

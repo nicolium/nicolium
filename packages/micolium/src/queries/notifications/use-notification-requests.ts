@@ -4,8 +4,8 @@ import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import { queryClient } from '../client';
-import { queryKeys } from '../keys';
-import { scopedQueryKey, useAppQuery } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
+import { useAppQuery } from '../query';
 import { importEntities } from '../utils/import-entities';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import {

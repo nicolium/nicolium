@@ -3,8 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
-import { queryKeys } from '../keys';
-import { scopedQueryKey } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
 import { removePageItem } from '../utils';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';

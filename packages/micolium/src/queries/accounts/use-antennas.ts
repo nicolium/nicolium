@@ -1,8 +1,8 @@
 import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient, useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';

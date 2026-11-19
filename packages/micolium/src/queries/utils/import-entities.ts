@@ -3,11 +3,9 @@ import { notifyManager } from '@tanstack/react-query';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
+import { queryKeys, scopedQueryKey } from '@/queries/keys';
 // import { useContextStore } from '@/stores/contexts';
 import { normalizeStatus } from '@/queries/statuses/normalize';
-
-import { scopedQueryKey } from '../query';
 
 import type {
   Account as BaseAccount,

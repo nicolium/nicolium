@@ -2,10 +2,10 @@ import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 
 import type { BookmarkFolder } from 'pl-api';
 

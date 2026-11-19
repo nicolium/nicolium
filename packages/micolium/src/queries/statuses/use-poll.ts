@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useAppQuery } from '@/queries/query';
 
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 
 const usePollQuery = (pollId: string) => {
   const client = useClient();

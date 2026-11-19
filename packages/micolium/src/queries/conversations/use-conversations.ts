@@ -7,8 +7,8 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
-import { queryKeys } from '../keys';
-import { useAppInfiniteQuery, scopedQueryKey } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
+import { useAppInfiniteQuery } from '../query';
 import { importEntities } from '../utils/import-entities';
 import {
   minifyConversation,

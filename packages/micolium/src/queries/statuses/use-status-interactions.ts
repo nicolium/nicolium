@@ -10,7 +10,7 @@ import { create } from 'mutative';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useAppQuery } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
@@ -18,7 +18,7 @@ import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 import { toast } from '@/utils/toast';
 
 import { useCredentialAccountId } from '../accounts/use-account-credentials';
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 import { filterById } from '../utils/filter-id';
 
 import type { NormalizedStatus } from '@/queries/statuses/normalize';

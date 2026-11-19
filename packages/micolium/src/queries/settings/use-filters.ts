@@ -3,10 +3,10 @@ import { create } from 'mutative';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useAppQuery } from '@/queries/query';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 
 import type { CreateFilterParams, Filter, UpdateFilterParams } from 'pl-api';
 

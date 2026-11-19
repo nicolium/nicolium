@@ -5,9 +5,9 @@ import * as v from 'valibot';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
-import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useAppQuery } from '@/queries/query';
 
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 
 const emptySchema = v.parse(interactionPoliciesSchema, {});
 

@@ -3,8 +3,8 @@ import { notifyManager, useQueryClient } from '@tanstack/react-query';
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 import { useImportEntities } from '@/queries/utils/import-entities';
 
-import { queryKeys } from '../keys';
-import { scopedQueryKey, useAppInfiniteQuery } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
+import { useAppInfiniteQuery } from '../query';
 
 import type { PaginationParams, SearchParams } from 'pl-api';
 

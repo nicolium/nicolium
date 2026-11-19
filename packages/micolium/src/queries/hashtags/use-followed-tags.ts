@@ -3,8 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 
 import { queryClient } from '../client';
-import { queryKeys } from '../keys';
-import { scopedQueryKey } from '../query';
+import { queryKeys, scopedQueryKey } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
 const useFollowedTags = makePaginatedResponseQuery(queryKeys.followedTags.all, (client) =>

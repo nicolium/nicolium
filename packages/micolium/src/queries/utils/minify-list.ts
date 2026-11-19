@@ -17,9 +17,8 @@ import {
 import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryClient } from '../client';
-import { queryKeys } from '../keys';
+import { queryKeys, scopedQueryKey } from '../keys';
 // import { normalizeNotification } from '../notifications/use-notifications';
-import { scopedQueryKey } from '../query';
 
 const minifyList = <T1, T2, IsArray extends boolean = true>(
   { previous, next, items, ...response }: PaginatedResponse<T1, IsArray>,
