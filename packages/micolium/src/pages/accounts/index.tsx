@@ -64,7 +64,6 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
       break;
     case 'collection':
       title = collection?.name ?? intl.formatMessage(messages.collectionHeader);
-      subtitle = collectionAccount ? `@${collectionAccount.acct}` : undefined;
       break;
     default:
       title = '';

@@ -1,5 +1,8 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
@@ -43,4 +46,48 @@ const useAccountCollections = (accountId?: string) => {
   });
 };
 
-export { useCollection, useAccountCollections };
+const useDeleteCollection = () => {
+  const client = useClient();
+  const scopeUrl = useScopeUrl();
+  const { data: me } = useCredentialAccountId();
+
+  return useMutation({
+    mutationKey: ['collections', 'delete'],
+    mutationFn: (collectionId: string) => client.collections.deleteCollection(collectionId),
+    onSuccess: (_, deletedCollectionId) => {
+      queryClient.removeQueries({
+        queryKey: scopedQueryKey(queryKeys.collections.show(deletedCollectionId), scopeUrl),
+      });
+      if (me) {
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.collections.byAccount(me), scopeUrl),
+          (prevData) => prevData?.filter(({ id }) => id !== deletedCollectionId),
+        );
+      }
+    },
+  });
+};
+
+const useRevokeCollectionInclusion = () => {
+  const client = useClient();
+  const scopeUrl = useScopeUrl();
+  const { data: me } = useCredentialAccountId();
+
+  return useMutation({
+    mutationKey: ['collections', 'revokeInclusion'],
+    mutationFn: ({ collectionId, itemId }: { collectionId: string; itemId: string }) =>
+      client.collections.revokeCollectionItem(collectionId, itemId),
+    onSuccess: (_, { collectionId }) => {
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.collections.show(collectionId), scopeUrl),
+      });
+      if (me) {
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.collections.featuringAccount(me), scopeUrl),
+        });
+      }
+    },
+  });
+};
+
+export { useCollection, useAccountCollections, useDeleteCollection, useRevokeCollectionInclusion };

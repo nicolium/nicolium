@@ -147,11 +147,18 @@ const ReportDialogSecondStep: React.FC<IReportDialogSecondStep> = ({
 interface IReportDialog {
   accountId: string;
   statusId?: string;
+  collectionId?: string;
   visible: boolean;
   onDismiss: () => void;
 }
 
-const ReportDialog: React.FC<IReportDialog> = ({ accountId, statusId, visible, onDismiss }) => {
+const ReportDialog: React.FC<IReportDialog> = ({
+  accountId,
+  statusId,
+  collectionId,
+  visible,
+  onDismiss,
+}) => {
   const intl = useIntl();
   const features = useFeatures();
 
@@ -173,6 +180,7 @@ const ReportDialog: React.FC<IReportDialog> = ({ accountId, statusId, visible, o
       {
         rule_ids: ruleIds.length ? ruleIds : undefined,
         status_ids: statusId ? [statusId] : undefined,
+        collection_ids: collectionId ? [collectionId] : undefined,
         comment,
         forward: canForward && forward,
       },

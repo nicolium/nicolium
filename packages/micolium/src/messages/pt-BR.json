@@ -99,6 +99,7 @@
   "confirmations.mute.message": "Você tem certeza de que quer silenciar {name}?",
   "confirmations.remove_from_followers.confirm": "Remove",
   "confirmations.remove_from_followers.message": "Are you sure you want to remove {name} from your followers?",
+  "confirmations.revoke_collection_inclusion.confirm": "Remova-me",
   "confirmations.unfollow.confirm": "Deixar de seguir",
   "datepicker.hint": "Scheduled to post at…",
   "edit_profile.error": "Failed to update profile",

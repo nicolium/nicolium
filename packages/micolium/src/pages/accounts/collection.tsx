@@ -1,78 +1,18 @@
-import { Divider, IconButton, Text, TouchableRipple, useTheme } from '@mkljczk/react-native-paper';
+import { Divider, Text, useTheme } from '@mkljczk/react-native-paper';
 import { FlashList } from '@shopify/flash-list';
-import * as Clipboard from 'expo-clipboard';
-import { shareAsync } from 'expo-sharing';
-import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
-import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Platform, Pressable, View } from 'react-native';
+import { FormattedMessage } from 'react-intl';
+import { View } from 'react-native';
 
 import { Account } from '@/components/accounts/account';
-import { DropdownMenu } from '@/components/ui/dropdown-menu';
+import { CollectionActionsDropdown } from '@/components/collections/collection-actions-dropdown';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
-import { iconHelper } from '@/components/ui/icon';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCollection } from '@/queries/accounts/use-collections';
-import { openUrl } from '@/utils/url';
 
-import type { DropdownMenuItem } from '@/components/ui/dropdown-menu-types';
 import type { AccountStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { Collection } from 'pl-api';
-
-const messages = {
-  copy: { id: 'account.copy.short', defaultMessage: 'Copy link' },
-  openInBrowser: { id: 'account.open_in_browser.short', defaultMessage: 'Open in browser' },
-  share: { id: 'collections.share', defaultMessage: 'Share' },
-  menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
-};
-
-const useMenuItems = (collection: Collection) => {
-  const intl = useIntl();
-
-  const items: Array<DropdownMenuItem> = [];
-
-  if (collection.url) {
-    const url = collection.url;
-
-    const handleCopy = () => Clipboard.setStringAsync(url);
-    const handleOpenInBrowser = () => openUrl(url);
-    const handleShare = () => shareAsync(url);
-
-    const shareItems: Array<DropdownMenuItem> = [
-      {
-        key: 'copy',
-        type: 'button',
-        label: intl.formatMessage(messages.copy),
-        appleIcon: 'link',
-        androidIcon: 'ph_link_simple_horizontal',
-        onPress: handleCopy,
-      },
-      {
-        key: 'open-in-browser',
-        type: 'button',
-        label: intl.formatMessage(messages.openInBrowser),
-        appleIcon: 'safari',
-        androidIcon: 'ph_arrow_square_out',
-        onPress: handleOpenInBrowser,
-      },
-      {
-        key: 'share',
-        type: 'button',
-        label: intl.formatMessage(messages.share),
-        appleIcon: 'square.and.arrow.up',
-        androidIcon: 'ph_export',
-        onPress: handleShare,
-      },
-    ];
-
-    items.push({ key: 'share', type: 'section', children: shareItems, controlGroup: true });
-  }
-
-  return items;
-};
 
 const AccountCollectionScreen = ({
   navigation,
@@ -81,7 +21,6 @@ const AccountCollectionScreen = ({
   },
 }: NativeStackScreenProps<AccountStackParams, 'collection'>) => {
   const { colors } = useTheme();
-  const intl = useIntl();
 
   const { data: collection, isPending } = useCollection(id);
   const { data: collectionAccount } = useAccount(collection?.account_id);
@@ -112,7 +51,7 @@ const AccountCollectionScreen = ({
               }}
             >
               <View>
-                <Text variant='bodyMedium'>{collection.name}</Text>
+                <Text variant='bodyLarge'>{collection.name}</Text>
                 {collectionAccount && (
                   <Text variant='labelLarge'>
                     <FormattedMessage
@@ -141,18 +80,7 @@ const AccountCollectionScreen = ({
                   </Text>
                 )}
               </View>
-              <DropdownMenu
-                trigger={
-                  <IconButton
-                    icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-                    style={{ height: 32, width: 32 }}
-                    onPress={() => {}}
-                    accessibilityLabel={intl.formatMessage(messages.menuTitle)}
-                  />
-                }
-                useItems={useMenuItems}
-                hookArgs={[collection]}
-              />
+              <CollectionActionsDropdown collection={collection} />
             </View>
             {collection?.description && <Text variant='bodyMedium'>{collection.description}</Text>}
           </View>
