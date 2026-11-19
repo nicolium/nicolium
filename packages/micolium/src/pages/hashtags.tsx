@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Timeline } from '@/components/timelines/timeline';
 import { CornerInset } from '@/components/ui/corner-inset';
+import { Emojify } from '@/components/ui/emojify';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -61,7 +62,7 @@ const HashtagsScreen = ({
   const [isScrolled, setIsScrolled] = React.useState(false);
   const { data: account } = useAccount(accountId);
 
-  const headerOpacity = useSharedValue(accountId || +isScrolled);
+  const headerOpacity = useSharedValue(+isScrolled);
   const headerStyle = useAnimatedStyle(() => ({
     opacity: headerOpacity.value,
   }));
@@ -83,8 +84,6 @@ const HashtagsScreen = ({
   );
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (accountId) return;
-
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
     const newIsScrolled = scrollOffset > 64;
     setIsScrolled(newIsScrolled);
@@ -149,16 +148,27 @@ const HashtagsScreen = ({
         }
         onScroll={handleScroll}
         header={
-          accountId ? undefined : (
-            <View style={{ marginTop: 64 + topInset, paddingHorizontal: 16 }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+          <View style={{ marginTop: 64 + topInset, paddingHorizontal: 16 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              {accountId ? (
+                <Text variant='titleLarge'>
+                  {intl.formatMessage(messages.headingFromAccount, {
+                    tag,
+                    name: account && (
+                      <Emojify text={account.display_name} emojis={account.emojis} />
+                    ),
+                  })}
+                </Text>
+              ) : (
                 <Text variant='titleLarge'>#{tag}</Text>
+              )}
+              {!accountId && (
                 <Button
                   mode={hashtag?.following ? 'contained-tonal' : 'contained'}
                   disabled={!hashtag || isFollowPending}
@@ -171,9 +181,9 @@ const HashtagsScreen = ({
                     <FormattedMessage id='account.follow' defaultMessage='Follow' />
                   )}
                 </Button>
-              </View>
+              )}
             </View>
-          )
+          </View>
         }
       />
     </>
