@@ -12,8 +12,6 @@ import { importEntities } from '../utils/import-entities';
 
 import type { CreateCollectionParams, UpdateCollectionParams } from 'pl-api';
 
-const MAX_COLLECTION_ACCOUNT_COUNT = 25;
-
 const useCollection = (collectionId?: string) => {
   const client = useClient();
   const features = useFeatures();
@@ -217,7 +215,6 @@ const useRevokeCollectionInclusion = () => {
 };
 
 export {
-  MAX_COLLECTION_ACCOUNT_COUNT,
   useCollection,
   useAccountCollections,
   useCollectionsFeaturingAccount,

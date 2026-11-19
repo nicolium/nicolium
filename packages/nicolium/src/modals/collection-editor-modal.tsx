@@ -19,7 +19,6 @@ import Toggle from '@/components/ui/toggle';
 import Search from '@/modals/list-editor-modal/components/search';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
-  MAX_COLLECTION_ACCOUNT_COUNT,
   useAddCollectionItem,
   useCollection,
   useCreateCollection,
@@ -27,6 +26,7 @@ import {
   useUpdateCollection,
 } from '@/queries/accounts/use-collections';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 import { languages } from '@/utils/languages';
@@ -143,8 +143,10 @@ const CollectionAccountsForm: React.FC<ICollectionAccountsForm> = ({ collectionI
   const { mutate: addItem } = useAddCollectionItem(collectionId);
   const { mutate: removeItem } = useRemoveCollectionItem(collectionId);
 
+  const maxItems = useInstance().configuration.collections.max_items;
+
   const items = collection?.items ?? [];
-  const hasMaxItems = items.length >= MAX_COLLECTION_ACCOUNT_COUNT;
+  const hasMaxItems = items.length >= maxItems;
   const hasPendingItems = items.some((item) => item.state === 'pending');
 
   const onAdd = (accountId: string) => {
@@ -190,7 +192,7 @@ const CollectionAccountsForm: React.FC<ICollectionAccountsForm> = ({ collectionI
                 <FormattedMessage
                   id='collections.accounts_counter'
                   defaultMessage='Colection members ({count}/{max} accounts)'
-                  values={{ count: items.length, max: MAX_COLLECTION_ACCOUNT_COUNT }}
+                  values={{ count: items.length, max: maxItems }}
                 />
               }
             />
@@ -243,7 +245,7 @@ const CollectionAccountsForm: React.FC<ICollectionAccountsForm> = ({ collectionI
             <FormattedMessage
               id='empty_column.collection_accounts'
               defaultMessage='No one is in this collection yet. Use search to find accounts to feature. You can add up to {max} accounts.'
-              values={{ max: MAX_COLLECTION_ACCOUNT_COUNT }}
+              values={{ max: maxItems }}
             />
           </p>
         </div>
