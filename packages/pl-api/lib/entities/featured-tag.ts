@@ -8,7 +8,7 @@ const featuredTagSchema = v.object({
   id: v.string(),
   name: v.string(),
   url: v.fallback(v.optional(v.string()), undefined),
-  statuses_count: v.number(),
+  statuses_count: v.fallback(v.nullable(v.pipe(v.unknown(), v.transform(Number))), null),
   last_status_at: v.fallback(v.nullable(v.number()), null),
 });
 
