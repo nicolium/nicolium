@@ -397,7 +397,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({
         ) : (
           <Pressable
             style={{ flex: 1 }}
-            onPress={() => openMediaViewer(filteredMedia, filteredMedia.indexOf(media))}
+            onPress={
+              sensitive && !mediaVisible
+                ? undefined
+                : () => openMediaViewer(filteredMedia, filteredMedia.indexOf(media))
+            }
             accessibilityRole='imagebutton'
             accessibilityLabel={media.description || undefined}
           >
