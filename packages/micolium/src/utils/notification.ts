@@ -21,7 +21,6 @@ const NOTIFICATION_TYPES = [
   'quote',
   'quoted_update',
   'subscribed_reaction',
-  ,
   'added_to_collection',
   'collection_update',
 ] as const;
