@@ -28,9 +28,9 @@ import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useUiStoreActions } from '@/stores/ui';
+import { MIMETYPE_ICONS } from '@/utils/media';
 import { toast } from '@/utils/toast';
 
-import { MIMETYPE_ICONS } from '../compose/compose-attachment-thumbs';
 import { iconHelper } from '../ui/icon';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
