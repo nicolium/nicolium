@@ -224,9 +224,9 @@ const configurationSchema = coerceObject({
     provider: v.fallback(v.nullable(v.string()), null),
   }),
   collections: coerceObject({
-    max_items: v.fallback(v.number(), 0),
-    max_name_length: v.fallback(v.number(), 0),
-    max_description_length: v.fallback(v.number(), 0),
+    max_items: v.fallback(v.number(), 25),
+    max_name_length: v.fallback(v.number(), 40),
+    max_description_length: v.fallback(v.number(), 100),
   }),
 });
 
