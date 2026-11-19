@@ -85,6 +85,8 @@
   "circles.new.create.title": "Kreis hinzufügen",
   "circles.new.title.placeholder": "Neuer Kreistitel",
   "collections.account_count": "{count, plural, one {# Konto} other {# Konten}}",
+  "collections.by_account": "Erstellt von {account}",
+  "collections.share": "Teilen",
   "column.antennas": "Antennen",
   "column.bookmarks": "Lesezeichen",
   "column.bookmarks.all": "Alle Lesezeichen",

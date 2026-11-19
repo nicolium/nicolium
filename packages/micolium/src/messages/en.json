@@ -147,6 +147,8 @@
   "circles.new.create.title": "Add circle",
   "circles.new.title.placeholder": "New circle title",
   "collections.account_count": "{count, plural, one {# account} other {# accounts}}",
+  "collections.by_account": "Created by {account}",
+  "collections.share": "Share",
   "column.antennas": "Antennas",
   "column.antennas.empty": "You have no antennas yet.",
   "column.blocks.long": "Blocked accounts",

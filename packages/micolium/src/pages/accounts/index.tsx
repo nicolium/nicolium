@@ -1,20 +1,17 @@
-import { Appbar, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useColorScheme, View } from 'react-native';
 
-import { Account } from '@/components/accounts/account';
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { Profile } from '@/components/accounts/profile';
 import { StatusesList } from '@/components/statuses/statuses-list';
 import { CornerInset } from '@/components/ui/corner-inset';
-import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useFollowers, useFollowing, useSubscribers } from '@/queries/account-lists/use-follows';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -22,6 +19,8 @@ import { useCredentialAccountId } from '@/queries/accounts/use-account-credentia
 import { useCollection } from '@/queries/accounts/use-collections';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
 import { useSetting } from '@/stores/settings';
+
+import { AccountCollectionScreen } from './collection';
 
 import type { AccountStackParams } from '@/router/router';
 import type { NavigatorScreenParams, StaticScreenProps } from '@react-navigation/native';
@@ -199,48 +198,6 @@ const AccountFavouritesScreen = ({
             defaultMessage='This user doesn’t have any liked posts yet.'
           />
         )
-      }
-    />
-  );
-};
-
-const AccountCollectionScreen = ({
-  route: {
-    params: { id },
-  },
-}: NativeStackScreenProps<AccountStackParams, 'collection'>) => {
-  const { data: collection, isPending } = useCollection(id);
-
-  const accountIds = collection?.items
-    .filter((item) => item.state === 'accepted' && item.account_id)
-    .map((item) => item.account_id!);
-
-  return (
-    <FlashList
-      data={accountIds}
-      keyExtractor={(accountId) => accountId}
-      renderItem={({ item }) => (
-        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink withFollowButton />
-      )}
-      ItemSeparatorComponent={Divider}
-      ListHeaderComponent={
-        collection?.description ? (
-          <Text variant='bodyMedium' style={{ padding: 16 }}>
-            {collection.description}
-          </Text>
-        ) : undefined
-      }
-      ListEmptyComponent={
-        !isPending ? (
-          <EmptyMessage
-            emptyMessageText={
-              <FormattedMessage
-                id='empty_column.collection'
-                defaultMessage='This collection is empty'
-              />
-            }
-          />
-        ) : null
       }
     />
   );

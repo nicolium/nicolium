@@ -83,6 +83,8 @@
   "circles.new.create.title": "Dodaj krąg",
   "circles.new.title.placeholder": "Nazwa nowego kręgu",
   "collections.account_count": "{count, plural, one {# konto} few {# konta} other {# kont}}",
+  "collections.by_account": "Utworzona przez {account}",
+  "collections.share": "Udostępnij",
   "column.antennas": "Anteny",
   "column.bookmarks": "Zakładki",
   "column.bookmarks.all": "Wszystkie zakładki",
