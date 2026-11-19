@@ -1,10 +1,11 @@
-import { Card, TextInput } from '@mkljczk/react-native-paper';
+import { Card, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useCollection } from '@/queries/accounts/use-collections';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useReportAccountMutation } from '@/queries/accounts/use-report';
 import { getDomain } from '@/utils/accounts';
@@ -15,6 +16,7 @@ import { DialogOrSheet, type DialogOrSheetAction } from '../ui/dialog-or-sheet';
 import { type IListSections, List } from '../ui/list';
 
 import { Account } from './account';
+import { CollectionItem } from './profile-featured';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -161,10 +163,12 @@ const ReportDialog: React.FC<IReportDialog> = ({
 }) => {
   const intl = useIntl();
   const features = useFeatures();
+  const { colors } = useTheme();
 
   const { data: account } = useAccount(accountId, true);
   const { mutate: blockAccount } = useBlockAccountMutation(accountId);
   const { mutate: reportAccount, isPending } = useReportAccountMutation(accountId);
+  const { data: collection } = useCollection(collectionId);
 
   const [step, setStep] = React.useState<0 | 1>(0);
   const [ruleIds, setRuleIds] = React.useState<Array<string>>([]);
@@ -248,6 +252,20 @@ const ReportDialog: React.FC<IReportDialog> = ({
             <Account id={accountId} style={{ paddingHorizontal: 16, paddingVertical: 8 }} />
           )}
         </Card>
+
+        {collection && (
+          <View style={{ gap: 8 }}>
+            <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
+              <FormattedMessage
+                id='report.target_collection'
+                defaultMessage='Reported collection'
+              />
+            </Text>
+            <Card mode='outlined'>
+              <CollectionItem collection={collection} disabled />
+            </Card>
+          </View>
+        )}
 
         {step === 0 ? (
           <ReportDialogFirstStep

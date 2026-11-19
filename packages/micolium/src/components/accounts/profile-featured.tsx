@@ -58,9 +58,10 @@ const FeaturedTagItem: React.FC<IFeaturedTagItem> = ({ tag, accountId }) => {
 
 interface ICollectionItem {
   collection: Collection;
+  disabled?: boolean;
 }
 
-const CollectionItem: React.FC<ICollectionItem> = ({ collection }) => {
+const CollectionItem: React.FC<ICollectionItem> = ({ collection, disabled }) => {
   const navigation = useNavigation();
 
   return (
@@ -74,11 +75,14 @@ const CollectionItem: React.FC<ICollectionItem> = ({ collection }) => {
         />
       }
       left={(props) => <List.Icon {...props} icon={iconHelper(ShapesIcon)} />}
-      onPress={() =>
-        navigation.navigate('accounts', {
-          screen: 'collection',
-          params: { id: collection.id },
-        })
+      onPress={
+        disabled
+          ? undefined
+          : () =>
+              navigation.navigate('accounts', {
+                screen: 'collection',
+                params: { id: collection.id },
+              })
       }
     />
   );
