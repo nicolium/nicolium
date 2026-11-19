@@ -198,6 +198,7 @@
   "login.otp_log_in.fail": "Ugyldig kode, vennligst prøv igjen.",
   "missing_description_modal.continue": "Post",
   "missing_description_modal.text": "Du har ikke lagt inn en beskrivelse for alle vedlegg. Fortsette likevel?",
+  "moderation_overlay.hide": "Skjul innhold",
   "moderation_overlay.show": "Vis Innhold",
   "mute_modal.auto_expire": "Utløper ignorerte automatisk?",
   "mute_modal.duration": "Varighet",

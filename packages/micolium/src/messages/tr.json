@@ -205,6 +205,7 @@
   "login.otp_log_in.fail": "Geçersiz kod, lütfen tekrar deneyiniz.",
   "missing_description_modal.continue": "Gönderi",
   "missing_description_modal.text": "Tüm ekler için bir açıklama girmediniz. Yine de devam edilsin mi?",
+  "moderation_overlay.hide": "İçeriği gizle",
   "moderation_overlay.show": "İçeriği Göster",
   "mute_modal.auto_expire": "Sessize alma işlemi otomatik olarak sona ersin mi?",
   "mute_modal.duration": "Süre",

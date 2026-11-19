@@ -1,8 +1,9 @@
-import { useTheme } from '@mkljczk/react-native-paper';
+import { IconButton, useTheme } from '@mkljczk/react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import { useQueryClient } from '@tanstack/react-query';
+import { EyeIcon, EyeSlashIcon } from 'phosphor-react-native';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -11,20 +12,36 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
 import { useSetting } from '@/stores/settings';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { renderMedia } from '../statuses/status-media';
 import { EmptyMessage } from '../ui/empty-message';
+import { iconHelper } from '../ui/icon';
 import { LoadMore } from '../ui/load-more';
 import { LoadingIndicator } from '../ui/loading-indicator';
+
+const messages = defineMessages({
+  show: {
+    id: 'moderation_overlay.show',
+    defaultMessage: 'Show content',
+  },
+  hide: {
+    id: 'moderation_overlay.hide',
+    defaultMessage: 'Hide content',
+  },
+});
 
 interface IProfileMediaItem {
   item: Extract<AccountGalleryAttachment, { type: 'image' | 'video' | 'gifv' }>;
 }
 
 const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
+  const intl = useIntl();
+  const { mediaVisible } = useStatusMeta(item.status_id);
   const { colors, shapes } = useTheme();
   const { openMediaViewer } = useUiStoreActions();
+  const { revealStatusMedia, hideStatusMedia } = useStatusMetaActions();
   const queryClient = useQueryClient();
   const scopeUrl = useScopeUrl();
 
@@ -38,18 +55,36 @@ const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
 
   return (
     <Pressable
-      onPress={handleOpenMediaViewer}
+      onPress={item.sensitive && !mediaVisible ? undefined : handleOpenMediaViewer}
       style={{
         flex: 1,
         aspectRatio: 1,
         borderRadius: shapes.corner.medium,
         overflow: 'hidden',
         backgroundColor: colors.surfaceContainerHighest,
+        position: 'relative',
       }}
       accessibilityRole='button'
       accessibilityLabel={item.description}
     >
-      {renderMedia(item, item.sensitive, false, true)}
+      {item.sensitive && (
+        <IconButton
+          icon={iconHelper(mediaVisible ? EyeSlashIcon : EyeIcon)}
+          style={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            zIndex: 1,
+            borderRadius: shapes.corner.medium,
+          }}
+          mode='contained'
+          onPress={() =>
+            mediaVisible ? hideStatusMedia(item.status_id) : revealStatusMedia(item.status_id)
+          }
+          accessibilityLabel={intl.formatMessage(mediaVisible ? messages.hide : messages.show)}
+        />
+      )}
+      {renderMedia(item, item.sensitive, mediaVisible, true)}
     </Pressable>
   );
 };

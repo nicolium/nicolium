@@ -158,7 +158,6 @@
   "confirmations.remove_from_followers.message": "Сигурни ли сте, че искате да премахнете {name} от вашите последователи?",
   "confirmations.unfollow.confirm": "Отследване",
   "edit_bookmark_folder_modal.header.title": "Редактиране на папката",
-  "textarea.counter.label": "оставащи {count, plural, one {# знак} other {# знака}}",
   "edit_profile.error": "Неуспешно обновяване на профила",
   "edit_profile.fields.bio.label": "Биография",
   "edit_profile.fields.bio.placeholder": "Разкажете ни за себе си.",
@@ -245,6 +244,7 @@
   "login.fields.password.placeholder": "Парола",
   "login.fields.username.label": "Адрес за ел. поща или потребителско име",
   "missing_description_modal.continue": "Публикация",
+  "moderation_overlay.hide": "Скриване на съдържанието",
   "moderation_overlay.show": "Показване на съдържанието",
   "mute_modal.auto_expire": "Автоматично изтичащо заглушаване?",
   "mute_modal.hide_notifications": "Да се скрият ли известията от този потребител?",
@@ -347,6 +347,7 @@
   "status.translating": "Превежда се…",
   "status.unbookmark": "Премахване на отметката",
   "status.unbookmarked": "Отметката е премахната.",
+  "textarea.counter.label": "оставащи {count, plural, one {# знак} other {# знака}}",
   "toast.view": "Преглед",
   "upload_button.label": "Прикачване на мултимедия",
   "upload_form.undo": "Изтриване"

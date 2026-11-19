@@ -205,6 +205,7 @@
   "login.otp_log_in.fail": "Kode salah, coba lagi.",
   "missing_description_modal.continue": "Post",
   "missing_description_modal.text": "Anda belum memasukkan deskripsi untuk semua lampiran. Lanjutkan saja?",
+  "moderation_overlay.hide": "Sembunyikan konten",
   "moderation_overlay.show": "Tampilkan Konten",
   "mute_modal.auto_expire": "Secara otomatis kedaluwarsa tanpa suara?",
   "mute_modal.duration": "Durasi",

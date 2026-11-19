@@ -205,6 +205,7 @@
   "login.otp_log_in.fail": "الرمز غير صحيح، رجاءً حاول من جديد.",
   "missing_description_modal.continue": "نشر",
   "missing_description_modal.text": "لم تقم بإدخال الوصف لجميع المُرفقات. هل تريد الاستمرار على أي حال؟",
+  "moderation_overlay.hide": "إخفاء المحتوى",
   "moderation_overlay.show": "عرض المحتوى",
   "mute_modal.auto_expire": "إنهاء الكتم تلقائيا؟",
   "mute_modal.duration": "المدة",

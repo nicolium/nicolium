@@ -177,6 +177,7 @@
   "login.otp_log_in.fail": "Invalid code, please try again.",
   "missing_description_modal.continue": "𐑐𐑴𐑕𐑑",
   "missing_description_modal.text": "𐑿 𐑣𐑨𐑝 𐑯𐑪𐑑 𐑧𐑯𐑑𐑼𐑛 𐑩 𐑛𐑦𐑕𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑓 𐑷𐑤 𐑩𐑑𐑨𐑗𐑥𐑩𐑯𐑑𐑕.",
+  "moderation_overlay.hide": "Hide content",
   "moderation_overlay.show": "Show Content",
   "mute_modal.auto_expire": "Automatically expire mute?",
   "mute_modal.duration": "Duration",

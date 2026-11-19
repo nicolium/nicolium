@@ -197,6 +197,7 @@
   "login.otp_log_in.fail": "Invalid code, please try again.",
   "missing_description_modal.continue": "שלח",
   "missing_description_modal.text": "לא הזנת תיאור עבור כל הקבצים המצורפים. להמשך בכל מקרה?",
+  "moderation_overlay.hide": "Hide content",
   "moderation_overlay.show": "Show Content",
   "mute_modal.auto_expire": "Automatically expire mute?",
   "mute_modal.duration": "Duration",

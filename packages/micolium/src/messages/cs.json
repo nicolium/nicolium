@@ -145,6 +145,7 @@
   "login.fields.username.label": "E-mail nebo uživatelské jméno",
   "login.otp_log_in": "OTP přihlášení",
   "missing_description_modal.continue": "Publikovat",
+  "moderation_overlay.hide": "Schovat obsah",
   "moderation_overlay.show": "Ukázat obsah",
   "mute_modal.auto_expire": "Skrýt pouze na určitou dobu",
   "mute_modal.duration": "Trvání",

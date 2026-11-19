@@ -199,6 +199,7 @@
   "login.otp_log_in.fail": "コードが正しくありません、もう一度お試しください。",
   "missing_description_modal.continue": "Post",
   "missing_description_modal.text": "すべての添付ファイルに説明を与えていません。とにかく続けますか?",
+  "moderation_overlay.hide": "内容を隠す",
   "moderation_overlay.show": "内容を表示する",
   "mute_modal.auto_expire": "自動でミュートを失効させますか?",
   "mute_modal.duration": "期間",

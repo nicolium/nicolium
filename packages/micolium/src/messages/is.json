@@ -177,6 +177,7 @@
   "login.otp_log_in.fail": "Invalid code, please try again.",
   "missing_description_modal.continue": "Senda",
   "missing_description_modal.text": "Þú hefur ekki slegið inn lýsingu fyrir öll viðhengi. Halda samt áfram?",
+  "moderation_overlay.hide": "Hide content",
   "moderation_overlay.show": "Show Content",
   "mute_modal.auto_expire": "Automatically expire mute?",
   "mute_modal.duration": "Duration",

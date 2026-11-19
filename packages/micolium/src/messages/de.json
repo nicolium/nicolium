@@ -288,6 +288,7 @@
   "login.otp_log_in.fail": "Ungültiger Code, bitte versuche es erneut.",
   "missing_description_modal.continue": "Senden",
   "missing_description_modal.text": "Du hast nicht für alle Anhänge Beschreibungen angegeben. Dennoch fortfahren?",
+  "moderation_overlay.hide": "Inhalt verbergen",
   "moderation_overlay.show": "Anzeigen",
   "mute_modal.auto_expire": "Automatisch ablaufende Stummschaltung?",
   "mute_modal.duration": "Dauer",

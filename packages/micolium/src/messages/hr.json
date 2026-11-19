@@ -185,6 +185,7 @@
   "login.otp_log_in.fail": "Invalid code, please try again.",
   "missing_description_modal.continue": "Post",
   "missing_description_modal.text": "You have not entered a description for all attachments. Continue anyway?",
+  "moderation_overlay.hide": "Hide content",
   "moderation_overlay.show": "Show Content",
   "mute_modal.auto_expire": "Automatically expire mute?",
   "mute_modal.duration": "Duration",

@@ -57,6 +57,14 @@ const messages = defineMessages({
     id: 'media_gallery.download.fail',
     defaultMessage: 'Failed to download file.',
   },
+  show: {
+    id: 'moderation_overlay.show',
+    defaultMessage: 'Show content',
+  },
+  hide: {
+    id: 'moderation_overlay.hide',
+    defaultMessage: 'Hide content',
+  },
 });
 
 type MediaAttachment = SelectedStatus['media_attachments'][number];

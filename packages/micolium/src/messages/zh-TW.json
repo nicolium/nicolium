@@ -205,6 +205,7 @@
   "login.otp_log_in.fail": "密碼無效，請重新輸入。",
   "missing_description_modal.continue": "發布",
   "missing_description_modal.text": "附件沒有提供描述。仍然繼續發布嗎？",
+  "moderation_overlay.hide": "隱藏內容",
   "moderation_overlay.show": "顯示內容",
   "mute_modal.auto_expire": "自動過期靜音？",
   "mute_modal.duration": "期間",

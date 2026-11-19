@@ -253,6 +253,7 @@
   "login.otp_log_in.fail": "Codice sbagliato, per favore riprova.",
   "missing_description_modal.continue": "Post",
   "missing_description_modal.text": "Non hai compilato la descrizione per ogni allegato. Vuoi davvero continuare?",
+  "moderation_overlay.hide": "Nascondi",
   "moderation_overlay.show": "Leggi cosa contiene",
   "mute_modal.auto_expire": "Interrompere il silenzio automaticamente?",
   "mute_modal.duration": "Durata",
