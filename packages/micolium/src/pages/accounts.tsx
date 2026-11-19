@@ -34,9 +34,8 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
   const { colors } = useTheme();
   const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
-  const { data: account } = useAccount(
-    (route.params as AccountStackParams['view'] | undefined)?.id,
-  );
+  const id = (route.params as AccountStackParams['view'] | undefined)?.id;
+  const { data: account } = useAccount(id);
 
   let title: string | Array<React.ReactNode>;
   let subtitle: string | undefined;

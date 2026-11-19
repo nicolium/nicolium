@@ -20,6 +20,7 @@ import {
   type NativeScrollEvent,
   type NativeSyntheticEvent,
   Pressable,
+  ScrollView,
   useColorScheme,
   View,
 } from 'react-native';
@@ -37,20 +38,20 @@ import { GlassButton } from '@/components/ui/glass-button';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { StyledHtml } from '@/components/ui/styled-html';
-import { useClient } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
   useAcceptFollowRequestMutation,
   useRejectFollowRequestMutation,
 } from '@/queries/accounts/use-follow-requests';
-import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
-import { type ITimeline, Timeline } from '../timelines/timeline';
 import { CornerInset } from '../ui/corner-inset';
 import { HeaderBackButton } from '../ui/header-icon-button';
+
+import { ProfileMedia } from './profile-media';
+import { ProfileTimeline } from './profile-timeline';
 
 import type { TimelineEntry } from '@/stores/timelines';
 import type { FlashListRef } from '@shopify/flash-list';
@@ -101,7 +102,47 @@ const messages = defineMessages({
     id: 'follow_request.reject',
     defaultMessage: 'Reject',
   },
+  posts: { id: 'account.posts', defaultMessage: 'Posts' },
+  media: { id: 'account.media', defaultMessage: 'Media' },
 });
+
+type ProfileTab = 'posts' | 'media'; // | 'hashtags' | 'accounts' | 'collections';
+
+const useProfileTabs = (_accountId: string) => {
+  const tabs: Array<ProfileTab> = ['posts', 'media'];
+
+  return tabs;
+};
+
+interface IProfileTabs {
+  tabs: Array<ProfileTab>;
+  active: ProfileTab;
+  onChange: (tab: ProfileTab) => void;
+}
+
+const ProfileTabs: React.FC<IProfileTabs> = ({ tabs, active, onChange }) => {
+  const intl = useIntl();
+
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ gap: 8, paddingHorizontal: 16, paddingBottom: 8 }}
+    >
+      {tabs.map((tab) => (
+        <Chip
+          key={tab}
+          mode={active === tab ? 'flat' : 'outlined'}
+          selected={active === tab}
+          showSelectedCheck={false}
+          onPress={() => onChange(tab)}
+        >
+          {intl.formatMessage(messages[tab])}
+        </Chip>
+      ))}
+    </ScrollView>
+  );
+};
 
 interface IFollowRequestedChip {
   account: Account;
@@ -158,57 +199,6 @@ const FollowRequestedChip: React.FC<IFollowRequestedChip> = ({ account }) => {
   );
 };
 
-interface IProfileTimeline extends Pick<ITimeline, 'header'> {
-  ref?: React.RefObject<FlashListRef<TimelineEntry> | null>;
-  pinnedCountRef?: React.RefObject<number>;
-  id: string;
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  withReplies?: boolean;
-  withReblogs?: boolean;
-  withPinned?: boolean;
-}
-
-const ProfileTimeline: React.FC<IProfileTimeline> = ({
-  id,
-  withReplies,
-  withReblogs,
-  withPinned,
-  pinnedCountRef,
-  ...props
-}) => {
-  const client = useClient();
-
-  const pinnedQuery = useTimeline(`account:${id}:pinned`, (paginationParams) =>
-    client.accounts.getAccountStatuses(id, { ...paginationParams, pinned: true }),
-  );
-
-  const timelineQuery = useTimeline(
-    `account:${id}${withReblogs ? '' : ':exclude_reblogs'}${withReplies ? '' : ':exclude_replies'}`,
-    (paginationParams) =>
-      client.accounts.getAccountStatuses(id, {
-        ...paginationParams,
-        exclude_reblogs: !withReblogs,
-        exclude_replies: !withReplies,
-      }),
-  );
-
-  React.useEffect(() => {
-    if (pinnedCountRef) pinnedCountRef.current = withPinned ? pinnedQuery.entries.length : 0;
-  }, [withPinned, pinnedQuery.entries.length]);
-
-  return (
-    <Timeline
-      query={timelineQuery}
-      pinnedQuery={withPinned ? pinnedQuery : undefined}
-      emptyMessageHeading={
-        <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
-      }
-      context='account'
-      {...props}
-    />
-  );
-};
-
 interface IProfile {
   id: string;
   ownAccount?: boolean;
@@ -234,6 +224,9 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
 
   const [showHeader, setShowHeader] = React.useState(false);
   const [showComposeButton, setShowComposeButton] = React.useState(true);
+  const [tab, setTab] = React.useState<ProfileTab>('posts');
+
+  const tabs = useProfileTabs(id);
 
   const headerMarginTop = useSharedValue(-128);
   const headerStyle = useAnimatedStyle(() => ({
@@ -280,7 +273,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     }
 
     return chips;
-  }, [account?.relationship, ownAccount]);
+  }, [account, ownAccount]);
 
   if (!account) return <LoadingIndicator />;
 
@@ -669,17 +662,20 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </>
         </CollapsibleContent>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          gap: 8,
-          marginHorizontal: 16,
-        }}
-      >
-        {timelineFiltersSelector}
-        {pinnedCount.current > 3 && skipPinnedButton}
-      </View>
+      <ProfileTabs tabs={tabs} active={tab} onChange={setTab} />
+      {tab === 'posts' && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            gap: 8,
+            marginHorizontal: 16,
+          }}
+        >
+          {timelineFiltersSelector}
+          {pinnedCount.current > 3 && skipPinnedButton}
+        </View>
+      )}
     </>
   );
 
@@ -720,16 +716,20 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           <AccountActionsDropdown account={account} headerButton visible={showHeader} />
         </Appbar.Header>
       </Animated.View>
-      <ProfileTimeline
-        ref={timelineNode}
-        pinnedCountRef={pinnedCount}
-        id={account.id}
-        onScroll={handleScroll}
-        header={header}
-        withReplies={profileFilters.showReplies}
-        withReblogs={profileFilters.showReblogs}
-        withPinned={profileFilters.showPinned}
-      />
+      {tab === 'posts' ? (
+        <ProfileTimeline
+          ref={timelineNode}
+          pinnedCountRef={pinnedCount}
+          id={account.id}
+          onScroll={handleScroll}
+          header={header}
+          withReplies={profileFilters.showReplies}
+          withReblogs={profileFilters.showReblogs}
+          withPinned={profileFilters.showPinned}
+        />
+      ) : (
+        <ProfileMedia id={account.id} onScroll={handleScroll} header={header} />
+      )}
       <ComposeButton visible={showComposeButton} />
     </>
   );

@@ -34,6 +34,7 @@ import type {
   CustomEmoji,
   DriveFile,
   DriveFolder,
+  FeaturedTag,
   Filter,
   GifResults,
   Group,
