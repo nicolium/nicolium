@@ -26,6 +26,7 @@
   "account.unendorse.success": "您已不再展示 @{acct}",
   "account.unfollow": "取消追蹤",
   "account.unmute": "取消隱藏 @{name}",
+  "account_gallery.none": "沒有可顯示的媒體",
   "account_note.placeholder": "沒有評論",
   "admin.statuses.actions.delete_status": "刪除帖文",
   "auth.invalid_credentials": "無效的帳户名稱或密碼",

@@ -27,6 +27,7 @@
   "account.unendorse.success": "Ya no estás presentando a @{acct}",
   "account.unfollow": "Dejar de seguir",
   "account.unmute": "Dejar de silenciar a @{name}",
+  "account_gallery.none": "No hay multimedia que mostrar.",
   "account_note.placeholder": "No se proporcionó ningún comentario",
   "admin.statuses.actions.delete_status": "Eliminar publicación",
   "announcements.title": "Anuncios",

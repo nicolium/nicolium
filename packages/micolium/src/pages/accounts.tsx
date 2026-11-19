@@ -1,21 +1,25 @@
-import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Appbar, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useColorScheme, View } from 'react-native';
 
+import { Account } from '@/components/accounts/account';
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { Profile } from '@/components/accounts/profile';
 import { StatusesList } from '@/components/statuses/statuses-list';
 import { CornerInset } from '@/components/ui/corner-inset';
+import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useFollowers, useFollowing, useSubscribers } from '@/queries/account-lists/use-follows';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
+import { useCollection } from '@/queries/accounts/use-collections';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
 import { useSetting } from '@/stores/settings';
 
@@ -27,6 +31,7 @@ const messages = defineMessages({
   followersHeader: { id: 'column.followers', defaultMessage: 'Followers' },
   subscribersHeader: { id: 'column.subscribers', defaultMessage: 'Subscribers' },
   favouritesHeader: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },
+  collectionHeader: { id: 'column.collection', defaultMessage: 'Collection' },
 });
 
 const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
@@ -35,7 +40,9 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
   const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const id = (route.params as AccountStackParams['view'] | undefined)?.id;
-  const { data: account } = useAccount(id);
+  const { data: account } = useAccount(route.name === 'collection' ? undefined : id);
+  const { data: collection } = useCollection(route.name === 'collection' ? id : undefined);
+  const { data: collectionAccount } = useAccount(collection?.account_id);
 
   let title: string | Array<React.ReactNode>;
   let subtitle: string | undefined;
@@ -55,6 +62,10 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
     case 'favourites':
       title = intl.formatMessage(messages.favouritesHeader);
       subtitle = account ? `@${account.acct}` : undefined;
+      break;
+    case 'collection':
+      title = collection?.name ?? intl.formatMessage(messages.collectionHeader);
+      subtitle = collectionAccount ? `@${collectionAccount.acct}` : undefined;
       break;
     default:
       title = '';
@@ -193,6 +204,48 @@ const AccountFavouritesScreen = ({
   );
 };
 
+const AccountCollectionScreen = ({
+  route: {
+    params: { id },
+  },
+}: NativeStackScreenProps<AccountStackParams, 'collection'>) => {
+  const { data: collection, isPending } = useCollection(id);
+
+  const accountIds = collection?.items
+    .filter((item) => item.state === 'accepted' && item.account_id)
+    .map((item) => item.account_id!);
+
+  return (
+    <FlashList
+      data={accountIds}
+      keyExtractor={(accountId) => accountId}
+      renderItem={({ item }) => (
+        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink withFollowButton />
+      )}
+      ItemSeparatorComponent={Divider}
+      ListHeaderComponent={
+        collection?.description ? (
+          <Text variant='bodyMedium' style={{ padding: 16 }}>
+            {collection.description}
+          </Text>
+        ) : undefined
+      }
+      ListEmptyComponent={
+        !isPending ? (
+          <EmptyMessage
+            emptyMessageText={
+              <FormattedMessage
+                id='empty_column.collection'
+                defaultMessage='This collection is empty'
+              />
+            }
+          />
+        ) : null
+      }
+    />
+  );
+};
+
 const AccountsStack = createNativeStackNavigator<AccountStackParams>();
 
 const AccountsStackScreen = (_: StaticScreenProps<NavigatorScreenParams<AccountStackParams>>) => {
@@ -207,6 +260,7 @@ const AccountsStackScreen = (_: StaticScreenProps<NavigatorScreenParams<AccountS
       <AccountsStack.Screen name='following' component={AccountFollowingScreen} />
       <AccountsStack.Screen name='subscribers' component={AccountSubscribersScreen} />
       <AccountsStack.Screen name='favourites' component={AccountFavouritesScreen} />
+      <AccountsStack.Screen name='collection' component={AccountCollectionScreen} />
     </AccountsStack.Navigator>
   );
 };

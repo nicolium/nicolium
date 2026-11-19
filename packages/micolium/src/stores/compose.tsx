@@ -1826,7 +1826,7 @@ export {
   appendMedia,
   checkComposeContent,
   newPoll,
-    statusToMentionsAccountIdsArray,
+  statusToMentionsAccountIdsArray,
   useComposeStore,
   useCompose,
   //   useThread,

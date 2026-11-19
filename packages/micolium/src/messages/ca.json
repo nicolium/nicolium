@@ -21,6 +21,7 @@
   "account.unendorse": "No es mostren al perfil",
   "account.unfollow": "Deixa de seguir",
   "account.unmute": "Deixar de silenciar @{name}",
+  "account_gallery.none": "No hi ha cap imatge per mostrar.",
   "admin.statuses.actions.delete_status": "Suprimeix la publicació",
   "column.bookmarks": "Marcadors",
   "column.chats": "Xats",

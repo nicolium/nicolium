@@ -26,6 +26,7 @@
   "account.unendorse": "プロフィールから外す",
   "account.unfollow": "フォロー解除",
   "account.unmute": "@{name}さんのミュートを解除",
+  "account_gallery.none": "表示するメディアがありません。",
   "account_note.placeholder": "クリックしてノートを追加する",
   "admin.statuses.actions.delete_status": "投稿を削除する",
   "announcements.title": "アナウンス",

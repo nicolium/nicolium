@@ -30,6 +30,7 @@
   "account.unendorse.success": "Hai smesso di promuovere @{acct}",
   "account.unfollow": "Non seguire",
   "account.unmute": "Non silenziare @{name}",
+  "account_gallery.none": "Nessun allegato da mostrare.",
   "account_note.placeholder": "Nessun commento",
   "admin.statuses.actions.delete_status": "Elimina pubblicazione",
   "alt_text_modal.describe_for_people_with_hearing_impairments": "Descrizione per persone non udenti…",

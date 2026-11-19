@@ -26,6 +26,7 @@
   "account.unendorse.success": "@{acct} više nije zakačen",
   "account.unfollow": "Prestani pratiti",
   "account.unmute": "Uključi @{name}",
+  "account_gallery.none": "Nema medija za prikaz.",
   "account_note.placeholder": "Nema komentara",
   "admin.statuses.actions.delete_status": "Izbriši objavu",
   "announcements.title": "Najave",

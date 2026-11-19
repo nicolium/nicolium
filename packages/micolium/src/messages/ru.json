@@ -30,6 +30,7 @@
   "account.unendorse.success": "Вы больше не представляете @{acct}",
   "account.unfollow": "Отписаться",
   "account.unmute": "Снять глушение",
+  "account_gallery.none": "Нет медиа для показа.",
   "account_note.fail": "Заметка не сохранилась",
   "account_note.placeholder": "Щёлкните, чтобы добавить заметку",
   "admin.statuses.actions.delete_status": "Удалить сообщение",

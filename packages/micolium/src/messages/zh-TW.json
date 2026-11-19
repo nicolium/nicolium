@@ -27,6 +27,7 @@
   "account.unendorse.success": "您已不再展示 @{acct}",
   "account.unfollow": "取消追隨",
   "account.unmute": "取消靜音 @{name}",
+  "account_gallery.none": "沒有可顯示的媒體。",
   "account_note.placeholder": "按一下新增註解",
   "admin.statuses.actions.delete_status": "刪除貼文",
   "announcements.title": "公告",

@@ -22,6 +22,7 @@ import { Timeline } from '@/components/timelines/timeline';
 import { CornerInset } from '@/components/ui/corner-inset';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
+import { useAccount } from '@/queries/accounts/use-account';
 import {
   useFollowHashtagMutation,
   useUnfollowHashtagMutation,
@@ -35,6 +36,10 @@ import type { StaticScreenProps } from '@react-navigation/native';
 const messages = defineMessages({
   followHashtag: { id: 'hashtag.follow', defaultMessage: 'Follow hashtag' },
   unfollowHashtag: { id: 'hashtag.unfollow', defaultMessage: 'Unfollow hashtag' },
+  headingFromAccount: {
+    id: 'column.hashtag.from_account',
+    defaultMessage: 'Posts tagged #{tag} from {name}',
+  },
 });
 
 const AnimatedAppbarContent = createAnimatedComponent(Appbar.Content);
@@ -42,9 +47,9 @@ const AnimatedHeaderIconButton = createAnimatedComponent(HeaderIconButton);
 
 const HashtagsScreen = ({
   route: {
-    params: { tag },
+    params: { tag, accountId },
   },
-}: StaticScreenProps<{ tag: string }>) => {
+}: StaticScreenProps<{ tag: string; accountId?: string }>) => {
   const navigation = useNavigation('hashtags');
   const intl = useIntl();
   const { colors } = useTheme();
@@ -54,8 +59,9 @@ const HashtagsScreen = ({
   const client = useClient();
   const features = useFeatures();
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const { data: account } = useAccount(accountId);
 
-  const headerOpacity = useSharedValue(+isScrolled);
+  const headerOpacity = useSharedValue(accountId || +isScrolled);
   const headerStyle = useAnimatedStyle(() => ({
     opacity: headerOpacity.value,
   }));
@@ -66,12 +72,19 @@ const HashtagsScreen = ({
   const { data: hashtag } = useHashtag(tag);
 
   const timelineQuery = useTimeline(
-    `hashtag:${tag}`,
-    (paginationParams) => client.timelines.hashtagTimeline(tag, paginationParams),
+    `hashtag:${tag}${accountId ? `:${accountId}` : ''}`,
+    (paginationParams) =>
+      accountId
+        ? client.accounts.getAccountStatuses(accountId, {
+            tagged: tag,
+          })
+        : client.timelines.hashtagTimeline(tag, paginationParams),
     { stream: 'hashtag', params: { tag } },
   );
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (accountId) return;
+
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
     const newIsScrolled = scrollOffset > 64;
     setIsScrolled(newIsScrolled);
@@ -102,8 +115,18 @@ const HashtagsScreen = ({
       >
         <CornerInset direction='horizontal' edge='left' />
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
-        <AnimatedAppbarContent title={`#${tag}`} style={headerStyle} />
-        {features.followHashtags && (
+        <AnimatedAppbarContent
+          title={
+            accountId
+              ? intl.formatMessage(messages.headingFromAccount, {
+                  tag,
+                  name: account?.display_name,
+                })
+              : `#${tag}`
+          }
+          style={headerStyle}
+        />
+        {!accountId && features.followHashtags && (
           <AnimatedHeaderIconButton
             icon={hashtag?.following ? UserMinusIcon : UserPlusIcon}
             disabled={!hashtag || isFollowPending}
@@ -126,29 +149,31 @@ const HashtagsScreen = ({
         }
         onScroll={handleScroll}
         header={
-          <View style={{ marginTop: 64 + topInset, paddingHorizontal: 16 }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Text variant='titleLarge'>#{tag}</Text>
-              <Button
-                mode={hashtag?.following ? 'contained-tonal' : 'contained'}
-                disabled={!hashtag || isFollowPending}
-                loading={isFollowPending}
-                onPress={() => (hashtag?.following ? unfollowHashtag() : followHashtag())}
+          accountId ? undefined : (
+            <View style={{ marginTop: 64 + topInset, paddingHorizontal: 16 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
               >
-                {hashtag?.following ? (
-                  <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
-                ) : (
-                  <FormattedMessage id='account.follow' defaultMessage='Follow' />
-                )}
-              </Button>
+                <Text variant='titleLarge'>#{tag}</Text>
+                <Button
+                  mode={hashtag?.following ? 'contained-tonal' : 'contained'}
+                  disabled={!hashtag || isFollowPending}
+                  loading={isFollowPending}
+                  onPress={() => (hashtag?.following ? unfollowHashtag() : followHashtag())}
+                >
+                  {hashtag?.following ? (
+                    <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
+                  ) : (
+                    <FormattedMessage id='account.follow' defaultMessage='Follow' />
+                  )}
+                </Button>
+              </View>
             </View>
-          </View>
+          )
         }
       />
     </>

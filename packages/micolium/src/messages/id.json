@@ -27,6 +27,7 @@
   "account.unendorse.success": "Anda tidak lagi tampil @{acct}",
   "account.unfollow": "Berhenti mengikuti",
   "account.unmute": "Berhenti membisukan @{name}",
+  "account_gallery.none": "Tidak ada media untuk ditampilkan.",
   "account_note.placeholder": "Klik untuk menambahkan catatan",
   "admin.statuses.actions.delete_status": "Hapus postingan",
   "announcements.title": "Pengumuman",

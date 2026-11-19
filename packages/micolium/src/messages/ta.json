@@ -30,6 +30,7 @@
   "account.unendorse.success": "நீங்கள் இனி @{acct} இடம்பெறவில்லை",
   "account.unfollow": "பின்தொடராட்",
   "account.unmute": "தடுப்புநீக்கு @{name}",
+  "account_gallery.none": "காட்ட ஊடகங்கள் இல்லை.",
   "account_note.placeholder": "குறிப்பைச் சேர்க்க சொடுக்கு செய்க",
   "admin.statuses.actions.delete_status": "இடுகையை நீக்கு",
   "alt_text_modal.describe_for_people_with_hearing_impairments": "செவித்திறன் குறைபாடுகள் உள்ளவர்களுக்கு இதை விவரிக்கவும்…",

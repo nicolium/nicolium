@@ -26,6 +26,7 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "Hætta að fylgja",
   "account.unmute": "Hætta að þagga niður í @{name}",
+  "account_gallery.none": "Engir myndskrár til að sýna.",
   "account_note.placeholder": "Enginn minnispunktur ennþá",
   "admin.statuses.actions.delete_status": "Eyða færslu",
   "announcements.title": "Announcements",

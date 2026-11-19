@@ -26,6 +26,7 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "팔로우 해제",
   "account.unmute": "뮤트 해제",
+  "account_gallery.none": "No media to show.",
   "account_note.placeholder": "Click to add a note",
   "admin.statuses.actions.delete_status": "Delete post",
   "announcements.title": "Announcements",

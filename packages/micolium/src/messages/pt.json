@@ -30,6 +30,7 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "Deixar de seguir",
   "account.unmute": "Não silenciar @{name}",
+  "account_gallery.none": "Sem média para exibir.",
   "account_note.fail": "Falha ao guardar nota",
   "account_note.placeholder": "Click to add a note",
   "account_note.save": "Guardar nota",

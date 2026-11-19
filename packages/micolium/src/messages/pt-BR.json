@@ -26,6 +26,7 @@
   "account.unendorse.success": "Você não está mais destacando @{acct}",
   "account.unfollow": "Deixar de seguir",
   "account.unmute": "Não silenciar @{name}",
+  "account_gallery.none": "Nenhuma mídia a ser exibida.",
   "account_note.placeholder": "Click to add a note",
   "account_note.save": "Salvar nota",
   "account_note.success": "Nota salva",

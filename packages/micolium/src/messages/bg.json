@@ -30,6 +30,7 @@
   "account.unendorse.success": "Вече не представяте @{acct}",
   "account.unfollow": "Отследване",
   "account.unmute": "Раззаглушаване на @{name}",
+  "account_gallery.none": "Няма мултимедия за показване.",
   "account_note.fail": "Неуспешно запазване на бележката",
   "account_note.modal.header": "Редактиране на бележката за @{name}",
   "account_note.placeholder": "Натиснете, за да добавите бележка",

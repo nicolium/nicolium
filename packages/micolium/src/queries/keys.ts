@@ -92,6 +92,8 @@ const accounts = {
   show: (accountId: string) => key<Account>()('accounts', accountId),
   latestStatus: (accountId: string) => key<string | null>()('accounts', accountId, 'latestStatus'),
   lookup: (acct: string) => key<string>()('accounts', 'lookup', acct),
+  featuredTags: (accountId: string) =>
+    key<Array<FeaturedTag>>()('accounts', accountId, 'featuredTags'),
 };
 
 const accountCredentials = {

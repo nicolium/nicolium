@@ -27,6 +27,7 @@
   "account.unendorse.success": "أُزيل @{acct} من ملفك الشخصي",
   "account.unfollow": "إلغاء المتابعة",
   "account.unmute": "إلغاء كتم @{name}",
+  "account_gallery.none": "لا يوجد وسائط لعرضها.",
   "account_note.placeholder": "لا توجد تعليقات",
   "admin.statuses.actions.delete_status": "حذف المنشور",
   "announcements.title": "الإعلانات",

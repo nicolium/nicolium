@@ -21,6 +21,7 @@
   "account.unendorse": "Не публікувати у профілі",
   "account.unfollow": "Відписатися",
   "account.unmute": "Зняти глушення з @{name}",
+  "account_gallery.none": "Нема чого показувати.",
   "account_note.modal.header": "Редагувати примітку про @{name}",
   "account_note.placeholder": "Click to add a note",
   "account_note.save": "Зберегти примітку",

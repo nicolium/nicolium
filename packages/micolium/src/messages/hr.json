@@ -27,6 +27,7 @@
   "account.unendorse.success": "Više ne predstavljate @{acct}",
   "account.unfollow": "Prestani pratiti",
   "account.unmute": "Poništi utišavanje @{name}",
+  "account_gallery.none": "Nema medija za prikaz.",
   "account_note.placeholder": "Nema komentara",
   "admin.statuses.actions.delete_status": "Delete post",
   "announcements.title": "Obavijesti",

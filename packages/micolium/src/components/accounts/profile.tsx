@@ -30,6 +30,7 @@ import * as v from 'valibot';
 
 import { AccountActionsDropdown } from '@/components/accounts/account-actions-dropdown';
 import { FollowButton } from '@/components/accounts/follow-button';
+import { ProfileFeatured } from '@/components/accounts/profile-featured';
 import { ComposeButton } from '@/components/compose-button';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
@@ -40,6 +41,9 @@ import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { StyledHtml } from '@/components/ui/styled-html';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useAccountCollections } from '@/queries/accounts/use-collections';
+import { useEndorsedAccounts } from '@/queries/accounts/use-endorsed-accounts';
+import { useFeaturedTags } from '@/queries/accounts/use-featured-tags';
 import {
   useAcceptFollowRequestMutation,
   useRejectFollowRequestMutation,
@@ -104,12 +108,22 @@ const messages = defineMessages({
   },
   posts: { id: 'account.posts', defaultMessage: 'Posts' },
   media: { id: 'account.media', defaultMessage: 'Media' },
+  hashtags: { id: 'account.tabs.hashtags', defaultMessage: 'Hashtags' },
+  accounts: { id: 'account.tabs.accounts', defaultMessage: 'Accounts' },
+  collections: { id: 'column.collections', defaultMessage: 'Collections' },
 });
 
-type ProfileTab = 'posts' | 'media'; // | 'hashtags' | 'accounts' | 'collections';
+type ProfileTab = 'posts' | 'media' | 'hashtags' | 'accounts' | 'collections';
 
-const useProfileTabs = (_accountId: string) => {
+const useProfileTabs = (accountId: string) => {
+  const { data: featuredTags = [] } = useFeaturedTags(accountId);
+  const { data: endorsedAccounts = [] } = useEndorsedAccounts(accountId);
+  const { data: collections = [] } = useAccountCollections(accountId);
+
   const tabs: Array<ProfileTab> = ['posts', 'media'];
+  if (featuredTags.length) tabs.push('hashtags');
+  if (endorsedAccounts.length) tabs.push('accounts');
+  if (collections.length) tabs.push('collections');
 
   return tabs;
 };
@@ -273,7 +287,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     }
 
     return chips;
-  }, [account, ownAccount]);
+  }, [account?.relationship, ownAccount]);
 
   if (!account) return <LoadingIndicator />;
 
@@ -727,8 +741,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           withReblogs={profileFilters.showReblogs}
           withPinned={profileFilters.showPinned}
         />
-      ) : (
+      ) : tab === 'media' ? (
         <ProfileMedia id={account.id} onScroll={handleScroll} header={header} />
+      ) : (
+        <ProfileFeatured tab={tab} accountId={account.id} onScroll={handleScroll} header={header} />
       )}
       <ComposeButton visible={showComposeButton} />
     </>

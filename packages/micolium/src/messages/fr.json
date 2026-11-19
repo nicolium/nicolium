@@ -34,6 +34,7 @@
   "account.unendorse.success": "Vous n’affichez plus @{acct} dans votre sélection",
   "account.unfollow": "Ne plus suivre",
   "account.unmute": "Ne plus mettre en sourdine @{name}",
+  "account_gallery.none": "Pas de média à afficher.",
   "account_note.fail": "Echec de l’enregistrement",
   "account_note.modal.header": "Modifier la note concernant @{name}",
   "account_note.placeholder": "Cliquer pour ajouter une note",

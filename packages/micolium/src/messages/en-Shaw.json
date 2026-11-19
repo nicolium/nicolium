@@ -26,6 +26,7 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "𐑳𐑯𐑓𐑪𐑤𐑴",
   "account.unmute": "𐑳𐑯𐑥𐑿𐑑 @{name}",
+  "account_gallery.none": "𐑯𐑴 𐑥𐑰𐑛𐑾 𐑑 𐑖𐑴.",
   "account_note.placeholder": "Click to add a note",
   "admin.statuses.actions.delete_status": "𐑛𐑦𐑤𐑰𐑑 𐑐𐑴𐑕𐑑",
   "announcements.title": "Announcements",

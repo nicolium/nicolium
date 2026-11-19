@@ -27,6 +27,7 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "הפסקת מעקב",
   "account.unmute": "הפסקת השתקת @{name}",
+  "account_gallery.none": "אין מדיה להראות.",
   "account_note.placeholder": "Click to add a note",
   "admin.statuses.actions.delete_status": "מחק פוסט",
   "announcements.title": "Announcements",

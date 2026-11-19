@@ -23,6 +23,7 @@
   "account.unendorse": "Peidio a'i arddangos ar fy mhroffil",
   "account.unfollow": "Dad-ddilyn",
   "account.unmute": "Dad-dewi @{name}",
+  "account_gallery.none": "Dim cyfryngau i'w dangos.",
   "account_note.placeholder": "Cliciwch i ychwanegu nodyn",
   "admin.statuses.actions.delete_status": "Delete post",
   "announcements.title": "Cyhoeddiadau",

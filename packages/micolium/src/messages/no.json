@@ -26,6 +26,7 @@
   "account.unendorse.success": "Du fremhever ikke lengre @{acct}",
   "account.unfollow": "Avfølg",
   "account.unmute": "Avdemp @{name}",
+  "account_gallery.none": "Ingen media å vise.",
   "account_note.placeholder": "Ingen kommentarer gitt",
   "admin.statuses.actions.delete_status": "Slett innlegg",
   "announcements.title": "Kunngjøringer",

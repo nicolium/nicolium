@@ -27,6 +27,7 @@
   "account.unendorse.success": "Artık @{acct} adlı hesabı profilinizde öne çıkartmıyorsunuz",
   "account.unfollow": "Takipi bırak",
   "account.unmute": "@{name} adlı hesabı sessizden çıkart",
+  "account_gallery.none": "Gösterilecek medya yok.",
   "account_note.placeholder": "Yorum sağlanmadı",
   "admin.statuses.actions.delete_status": "Gönderiyi sil",
   "announcements.title": "Duyurular",

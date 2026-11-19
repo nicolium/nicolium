@@ -22,6 +22,7 @@
   "account.unendorse": "Nepředstavit na profilu",
   "account.unfollow": "Přestat sledovat",
   "account.unmute": "Odkrýt uživatele @{name}",
+  "account_gallery.none": "Nejsou tu žádná média.",
   "admin.statuses.actions.delete_status": "Smazat příspěvek",
   "auth.logged_out": "Odhlásili jste se.",
   "column.bookmarks": "Záložky",
