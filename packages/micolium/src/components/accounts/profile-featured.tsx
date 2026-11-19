@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import { HashIcon } from 'phosphor-react-native/src/icons/Hash';
 import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
-import { ShapesIcon } from 'phosphor-react-native/src/icons/Shapes';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
@@ -16,6 +15,7 @@ import {
 import { useEndorsedAccounts } from '@/queries/accounts/use-endorsed-accounts';
 import { useFeaturedTags } from '@/queries/accounts/use-featured-tags';
 
+import { CollectionItem } from '../collections/collection-item';
 import { CreateCollectionDialog } from '../collections/create-collection-dialog';
 import { EmptyMessage } from '../ui/empty-message';
 import { GlassButton } from '../ui/glass-button';
@@ -52,38 +52,6 @@ const FeaturedTagItem: React.FC<IFeaturedTagItem> = ({ tag, accountId }) => {
       }
       left={(props) => <List.Icon {...props} icon={iconHelper(HashIcon)} />}
       onPress={() => navigation.navigate('hashtags', { tag: tag.name, accountId })}
-    />
-  );
-};
-
-interface ICollectionItem {
-  collection: Collection;
-  disabled?: boolean;
-}
-
-const CollectionItem: React.FC<ICollectionItem> = ({ collection, disabled }) => {
-  const navigation = useNavigation();
-
-  return (
-    <List.Item
-      title={collection.name}
-      description={
-        <FormattedMessage
-          id='collections.account_count'
-          defaultMessage='{count, plural, one {# account} other {# accounts}}'
-          values={{ count: collection.item_count }}
-        />
-      }
-      left={(props) => <List.Icon {...props} icon={iconHelper(ShapesIcon)} />}
-      onPress={
-        disabled
-          ? undefined
-          : () =>
-              navigation.navigate('accounts', {
-                screen: 'collection',
-                params: { id: collection.id },
-              })
-      }
     />
   );
 };
@@ -220,4 +188,4 @@ const ProfileFeatured: React.FC<IProfileFeatured> = ({
   }
 };
 
-export { ProfileFeatured, CollectionItem };
+export { ProfileFeatured };

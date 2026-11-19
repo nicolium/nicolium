@@ -11,12 +11,12 @@ import { useReportAccountMutation } from '@/queries/accounts/use-report';
 import { getDomain } from '@/utils/accounts';
 import { toast } from '@/utils/toast';
 
+import { CollectionItem } from '../collections/collection-item';
 import { Status } from '../statuses/status';
 import { DialogOrSheet, type DialogOrSheetAction } from '../ui/dialog-or-sheet';
 import { type IListSections, List } from '../ui/list';
 
 import { Account } from './account';
-import { CollectionItem } from './profile-featured';
 
 import type { Account as AccountEntity } from 'pl-api';
 

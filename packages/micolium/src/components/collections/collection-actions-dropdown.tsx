@@ -10,10 +10,7 @@ import { Platform } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
-import {
-  useDeleteCollection,
-  useRevokeCollectionInclusion,
-} from '@/queries/accounts/use-collections';
+import { useDeleteCollection } from '@/queries/accounts/use-collections';
 import {
   useUnblockAccountMutation,
   useUnmuteAccountMutation,
@@ -28,6 +25,7 @@ import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
 import { CreateCollectionDialog } from './create-collection-dialog';
+import { useRevokeCollection } from './use-revoke-collection';
 
 import type { Collection } from 'pl-api';
 
@@ -54,27 +52,6 @@ const messages = defineMessages({
     id: 'collections.revoke_collection_inclusion',
     defaultMessage: 'Remove myself from this collection',
   },
-  revokeHeading: {
-    id: 'confirmations.revoke_collection_inclusion.heading',
-    defaultMessage: 'Remove yourself from this collection?',
-  },
-  revokeMessage: {
-    id: 'confirmations.revoke_collection_inclusion.message',
-    defaultMessage:
-      'The curator won’t be able to re-add you to this collection for 24 hours. To prevent them from adding you to collections permanently, you can block them.',
-  },
-  revokeConfirm: {
-    id: 'confirmations.revoke_collection_inclusion.confirm',
-    defaultMessage: 'Remove me',
-  },
-  revokeSuccess: {
-    id: 'collections.revoke_inclusion.success',
-    defaultMessage: 'You’ve been removed from “{collection}”',
-  },
-  revokeError: {
-    id: 'collections.revoke_inclusion.error',
-    defaultMessage: 'There was an error, please try again later.',
-  },
   report: { id: 'collections.report_collection', defaultMessage: 'Report this collection' },
   accountActions: { id: 'status.account_actions', defaultMessage: 'Account actions' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
@@ -98,10 +75,9 @@ const useMenuItems = (
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(collection.account_id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(collection.account_id);
   const { mutate: deleteCollection } = useDeleteCollection();
-  const { mutate: revokeInclusion } = useRevokeCollectionInclusion();
+  const confirmRevoke = useRevokeCollection(collection);
 
   const isOwnCollection = collection.account_id === me;
-  const ownItemId = collection.items.find((item) => item.account_id === me)?.id;
 
   const handleDelete = () => {
     Alert.alert(
@@ -123,36 +99,6 @@ const useMenuItems = (
               },
               onError: () => toast.error(intl.formatMessage(messages.deleteError)),
             }),
-        },
-      ],
-    );
-  };
-
-  const handleRevoke = () => {
-    if (!ownItemId) return;
-
-    Alert.alert(
-      intl.formatMessage(messages.revokeHeading),
-      intl.formatMessage(messages.revokeMessage),
-      [
-        {
-          text: intl.formatMessage(messages.cancel),
-          style: 'cancel',
-        },
-        {
-          text: intl.formatMessage(messages.revokeConfirm),
-          style: 'destructive',
-          onPress: () =>
-            revokeInclusion(
-              { collectionId: collection.id, itemId: ownItemId },
-              {
-                onSuccess: () =>
-                  toast.success(
-                    intl.formatMessage(messages.revokeSuccess, { collection: collection.name }),
-                  ),
-                onError: () => toast.error(intl.formatMessage(messages.revokeError)),
-              },
-            ),
         },
       ],
     );
@@ -230,14 +176,14 @@ const useMenuItems = (
   } else {
     const moderationItems: Array<DropdownMenuItem> = [];
 
-    if (ownItemId) {
+    if (confirmRevoke) {
       moderationItems.push({
         key: 'revoke',
         type: 'button',
         label: intl.formatMessage(messages.revoke),
         appleIcon: 'person.badge.minus',
         androidIcon: 'ph_user_minus',
-        onPress: handleRevoke,
+        onPress: confirmRevoke,
       });
     }
 
