@@ -138,4 +138,4 @@ const ProfileFeatured: React.FC<IProfileFeatured> = ({ tab, accountId, header, o
   }
 };
 
-export { ProfileFeatured };
+export { ProfileFeatured, CollectionItem };

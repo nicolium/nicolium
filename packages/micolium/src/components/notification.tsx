@@ -1,4 +1,4 @@
-import { Chip, useTheme } from '@mkljczk/react-native-paper';
+import { Card, Chip, useTheme } from '@mkljczk/react-native-paper';
 import { Link } from '@react-navigation/native';
 import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
@@ -34,6 +34,7 @@ import { useNotification } from '@/queries/notifications/use-notifications';
 import { useSetting } from '@/stores/settings';
 
 import { Account } from './accounts/account';
+import { CollectionItem } from './accounts/profile-featured';
 import { Status } from './statuses/status';
 import { Emoji } from './ui/emoji';
 import { Emojify } from './ui/emojify';
@@ -298,10 +299,11 @@ const Notification: React.FC<INotification> = (props) => {
         ) : null;
       case 'added_to_collection':
       case 'collection_update':
-        return null;
-      // return 'collection' in notification && notification.collection ? (
-      //   <CollectionNotification collection={notification.collection} />
-      // ) : null;
+        return 'collection' in notification && notification.collection ? (
+          <Card mode='outlined'>
+            <CollectionItem collection={notification.collection} />
+          </Card>
+        ) : null;
       case 'favourite':
       case 'mention':
       case 'reblog':

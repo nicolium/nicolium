@@ -98,6 +98,7 @@ const buildNotificationsParams = (
     } else {
       params.exclude_types = [...EXCLUDE_TYPES];
     }
+    console.log(params);
 
     return params;
   }
