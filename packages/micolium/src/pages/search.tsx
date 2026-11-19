@@ -241,10 +241,10 @@ const LinksResults: React.FC = () => {
 };
 
 const SearchTabs = createMaterialTopTabNavigator<{
-  accounts: undefined;
-  statuses: undefined;
-  hashtags: undefined;
-  links: undefined;
+  searchAccounts: undefined;
+  searchStatuses: undefined;
+  searchHashtags: undefined;
+  searchLinks: undefined;
 }>();
 
 const SearchScreen = ({ route, navigation }: BottomTabScreenProps<TabsParams, 'search'>) => {
@@ -297,26 +297,26 @@ const SearchScreen = ({ route, navigation }: BottomTabScreenProps<TabsParams, 's
         tabBar={(props) => <MaterialTopTabBar key={tabBarKey} {...props} />}
       >
         <SearchTabs.Screen
-          name='accounts'
+          name='searchAccounts'
           options={{ title: intl.formatMessage(messages.accounts) }}
         >
           {() => <AccountsResults query={activeQuery} />}
         </SearchTabs.Screen>
         <SearchTabs.Screen
-          name='statuses'
+          name='searchStatuses'
           options={{ title: intl.formatMessage(messages.statuses) }}
         >
           {() => <StatusesResults query={activeQuery} />}
         </SearchTabs.Screen>
         <SearchTabs.Screen
-          name='hashtags'
+          name='searchHashtags'
           options={{ title: intl.formatMessage(messages.hashtags) }}
         >
           {() => <HashtagsResults query={activeQuery} />}
         </SearchTabs.Screen>
         {!hasQuery && features.trendingLinks && (
           <SearchTabs.Screen
-            name='links'
+            name='searchLinks'
             component={LinksResults}
             options={{ title: intl.formatMessage(messages.links) }}
           />
