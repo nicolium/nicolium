@@ -284,6 +284,7 @@
   "status.filtered": "フィルターされました",
   "status.load_more": "もっと見る",
   "status.mute_conversation": "会話をミュート",
+  "status.open": "詳細を表示",
   "status.pin": "プロフィールに固定表示",
   "status.pinned": "固定された投稿",
   "status.quote": "投稿を引用",

@@ -146,6 +146,7 @@
   "status.filtered": "Filtrado",
   "status.load_more": "Cargar más",
   "status.mute_conversation": "Silenciar conversación",
+  "status.open": "Expandir este estado",
   "status.pin": "Pin en el perfil",
   "status.pinned": "Toot fijado",
   "status.read_more": "Leer más",

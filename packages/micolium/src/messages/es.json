@@ -317,6 +317,7 @@
   "status.filtered": "Filtrado",
   "status.load_more": "Cargar más",
   "status.mute_conversation": "Silenciar conversación",
+  "status.open": "Expandir estado",
   "status.pin": "Fijar",
   "status.pinned": "Toot fijado",
   "status.quote": "Quote post",

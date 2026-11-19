@@ -18,6 +18,7 @@ type EmojiPickerState = {
 type MediaViewerState = {
   media: Array<MediaAttachment>;
   index: number;
+  statusId?: string;
 };
 
 type State = {
@@ -41,7 +42,7 @@ type State = {
       scopeUrl?: string,
     ) => void;
     closeEmojiPicker: () => void;
-    openMediaViewer: (media: Array<MediaAttachment>, index?: number) => void;
+    openMediaViewer: (media: Array<MediaAttachment>, index?: number, statusId?: string) => void;
     closeMediaViewer: () => void;
   };
 };
@@ -82,8 +83,8 @@ const useUiStore = create<State>((set) => ({
         },
       })),
     closeEmojiPicker: () => set(() => ({ emojiPicker: null })),
-    openMediaViewer: (media, index = 0) => {
-      set({ mediaViewer: { media, index } });
+    openMediaViewer: (media, index = 0, statusId = undefined) => {
+      set({ mediaViewer: { media, index, statusId } });
     },
     closeMediaViewer: () => {
       set({ mediaViewer: null });

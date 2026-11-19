@@ -534,6 +534,7 @@
   "status.load_more": "加载更多",
   "status.mute_conversation": "静音此对话",
   "status.mute_conversation.success": "对话已静音",
+  "status.open": "显示帖文详情",
   "status.pin": "在个人资料页面置顶",
   "status.pinned": "置顶帖文",
   "status.quote": "引用帖文",

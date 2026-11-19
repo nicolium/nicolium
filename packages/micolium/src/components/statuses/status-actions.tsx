@@ -38,6 +38,8 @@ import { DialogOrSheet } from '../ui/dialog-or-sheet';
 import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
+import { StatusActionsDropdown } from './status-actions-dropdown';
+
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { TooltipTriggerProps } from '@mkljczk/react-native-paper/lib/typescript/src/components/Tooltip/Tooltip';
 
@@ -552,15 +554,17 @@ const DislikeAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => 
 interface IStatusActions {
   status: SelectedStatus;
   fromInteractAs?: boolean;
+  withDropdown?: boolean;
 }
 
 const StatusActions: React.FC<IStatusActions> = (props) => (
-  <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
+  <View style={{ flexDirection: 'row', gap: 8, marginTop: 4, alignItems: 'center' }}>
     <ReplyAction {...props} />
     <ReblogAction {...props} />
     <FavouriteAction {...props} />
     <DislikeAction {...props} />
     <ReactionAction {...props} />
+    {props.withDropdown && <StatusActionsDropdown withOpen {...props} />}
   </View>
 );
 

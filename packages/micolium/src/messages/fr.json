@@ -532,6 +532,7 @@
   "status.load_more": "Charger plus",
   "status.mute_conversation": "Ignorer la conversation",
   "status.mute_conversation.success": "Conversation mise en sourdine",
+  "status.open": "Déplier cette publication",
   "status.pin": "Épingler sur le profil",
   "status.pinned": "Publication épinglée",
   "status.quote": "Citation",

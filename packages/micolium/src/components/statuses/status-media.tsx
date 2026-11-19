@@ -274,7 +274,7 @@ const renderMedia = (
 };
 
 interface IStatusMedia {
-  status: Pick<SelectedStatus, 'media_attachments' | 'sensitive'>;
+  status: Pick<SelectedStatus, 'id' | 'media_attachments' | 'sensitive'>;
   compact?: boolean;
   filters?: Array<FilterResult>;
   mediaVisible?: boolean;
@@ -400,7 +400,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             onPress={
               sensitive && !mediaVisible
                 ? undefined
-                : () => openMediaViewer(filteredMedia, filteredMedia.indexOf(media))
+                : () => openMediaViewer(filteredMedia, filteredMedia.indexOf(media), status.id)
             }
             accessibilityRole='imagebutton'
             accessibilityLabel={media.description || undefined}

@@ -267,6 +267,7 @@
   "status.filtered": "필터로 걸러짐",
   "status.load_more": "더 보기",
   "status.mute_conversation": "이 대화를 뮤트",
+  "status.open": "상세 정보 표시",
   "status.pin": "고정",
   "status.pinned": "고정 된 툿",
   "status.quote": "Quote post",

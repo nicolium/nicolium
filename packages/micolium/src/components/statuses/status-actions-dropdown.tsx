@@ -4,7 +4,7 @@ import * as Clipboard from 'expo-clipboard';
 import { shareAsync } from 'expo-sharing';
 import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
-import React from 'react';
+import React, { Children } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
 
@@ -41,6 +41,7 @@ import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
 const messages = defineMessages({
+  open: { id: 'status.open', defaultMessage: 'Show post details' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   copy: { id: 'status.copy.short', defaultMessage: 'Copy link' },
   openInBrowser: { id: 'status.open_in_browser.short', defaultMessage: 'Open in browser' },
@@ -122,6 +123,7 @@ const messages = defineMessages({
 
 const useMenuItems = (
   status: SelectedStatus,
+  withOpen: boolean | undefined,
   detailed: boolean | undefined,
   openReportDialog: (statusId?: string) => void,
   openBlockMuteDialog: (action: 'block' | 'mute') => void,
@@ -535,6 +537,23 @@ const useMenuItems = (
     { key: 'share', type: 'section', children: shareItems, controlGroup: true },
   ];
 
+  if (withOpen)
+    items.unshift({
+      key: 'navigate',
+      type: 'section',
+      children: [
+        {
+          key: 'open',
+          type: 'button',
+          label: intl.formatMessage(messages.open),
+          appleIcon: 'chevron.up.chevron.down',
+          androidIcon: 'ph_arrows_vertical',
+          onPress: () =>
+            navigation.navigate('status', { screen: 'view', params: { id: status.id } }),
+        },
+      ],
+    });
+
   if (interactionItems.length) {
     items.push({ key: 'interactions', type: 'section', children: interactionItems });
   }
@@ -546,10 +565,15 @@ const useMenuItems = (
 
 interface IStatusActionsDropdown {
   status: SelectedStatus;
+  withOpen?: boolean;
   detailed?: boolean;
 }
 
-const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detailed }) => {
+const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({
+  status,
+  withOpen,
+  detailed,
+}) => {
   const intl = useIntl();
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
@@ -569,6 +593,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
         useItems={useMenuItems}
         hookArgs={[
           status,
+          withOpen,
           detailed,
           (statusId?: boolean) => setReportDialog(statusId || true),
           (action) => setBlockMuteDialog(action),

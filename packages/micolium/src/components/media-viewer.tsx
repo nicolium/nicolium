@@ -1,4 +1,5 @@
 import { IconButton, Text } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { Directory, File, Paths } from 'expo-file-system';
 import { Image } from 'expo-image';
 import { startActivityAsync } from 'expo-intent-launcher';
@@ -15,9 +16,11 @@ import Gallery, { type RenderItemInfo } from 'react-native-awesome-gallery';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useStatus } from '@/queries/statuses/use-status';
 import { useMediaViewer, useUiStoreActions } from '@/stores/ui';
 import { toast } from '@/utils/toast';
 
+import { StatusActions } from './statuses/status-actions';
 import { iconHelper } from './ui/icon';
 
 import type { MediaAttachment } from 'pl-api';
@@ -44,6 +47,18 @@ const messages = defineMessages({
     defaultMessage: 'Failed to download file.',
   },
 });
+
+interface IMediaViewerStatusActions {
+  statusId: string;
+}
+
+const MediaViewerStatusActions: React.FC<IMediaViewerStatusActions> = ({ statusId }) => {
+  const { data: status } = useStatus(statusId);
+
+  if (!status) return null;
+
+  return <StatusActions status={status} withDropdown />;
+};
 
 interface IMediaViewerVideo {
   media: MediaAttachment;
@@ -113,6 +128,8 @@ const MediaViewerItem: React.FC<IMediaViewerItem> = ({
 };
 
 const MediaViewer: React.FC = () => {
+  const navigation = useNavigation();
+
   const intl = useIntl();
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
   const mediaViewer = useMediaViewer();
@@ -125,6 +142,12 @@ const MediaViewer: React.FC = () => {
 
   const media = mediaViewer?.media ?? [];
   const current = media[index];
+
+  React.useEffect(() => {
+    if (mediaViewer) {
+      return navigation.addListener('state', () => closeMediaViewer());
+    }
+  }, [navigation, mediaViewer]);
 
   React.useEffect(() => {
     if (mediaViewer) {
@@ -268,7 +291,7 @@ const MediaViewer: React.FC = () => {
                 accessibilityLabel={intl.formatMessage(messages.share)}
               />
             </LinearGradient>
-            {current?.description ? (
+            {current?.description || mediaViewer?.statusId ? (
               <LinearGradient
                 colors={['transparent', 'rgba(0,0,0,0.6)']}
                 style={{
@@ -280,11 +303,21 @@ const MediaViewer: React.FC = () => {
                   paddingBottom: 16 + bottomInset,
                   paddingHorizontal: 16,
                 }}
-                pointerEvents='none'
+                pointerEvents='box-none'
               >
-                <Text variant='bodyMedium' style={{ color: '#fff' }} numberOfLines={8}>
-                  {current.description}
-                </Text>
+                {current?.description && (
+                  <Text
+                    variant='bodyMedium'
+                    style={{ color: '#fff' }}
+                    numberOfLines={8}
+                    pointerEvents='none'
+                  >
+                    {current.description}
+                  </Text>
+                )}
+                {mediaViewer?.statusId && (
+                  <MediaViewerStatusActions statusId={mediaViewer.statusId} />
+                )}
               </LinearGradient>
             ) : null}
           </>

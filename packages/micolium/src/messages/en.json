@@ -857,6 +857,7 @@
   "status.load_more": "Load more",
   "status.mute_conversation": "Mute conversation",
   "status.mute_conversation.success": "Conversation muted",
+  "status.open": "Show post details",
   "status.open_in_browser.short": "Open in browser",
   "status.pin": "Pin on profile",
   "status.pin.success": "Post pinned.",
