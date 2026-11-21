@@ -97,7 +97,7 @@
     "pl-api": "workspace:*",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "react-intl": "^11.0.1",
+    "react-intl": "^12.1.7",
     "react-native": "0.88.1",
     "react-native-awesome-gallery": "0.4.3",
     "react-native-gesture-handler": "~3.3.0",
