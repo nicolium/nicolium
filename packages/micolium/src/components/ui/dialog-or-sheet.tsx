@@ -5,7 +5,7 @@ import { Button, Dialog as PaperDialog, Text, useTheme } from '@mkljczk/react-na
 import { GlassView } from 'expo-glass-effect';
 import { SymbolView, type SFSymbol } from 'expo-symbols';
 import React, { useEffect } from 'react';
-import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
+import { Pressable, ScrollView, useColorScheme, useWindowDimensions, View } from 'react-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 
@@ -190,6 +190,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({
 
 const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, handleDismiss }) => {
   const { colors } = useTheme();
+  const { height } = useWindowDimensions();
 
   useEffect(() => {
     if (!visible && handleDismiss) {
@@ -200,7 +201,7 @@ const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, h
   }, [visible]);
 
   return (
-    <PaperDialog visible={visible} onDismiss={handleDismiss}>
+    <PaperDialog visible={visible} onDismiss={handleDismiss} style={{ maxHeight: height * 0.8 }}>
       <PaperDialog.Title>{title}</PaperDialog.Title>
       <PaperDialog.ScrollArea>
         <ScrollView>{children}</ScrollView>
