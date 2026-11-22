@@ -44,6 +44,7 @@
   "alt_text_modal.describe_for_people_with_visual_impairments": "为视觉障碍者描述此内容…",
   "alt_text_modal.header": "添加替代文本",
   "alt_text_modal.save.fail": "保存替代文本失败",
+  "announcements.empty": "目前没有公告。",
   "announcements.title": "公告",
   "antennas.account.add": "添加到天线",
   "antennas.account.list": "天线成员列表",

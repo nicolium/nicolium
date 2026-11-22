@@ -215,8 +215,10 @@ const TimelineHeaderMenu = () => {
         key: 'announcements',
         type: 'button',
         label: intl.formatMessage(messages.announcements),
-        disabled: true,
-        onPress: () => {},
+        onPress: () =>
+          navigation.navigate('settings', {
+            screen: 'announcements',
+          }),
       });
     }
 

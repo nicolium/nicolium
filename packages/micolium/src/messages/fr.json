@@ -45,6 +45,7 @@
   "alt_text_modal.describe_for_people_with_visual_impairments": "Décrivez ceci pour les personnes ayant une déficience visuelle…",
   "alt_text_modal.header": "Ajouter le texte alternatif (champ « alt »)",
   "alt_text_modal.save.fail": "Échec d’enregistrement du texte alternatif",
+  "announcements.empty": "Il n’y a aucune annonce pour l’instant.",
   "announcements.title": "Annonces",
   "antennas.account.add": "Ajouter à l’antenne",
   "antennas.account.list": "Liste des membres de l’antenne",

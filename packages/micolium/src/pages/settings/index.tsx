@@ -5,6 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Header } from '@/components/ui/header';
 
 import { AboutScreen } from './about';
+import { AnnouncementsScreen } from './announcements';
 import { AppearanceSettingsScreen } from './appearance-settings';
 import { ComposeSettingsScreen } from './compose-settings';
 import { ContentFilteringSettingsScreen } from './content-filtering-settings';
@@ -71,6 +72,7 @@ const messages = defineMessages({
     id: 'column.interaction_requests',
     defaultMessage: 'Interaction requests',
   },
+  announcements: { id: 'announcements.title', defaultMessage: 'Announcements' },
 });
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
@@ -183,6 +185,11 @@ const SettingsStackScreen = (
         name='interaction_requests'
         component={InteractionRequestsScreen}
         options={{ title: intl.formatMessage(messages.interactionRequests) }}
+      />
+      <SettingsStack.Screen
+        name='announcements'
+        component={AnnouncementsScreen}
+        options={{ title: intl.formatMessage(messages.announcements) }}
       />
     </SettingsStack.Navigator>
   );
