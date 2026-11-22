@@ -806,6 +806,7 @@
   "reply_mentions.reply_empty": "Replying to post",
   "report.block": "Block {target}",
   "report.forward": "Forward to {target}",
+  "report.hint": "The report will be sent to {domain} staff.",
   "report.next": "Next",
   "report.other_actions.further_actions": "Further actions",
   "report.placeholder": "Additional comments",

@@ -164,6 +164,7 @@ const ReportDialog: React.FC<IReportDialog> = ({
   const intl = useIntl();
   const features = useFeatures();
   const { colors } = useTheme();
+  const instance = useInstance();
 
   const { data: account } = useAccount(accountId, true);
   const { mutate: blockAccount } = useBlockAccountMutation(accountId);
@@ -245,6 +246,14 @@ const ReportDialog: React.FC<IReportDialog> = ({
       actions={actions}
     >
       <View style={{ gap: 16 }}>
+        <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
+          <FormattedMessage
+            id='report.hint'
+            defaultMessage='The report will be sent to {domain} staff.'
+            values={{ domain: instance.title }}
+          />
+        </Text>
+
         <Card mode='outlined'>
           {statusId ? (
             <Status id={statusId} compact withActions={false} textOnly />
