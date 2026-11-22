@@ -450,16 +450,15 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
         handleSelected={onSuggestionSelected}
       />
       {glassEffect ? (
-        <GlassView
+        <View
           onLayout={(e) => onHeightChange(e.nativeEvent.layout.height)}
-          style={{
-            marginHorizontal: 12,
-            borderRadius: 28,
-            borderCurve: 'continuous',
-          }}
+          style={{ marginHorizontal: 12 }}
         >
+          <GlassView
+            style={{ position: 'absolute', inset: 0, borderRadius: 28, borderCurve: 'continuous' }}
+          />
           {footerContent}
-        </GlassView>
+        </View>
       ) : (
         <View
           onLayout={(e) => onHeightChange(e.nativeEvent.layout.height)}

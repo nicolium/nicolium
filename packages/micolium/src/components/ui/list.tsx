@@ -5,6 +5,7 @@ import {
 } from '@expo/ui/swift-ui';
 import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { Icon, List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
+import { GlassView } from 'expo-glass-effect';
 import { CaretRightIcon } from 'phosphor-react-native/src/icons/CaretRight';
 import { CaretUpDownIcon } from 'phosphor-react-native/src/icons/CaretUpDown';
 import React from 'react';
@@ -102,7 +103,7 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
         {section.items.map((item, index) => {
           const styles = [
             getSegmentedMenuStyles(theme, false, index, section.items.length, colorVariant),
-            { marginHorizontal: 16 },
+            { marginHorizontal: item.type === 'select' && glassEffect ? 0 : 16 },
           ];
 
           switch (item.type) {
@@ -192,7 +193,7 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                   )
                 : item.options.find((option) => option.value === item.active)?.label;
 
-              return (
+              const dropdown = (
                 <DropdownMenu
                   key={index}
                   fullWidth
@@ -234,6 +235,10 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                   ]}
                 />
               );
+
+              if (!glassEffect) return dropdown;
+
+              return <GlassView style={[styles, { marginHorizontal: 16 }]}>{dropdown}</GlassView>;
             }
             case 'color-picker':
               return (

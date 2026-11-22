@@ -1,5 +1,6 @@
 import { IconButton } from '@mkljczk/react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
+import { GlassView } from 'expo-glass-effect';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageIcon } from 'phosphor-react-native/src/icons/Image';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
