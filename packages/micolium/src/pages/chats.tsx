@@ -64,6 +64,7 @@ const Chat: React.FC<IChat> = ({ chat }) => {
               }}
               contentFit='contain'
               recyclingKey={`avatar-${chat.account.id}`}
+              importantForAccessibility={chat.account.avatar_description ? 'auto' : 'no'}
             />
           ) : (
             <Avatar.Text

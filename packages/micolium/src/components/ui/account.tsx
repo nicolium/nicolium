@@ -80,6 +80,7 @@ const UIAccount: React.FC<IUIAccount> = ({
               }}
               contentFit='contain'
               recyclingKey={`avatar-${id}`}
+              importantForAccessibility={avatarDescription ? 'auto' : 'no'}
             />
           ) : (
             <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />

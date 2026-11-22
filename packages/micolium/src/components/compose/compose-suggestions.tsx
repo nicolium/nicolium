@@ -61,6 +61,7 @@ const ComposeAccountSuggestion: React.FC<IComposeAccountSuggestion> = ({ account
           }}
           contentFit='contain'
           recyclingKey={`avatar-${account.id}`}
+          importantForAccessibility={account.avatar_description ? 'auto' : 'no'}
         />
       )}
       onPress={onPress}

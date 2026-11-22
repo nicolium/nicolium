@@ -545,6 +545,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   }}
                   contentFit='contain'
                   recyclingKey={`avatar-${account.id}`}
+                  importantForAccessibility={account.avatar_description ? 'auto' : 'no'}
                 />
               </View>
             )}
