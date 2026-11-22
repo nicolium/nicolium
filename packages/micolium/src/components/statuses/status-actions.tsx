@@ -54,6 +54,10 @@ const messages = defineMessages({
   dislike: { id: 'status.dislike', defaultMessage: 'Dislike' },
   undislike: { id: 'status.undislike', defaultMessage: 'Undo dislike' },
   quote: { id: 'status.quote', defaultMessage: 'Quote post' },
+  reblogs: { id: 'status.view_reblogs', defaultMessage: 'View reposts' },
+  favourites: { id: 'status.view_favourites', defaultMessage: 'View likes' },
+  dislikes: { id: 'status.view_dislikes', defaultMessage: 'View dislikes' },
+  reactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   scheduleReblog: { id: 'status.schedule_reblog', defaultMessage: 'Schedule repost' },
   scheduleReblogLabel: { id: 'boost_modal.schedule.label', defaultMessage: 'Schedule at:' },
   scheduledSuccess: {
@@ -254,6 +258,15 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
     openCompose();
   };
 
+  const canLongPress = !fromInteractAs && status.reblogs_count;
+  const handleLongPress = () => {
+    haptics.longPress();
+    navigation.navigate('status', {
+      screen: 'reblogs',
+      params: { id: status.id },
+    });
+  };
+
   const renderAction = (props: Partial<TooltipTriggerProps>, action?: () => void) => (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       <IconButton
@@ -262,21 +275,18 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
         disabled={!publicStatus && !status.reblogged}
         style={{ margin: -4, height: 40, width: 40 }}
         selected={status.reblogged}
-        accessibilityLabel={intl.formatMessage(
-          status.reblogged ? messages.unreblog : messages.reblog,
-        )}
+        accessibilityLabel={intl.formatMessage(messages.reblog)}
+        aria-selected={status.reblogged}
         {...props}
-        onLongPress={
-          !fromInteractAs && status.reblogs_count
-            ? () => {
-                haptics.longPress();
-                navigation.navigate('status', {
-                  screen: 'reblogs',
-                  params: { id: status.id },
-                });
-              }
+        onLongPress={canLongPress ? handleLongPress : undefined}
+        accessibilityActions={
+          canLongPress
+            ? [{ name: 'longpress', label: intl.formatMessage(messages.reblogs) }]
             : undefined
         }
+        onAccessibilityAction={({ nativeEvent }) => {
+          if (nativeEvent.actionName === 'longpress') handleLongPress();
+        }}
       />
       {status.reblogs_count > 0 && (
         <Text
@@ -357,6 +367,15 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
   const { mutate: favouriteStatus, isPending: isPendingFavourite } = useFavouriteStatus(status.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);
 
+  const canLongPress = !fromInteractAs && status.favourites_count;
+  const handleLongPress = () => {
+    haptics.longPress();
+    navigation.navigate('status', {
+      screen: 'favourites',
+      params: { id: status.id },
+    });
+  };
+
   const renderAction = (props: TooltipTriggerProps) => (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       <IconButton
@@ -385,21 +404,18 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
         disabled={isPendingFavourite}
         style={{ margin: -4, height: 40, width: 40 }}
         selected={status.favourited}
-        accessibilityLabel={intl.formatMessage(
-          status.favourited ? messages.unfavourite : messages.favourite,
-        )}
+        accessibilityLabel={intl.formatMessage(messages.favourite)}
+        aria-selected={status.favourited}
         {...props}
-        onLongPress={
-          !fromInteractAs && status.favourites_count
-            ? () => {
-                haptics.longPress();
-                navigation.navigate('status', {
-                  screen: 'favourites',
-                  params: { id: status.id },
-                });
-              }
+        onLongPress={canLongPress ? handleLongPress : undefined}
+        accessibilityActions={
+          canLongPress
+            ? [{ name: 'longpress', label: intl.formatMessage(messages.favourites) }]
             : undefined
         }
+        onAccessibilityAction={({ nativeEvent }) => {
+          if (nativeEvent.actionName === 'longpress') handleLongPress();
+        }}
       />
       {status.favourites_count > 0 && (
         <Text
@@ -461,26 +477,32 @@ const ReactionAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =>
     );
   };
 
+  const canLongPress = !fromInteractAs && status.emoji_reactions.length;
+  const handleLongPress = () => {
+    haptics.longPress();
+    navigation.navigate('status', {
+      screen: 'reactions',
+      params: { id: status.id },
+    });
+  };
+
   const renderAction = (props: TooltipTriggerProps) => (
     <IconButton
       icon={iconHelper(SmileyIcon)}
       onPress={handleReact}
       disabled={isPendingReact}
       style={{ margin: -4, height: 40, width: 40 }}
-      selected={status.favourited}
       accessibilityLabel={intl.formatMessage(messages.emoji)}
       {...props}
-      onLongPress={
-        !fromInteractAs && status.emoji_reactions.length
-          ? () => {
-              haptics.longPress();
-              navigation.navigate('status', {
-                screen: 'reactions',
-                params: { id: status.id },
-              });
-            }
+      onLongPress={canLongPress ? handleLongPress : undefined}
+      accessibilityActions={
+        canLongPress
+          ? [{ name: 'longpress', label: intl.formatMessage(messages.reactions) }]
           : undefined
       }
+      onAccessibilityAction={({ nativeEvent }) => {
+        if (nativeEvent.actionName === 'longpress') handleLongPress();
+      }}
     />
   );
 
@@ -498,6 +520,15 @@ const DislikeAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => 
   const { mutate: undislikeStatus } = useUndislikeStatus(status.id);
 
   if (!features.statusDislikes) return null;
+
+  const canLongPress = !fromInteractAs && status.dislikes_count;
+  const handleLongPress = () => {
+    haptics.longPress();
+    navigation.navigate('status', {
+      screen: 'dislikes',
+      params: { id: status.id },
+    });
+  };
 
   return (
     <Tooltip title={intl.formatMessage(status.disliked ? messages.undislike : messages.dislike)}>
@@ -519,21 +550,18 @@ const DislikeAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => 
             disabled={isPendingDislike}
             style={{ margin: -4, height: 40, width: 40 }}
             selected={status.disliked}
-            accessibilityLabel={intl.formatMessage(
-              status.disliked ? messages.undislike : messages.dislike,
-            )}
+            accessibilityLabel={intl.formatMessage(messages.dislike)}
+            aria-selected={status.disliked}
             {...props}
-            onLongPress={
-              !fromInteractAs && status.dislikes_count
-                ? () => {
-                    haptics.longPress();
-                    navigation.navigate('status', {
-                      screen: 'dislikes',
-                      params: { id: status.id },
-                    });
-                  }
+            onLongPress={canLongPress ? handleLongPress : undefined}
+            accessibilityActions={
+              canLongPress
+                ? [{ name: 'longpress', label: intl.formatMessage(messages.dislikes) }]
                 : undefined
             }
+            onAccessibilityAction={({ nativeEvent }) => {
+              if (nativeEvent.actionName === 'longpress') handleLongPress();
+            }}
           />
           {status.dislikes_count > 0 && (
             <Text

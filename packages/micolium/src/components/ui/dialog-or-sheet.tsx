@@ -32,7 +32,12 @@ const GlassActionButton: React.FC<DialogOrSheetAction> = ({
   if (!icon) return null;
 
   return (
-    <Pressable onPress={onPress} disabled={disabled} accessibilityLabel={label}>
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityLabel={label}
+      accessibilityRole='button'
+    >
       <GlassView
         glassEffectStyle='regular'
         isInteractive={!disabled}

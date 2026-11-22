@@ -42,7 +42,7 @@ const HeaderIconButton: React.FC<IHeaderIconButton> = ({
 
   if (glassEffect) {
     return (
-      <Pressable {...props} style={{ marginHorizontal: 8 }}>
+      <Pressable {...props} style={{ marginHorizontal: 8 }} accessibilityRole='button'>
         <GlassView
           glassEffectStyle={{
             style: visible ? 'regular' : 'none',

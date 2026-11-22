@@ -52,6 +52,16 @@ const StatusEmojiReactions: React.FC<IStatusEmojiReactions> = ({ status }) => {
               params: { id: status.id, emoji: emoji.name },
             });
           }}
+          accessibilityActions={[{ name: 'longpress' }]}
+          onAccessibilityAction={({ nativeEvent }) => {
+            if (nativeEvent.actionName === 'longpress') {
+              haptics.longPress();
+              navigation.navigate('status', {
+                screen: 'reactions',
+                params: { id: status.id, emoji: emoji.name },
+              });
+            }
+          }}
           compact
         >
           {emoji.count}

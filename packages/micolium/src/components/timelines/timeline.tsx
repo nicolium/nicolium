@@ -90,7 +90,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({ message, onClick, count }
       accessibilityElementsHidden={!count}
     >
       {glassEffect ? (
-        <Pressable onPress={onClick}>
+        <Pressable onPress={onClick} accessibilityRole='button'>
           <GlassView
             isInteractive
             tintColor={colors.primaryContainer}

@@ -211,6 +211,7 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media, compact }) => {
               <Pressable
                 onPress={() => setActive(true)}
                 accessibilityLabel={intl.formatMessage(messages.play)}
+                accessibilityRole='button'
               >
                 <GlassView
                   style={{ borderRadius: compact ? 14 : 36, padding: compact ? 6 : 16 }}
