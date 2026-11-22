@@ -68,6 +68,7 @@ const settingsSchema = v.object({
   'notifications.autoMarkRead': v.optional(v.boolean(), false),
 
   'appearance.black': v.optional(v.boolean(), false),
+  'appearance.contrast': v.fallback(v.picklist(['standard', 'medium', 'high']), 'standard'),
   'appearance.enableLiquidGlass': v.optional(v.boolean(), true),
   'appearance.sourceColor': v.optional(v.string(), '#6750A4'),
   'appearance.useHeartIconForFavourites': v.optional(v.boolean(), false),

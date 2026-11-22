@@ -36,6 +36,7 @@
     "@formatjs/intl-relativetimeformat": "^13.0.3",
     "@futurejj/react-native-visibility-sensor": "^1.4.19",
     "@lodev09/react-native-true-sheet": "4.1.0",
+    "@material/material-color-utilities": "^0.3.0",
     "@mkljczk/react-native-paper": "github:mkljczk/react-native-paper",
     "@native-html/render": "^1.0.4",
     "@pchmn/expo-material3-theme": "^1.4.0",

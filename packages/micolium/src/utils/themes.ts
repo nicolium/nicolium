@@ -1,4 +1,5 @@
-import { DarkTheme, LightTheme, adaptNavigationTheme } from '@mkljczk/react-native-paper';
+import { argbFromHex, CorePalette, hexFromArgb } from '@material/material-color-utilities';
+import { DarkTheme, LightTheme, Palette, adaptNavigationTheme } from '@mkljczk/react-native-paper';
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
@@ -18,6 +19,25 @@ const { LightTheme: AdaptedLightTheme, DarkTheme: AdaptedDarkTheme } = adaptNavi
 
 const CombinedLightTheme = merge(LightTheme, AdaptedLightTheme);
 const CombinedDarkTheme = merge(DarkTheme, AdaptedDarkTheme);
+
+const createPalette = (sourceColor: string) => {
+  const { a1, a2, a3, n1, n2, error } = CorePalette.of(argbFromHex(sourceColor));
+  const palettes = {
+    primary: a1,
+    secondary: a2,
+    tertiary: a3,
+    neutral: n1,
+    neutralVariant: n2,
+    error,
+  };
+
+  return Object.fromEntries(
+    Object.keys(Palette).map((key) => {
+      const [, name, tone] = key.match(/^(\D+)(\d+)$/u)!;
+      return [key, hexFromArgb(palettes[name as keyof typeof palettes].tone(Number(tone)))];
+    }),
+  ) as typeof Palette;
+};
 
 const multiplyFontSizes = (typescaleStyle: TypescaleStyle, multiplier: number) =>
   multiplier === 1
@@ -63,6 +83,7 @@ const getSegmentedMenuStyles = (
 export {
   CombinedLightTheme as LightTheme,
   CombinedDarkTheme as DarkTheme,
+  createPalette,
   multiplyFontSizes,
   getSegmentedMenuStyles,
   type SurfaceColorVariant,

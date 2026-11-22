@@ -23,6 +23,10 @@ const messages = defineMessages({
     defaultMessage:
       'Turning this option off will reduce the amount of displayed glass effects, but won’t fully disable it.',
   },
+  contrast: { id: 'preferences.fields.contrast', defaultMessage: 'Contrast' },
+  contrastStandard: { id: 'preferences.options.contrast.normal', defaultMessage: 'Normal' },
+  contrastMedium: { id: 'preferences.options.contrast.medium', defaultMessage: 'Medium' },
+  contrastHigh: { id: 'preferences.options.contrast.high', defaultMessage: 'High' },
   baseColor: {
     id: 'preferences.options.brand_color',
     defaultMessage: 'Base color',
@@ -41,6 +45,7 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   const enableLiquidGlass = useSetting('appearance.enableLiquidGlass');
   const sourceColor = useSetting('appearance.sourceColor');
   const black = useSetting('appearance.black');
+  const contrast = useSetting('appearance.contrast');
   const useHeartIconForFavourites = useSetting('appearance.useHeartIconForFavourites');
 
   const listSections = React.useMemo(() => {
@@ -51,6 +56,17 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
           label: intl.formatMessage(messages.blackMode),
           active: black,
           onPress: () => update('appearance.black', !black),
+        },
+        {
+          type: 'select',
+          label: intl.formatMessage(messages.contrast),
+          active: contrast,
+          onChange: (value: typeof contrast) => update('appearance.contrast', value),
+          options: [
+            { value: 'standard', label: intl.formatMessage(messages.contrastStandard) },
+            { value: 'medium', label: intl.formatMessage(messages.contrastMedium) },
+            { value: 'high', label: intl.formatMessage(messages.contrastHigh) },
+          ],
         },
       ],
     };
@@ -88,7 +104,7 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
         ],
       },
     ] as IListSections;
-  }, [black, sourceColor, glassEffect, enableLiquidGlass, useHeartIconForFavourites]);
+  }, [black, contrast, sourceColor, glassEffect, enableLiquidGlass, useHeartIconForFavourites]);
 
   return (
     <ScrollView>

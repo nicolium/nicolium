@@ -80,6 +80,9 @@ importers:
       '@lodev09/react-native-true-sheet':
         specifier: 4.1.0
         version: 4.1.0(7d28a4561111badac8a467761f9fc097)
+      '@material/material-color-utilities':
+        specifier: ^0.3.0
+        version: 0.3.0
       '@mkljczk/react-native-paper':
         specifier: github:mkljczk/react-native-paper
         version: https://codeload.github.com/mkljczk/react-native-paper/tar.gz/fe1403d038992fc86253a14c1f61b220f0ca23e4(9b98c3d9aa5c7142e4b3ba2582188ed0)
