@@ -123,11 +123,7 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                           <PaperList.Icon
                             {...props}
                             icon={(props) => (
-                              <Icon
-                                {...props}
-                                color={theme.colors.onSurface}
-                                strokeWidth={1.75}
-                              />
+                              <Icon {...props} color={theme.colors.onSurface} strokeWidth={1.75} />
                             )}
                             style={{
                               ...props.style,
