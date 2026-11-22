@@ -125,7 +125,7 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                             icon={(props) => (
                               <Icon
                                 {...props}
-                                color={theme.colors.onPrimaryFixed}
+                                color={theme.colors.onSurface}
                                 strokeWidth={1.75}
                               />
                             )}
