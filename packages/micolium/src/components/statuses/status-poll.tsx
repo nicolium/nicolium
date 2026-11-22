@@ -75,6 +75,9 @@ const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
                 overflow: 'hidden',
               }}
               onPress={handleCheck}
+              accessibilityLanguage={
+                (translation?.poll && translation.language) || status.language || undefined
+              }
             >
               <>
                 {showResults ? (

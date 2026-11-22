@@ -86,6 +86,7 @@ interface IStatusImage {
   setImageDimensions?: React.Dispatch<
     React.SetStateAction<{ height: number; width: number } | undefined>
   >;
+  language?: string;
 }
 
 const StatusImage: React.FC<IStatusImage> = ({
@@ -94,6 +95,7 @@ const StatusImage: React.FC<IStatusImage> = ({
   sensitive,
   mediaVisible,
   setImageDimensions,
+  language,
 }) => {
   const { colors } = useTheme();
 
@@ -110,6 +112,7 @@ const StatusImage: React.FC<IStatusImage> = ({
         height,
       }}
       accessibilityLabel={media.description}
+      accessibilityLanguage={language}
       contentFit='cover'
       transition={300}
       recyclingKey={`${hidden ? 'hidden-' : ''}${media.id}`}
@@ -129,9 +132,10 @@ const StatusImage: React.FC<IStatusImage> = ({
 interface IMediaVideo {
   media: Extract<MediaAttachment, { type: 'video' | 'gifv' }>;
   compact?: boolean;
+  language?: string;
 }
 
-const StatusGifv: React.FC<IMediaVideo> = ({ media }) => {
+const StatusGifv: React.FC<IMediaVideo> = ({ media, language }) => {
   const isFocused = useIsFocused();
   const player = useVideoPlayer(media.url, (player) => {
     player.loop = true;
@@ -157,12 +161,13 @@ const StatusGifv: React.FC<IMediaVideo> = ({ media }) => {
         nativeControls={false}
         surfaceType='textureView'
         accessibilityLabel={media.description}
+        accessibilityLanguage={language}
       />
     </VisibilitySensor>
   );
 };
 
-const StatusVideoPlayer: React.FC<IMediaVideo> = ({ media }) => {
+const StatusVideoPlayer: React.FC<IMediaVideo> = ({ media, language }) => {
   const { colors } = useTheme();
   const isFocused = useIsFocused();
   const player = useVideoPlayer(media.url, (player) => {
@@ -186,12 +191,13 @@ const StatusVideoPlayer: React.FC<IMediaVideo> = ({ media }) => {
         fullscreenOptions={{ enable: true }}
         surfaceType='textureView'
         accessibilityLabel={media.description}
+        accessibilityLanguage={language}
       />
     </VisibilitySensor>
   );
 };
 
-const StatusVideo: React.FC<IMediaVideo> = ({ media, compact }) => {
+const StatusVideo: React.FC<IMediaVideo> = ({ media, compact, language }) => {
   const intl = useIntl();
   const [active, setActive] = useState(false);
 
@@ -200,10 +206,10 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media, compact }) => {
   return (
     <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>
       {active ? (
-        <StatusVideoPlayer media={media} />
+        <StatusVideoPlayer media={media} language={language} />
       ) : (
         <>
-          <StatusImage media={media} uri={media.preview_url} />
+          <StatusImage media={media} uri={media.preview_url} language={language} />
           <View
             style={[StyleSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center' }]}
           >
@@ -244,6 +250,7 @@ const renderMedia = (
   setImageDimensions?: React.Dispatch<
     React.SetStateAction<{ height: number; width: number } | undefined>
   >,
+  language?: string,
 ) => {
   if (sensitive && mediaVisible !== true) {
     return (
@@ -253,6 +260,7 @@ const renderMedia = (
         sensitive={sensitive}
         mediaVisible={mediaVisible}
         setImageDimensions={setImageDimensions}
+        language={language}
       />
     );
   }
@@ -266,12 +274,13 @@ const renderMedia = (
           sensitive={sensitive}
           mediaVisible={mediaVisible}
           setImageDimensions={setImageDimensions}
+          language={language}
         />
       );
     case 'gifv':
-      return <StatusGifv media={media} compact={compact} />;
+      return <StatusGifv media={media} compact={compact} language={language} />;
     case 'video':
-      return <StatusVideo media={media} compact={compact} />;
+      return <StatusVideo media={media} compact={compact} language={language} />;
   }
 };
 
@@ -283,6 +292,7 @@ interface IStatusMedia {
   revealStatusMedia?: () => void;
   hideStatusMedia?: () => void;
   thumbs?: boolean;
+  language?: string;
 }
 
 const StatusMedia: React.FC<IStatusMedia> = ({
@@ -293,6 +303,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   revealStatusMedia,
   hideStatusMedia,
   thumbs,
+  language,
 }) => {
   const intl = useIntl();
   const { colors, shapes } = useTheme();
@@ -398,7 +409,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
       >
         {!multiple && renderSensitiveOverlay()}
         {media.type === 'video' ? (
-          renderMedia(media, sensitive, mediaVisible, compact)
+          renderMedia(media, sensitive, mediaVisible, compact, undefined, language)
         ) : (
           <Pressable
             style={{ flex: 1 }}
@@ -409,6 +420,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             }
             accessibilityRole='imagebutton'
             accessibilityLabel={media.description || undefined}
+            accessibilityLanguage={language}
           >
             {renderMedia(
               media,
@@ -416,6 +428,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
               mediaVisible,
               compact,
               media.meta.original || multiple ? undefined : setImageDimensions,
+              language,
             )}
           </Pressable>
         )}

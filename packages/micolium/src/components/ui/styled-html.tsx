@@ -168,6 +168,7 @@ interface IStyledHtml {
   mentions?: Array<Mention>;
   sizeMultiplier?: number;
   nyaize?: boolean;
+  language?: string;
 }
 
 const StyledHtml: React.FC<IStyledHtml> = ({
@@ -176,6 +177,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({
   mentions,
   sizeMultiplier = 1,
   nyaize: shouldNyaize,
+  language,
 }) => {
   const { colors, fonts } = useTheme();
   const { width } = useWindowDimensions();
@@ -387,6 +389,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({
       systemFonts={systemFonts}
       customHTMLElementModels={customHTMLElementModels}
       renderers={renderers}
+      defaultTextProps={{ accessibilityLanguage: language }}
     />
   );
 };

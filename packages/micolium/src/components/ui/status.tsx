@@ -31,6 +31,7 @@ interface IUIStatus {
   unfilterStatus?: () => void;
   contentKey?: string;
   nyaize?: boolean;
+  language?: string;
 }
 
 const UIStatus: React.FC<IUIStatus> = ({
@@ -55,6 +56,7 @@ const UIStatus: React.FC<IUIStatus> = ({
   unfilterStatus,
   contentKey,
   nyaize: shouldNyaize,
+  language,
 }) => {
   const theme = useTheme();
 
@@ -84,6 +86,7 @@ const UIStatus: React.FC<IUIStatus> = ({
         mentions={mentions}
         sizeMultiplier={detailed ? 1.2 : 1}
         nyaize={shouldNyaize}
+        language={language}
       />
     );
 
@@ -100,6 +103,7 @@ const UIStatus: React.FC<IUIStatus> = ({
               <Text
                 variant='titleSmall'
                 numberOfLines={!(detailed || spoilerExpanded) ? 1 : undefined}
+                accessibilityLanguage={language}
               >
                 {emojis ? (
                   <Emojify text={spoilerText} emojis={emojis} nyaize={shouldNyaize} />

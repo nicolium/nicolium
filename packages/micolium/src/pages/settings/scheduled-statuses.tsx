@@ -147,6 +147,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus }) => {
               media_attachments: scheduledStatus.media_attachments,
               sensitive: false,
             }}
+            language={scheduledStatus.params.language || undefined}
           />
           {scheduledStatus.params.poll && (
             <View style={{ gap: 8 }}>
@@ -161,7 +162,12 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus }) => {
                     borderWidth: 1,
                   }}
                 >
-                  <Text numberOfLines={1}>{option}</Text>
+                  <Text
+                    numberOfLines={1}
+                    accessibilityLanguage={scheduledStatus.params.language || undefined}
+                  >
+                    {option}
+                  </Text>
                 </View>
               ))}
             </View>
@@ -172,6 +178,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus }) => {
         </>
       }
       contentKey={scheduledStatus.id}
+      language={scheduledStatus.params.language || undefined}
     />
   );
 

@@ -233,6 +233,9 @@ const Status: React.FC<IStatus> = ({
 
   if (!actualStatus || (hideFilters.length && !props.detailed)) return null;
 
+  const language =
+    (translation && (translation.language || targetLanguage)) || actualStatus.language || undefined;
+
   let chip;
 
   if (showPinned) {
@@ -326,6 +329,7 @@ const Status: React.FC<IStatus> = ({
               mediaVisible={mediaVisible}
               revealStatusMedia={() => revealStatusMedia(actualStatus.id)}
               hideStatusMedia={() => hideStatusMedia(actualStatus.id)}
+              language={actualStatus.language || undefined}
             />
             {actualStatus.poll_id && (
               <StatusPoll status={actualStatus} translation={translation || undefined} />
@@ -371,6 +375,7 @@ const Status: React.FC<IStatus> = ({
       unfilterStatus={() => unfilterStatus(id)}
       contentKey={status.id}
       nyaize={status.account.speak_as_cat}
+      language={language}
       {...props}
     />
   );

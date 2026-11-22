@@ -1,13 +1,14 @@
 import { Button, useTheme } from '@mkljczk/react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 interface ICollapsibleContent {
   children: React.JSX.Element;
   maxHeight?: number;
   showExpand?: boolean;
+  language?: string;
 }
 
 const CollapsibleContent: React.FC<ICollapsibleContent> = ({
@@ -15,6 +16,7 @@ const CollapsibleContent: React.FC<ICollapsibleContent> = ({
   maxHeight = 320,
   showExpand = true,
 }) => {
+  const intl = useIntl();
   const { colors } = useTheme();
 
   const containerNode = React.useRef<View>(null);
@@ -53,6 +55,7 @@ const CollapsibleContent: React.FC<ICollapsibleContent> = ({
             bottom: 0,
             height: Math.min(maxHeight, 160),
           }}
+          accessibilityLanguage={intl.locale}
         >
           {showExpand && (
             <Button
