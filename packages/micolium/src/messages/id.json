@@ -82,6 +82,7 @@
   "common.cancel": "Membatalkan",
   "common.save": "Simpang",
   "compare_history_modal.header": "Edit riwayat",
+  "compose.character_counter.title": "Digunakan {chars} dari {maxChars} {maxChars, plural, one {character} lainya{characters}}",
   "compose.edit.success": "Postingan Anda telah diedit",
   "compose.submit.success": "Postingan Anda telah terkirim!",
   "compose_form.placeholder": "Apa yang ada di pikiran anda?",

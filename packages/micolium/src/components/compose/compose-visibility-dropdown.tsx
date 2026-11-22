@@ -338,7 +338,6 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
           paddingHorizontal: 12,
           paddingVertical: 4,
         }}
-        accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
       >
         <Icon
           source={iconHelper(getVisibilityIcon(visibility))}
@@ -353,7 +352,6 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
     <Chip
       mode='outlined'
       icon={iconHelper(getVisibilityIcon(visibility))}
-      accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
       rightIcon={iconHelper(CaretDownIcon)}
     >
       {label}
@@ -362,7 +360,11 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
 
   return (
     <View style={{ alignItems: 'flex-start' }}>
-      <DropdownMenu trigger={chip} items={items} />
+      <DropdownMenu
+        trigger={chip}
+        items={items}
+        accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
+      />
     </View>
   );
 };

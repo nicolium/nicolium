@@ -64,6 +64,7 @@
   "common.cancel": "Cancel",
   "common.save": "Save",
   "compare_history_modal.header": "Edit history",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose.edit.success": "Your post was edited",
   "compose.submit.success": "Your post was sent",
   "compose_form.placeholder": "Шта Вам је на уму?",

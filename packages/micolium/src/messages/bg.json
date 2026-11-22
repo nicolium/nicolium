@@ -107,6 +107,7 @@
   "common.cancel": "Отказ",
   "common.save": "Запазване",
   "compare_history_modal.header": "История на редакциите",
+  "compose.character_counter.title": "Използвани {chars} от {maxChars} {maxChars, plural, one {знак} other {знака}}",
   "compose.edit.success": "Вашата публикация беше редактирана",
   "compose.language_dropdown.add_language": "Добавяне на език",
   "compose.language_dropdown.delete_language": "Изтриване на езика",

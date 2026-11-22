@@ -18,6 +18,7 @@ import {
   Platform,
   Keyboard,
   type TextInputSelectionChangeEvent,
+  AccessibilityInfo,
 } from 'react-native';
 import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -136,6 +137,11 @@ const messages = defineMessages({
   success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
+  title: {
+    id: 'compose.character_counter.title',
+    defaultMessage:
+      'Used {chars} out of {maxChars} {maxChars, plural, one {character} other {characters}}',
+  },
 });
 
 const MaybeDragDropContentView: React.FC<DragDropContentViewProps> = (props) => {
@@ -315,6 +321,16 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
     if (isKeyboardVisible) setShowKeyboardButton(true);
   }, [isKeyboardVisible]);
 
+  const isOverLimit = textLength > maxLength;
+
+  React.useEffect(() => {
+    if (!textLength) return;
+    AccessibilityInfo.announceForAccessibilityWithOptions(
+      intl.formatMessage(messages.title, { chars: textLength, maxChars: maxLength }),
+      { priority: 'high' },
+    );
+  }, [isOverLimit]);
+
   const handleInsertEmoji = () => {
     openEmojiPicker((emoji, custom) => {
       updateCompose(COMPOSE_ID, (draft) => {
@@ -396,15 +412,23 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
           accessibilityLabel={intl.formatMessage(messages.hideKeyboard)}
         />
       )}
-      <Text
-        variant='labelLargeEmphasized'
-        style={{
-          marginHorizontal: 8,
-          color: textLength > maxLength ? colors.error : colors.onBackground,
-        }}
+      <View
+        accessible
+        accessibilityLabel={intl.formatMessage(messages.title, {
+          chars: textLength,
+          maxChars: maxLength,
+        })}
       >
-        {maxLength - textLength}
-      </Text>
+        <Text
+          variant='labelLargeEmphasized'
+          style={{
+            marginHorizontal: 8,
+            color: textLength > maxLength ? colors.error : colors.onBackground,
+          }}
+        >
+          {maxLength - textLength}
+        </Text>
+      </View>
       {!glassEffect && (
         <Button
           mode='contained'

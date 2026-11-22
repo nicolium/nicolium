@@ -31,6 +31,7 @@
   "column.lists": "Seznami",
   "column.notifications": "Obvestila",
   "column.public": "Združena časovnica",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose_form.placeholder": "O čem razmišljaš?",
   "compose_form.poll.add_option": "Dodaj izbiro",
   "compose_form.poll.duration": "Trajanje ankete",

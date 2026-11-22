@@ -79,6 +79,7 @@
   "common.cancel": "בטל",
   "common.save": "Save",
   "compare_history_modal.header": "Edit history",
+  "compose.character_counter.title": "משומש ב-{chars} מתוך {maxChars} תווים",
   "compose.edit.success": "Your post was edited",
   "compose.submit.success": "הפוסט שלך נשלח!",
   "compose_form.placeholder": "על מה חושב?",

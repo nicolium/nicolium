@@ -82,6 +82,7 @@
   "common.cancel": "İptal",
   "common.save": "Kaydet",
   "compare_history_modal.header": "Düzenleme geçmişi",
+  "compose.character_counter.title": "{chars}/{maxChars} karakter kullanıldı",
   "compose.edit.success": "Gönderiniz düzenlendi",
   "compose.submit.success": "Gönderiniz gönderildi!",
   "compose_form.placeholder": "Aklınızdan ne geçiyor?",

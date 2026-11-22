@@ -78,6 +78,7 @@
   "common.cancel": "キャンセル",
   "common.save": "保存",
   "compare_history_modal.header": "履歴を編集する",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose.edit.success": "あなたの投稿は編集されました",
   "compose.submit.success": "送信されました！",
   "compose_form.placeholder": "今なにしてる？",

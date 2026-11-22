@@ -178,6 +178,8 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                     )
                   }
                   containerStyle={{ gap: 4, alignItems: 'center' }}
+                  accessibilityRole='togglebutton'
+                  aria-selected={item.active}
                 />
               );
             case 'select':

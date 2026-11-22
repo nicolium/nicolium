@@ -32,6 +32,7 @@
   "column.lists": "Listor",
   "column.notifications": "Meddelanden",
   "column.public": "Förenad tidslinje",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose_form.placeholder": "Vad funderar du på?",
   "compose_form.poll.add_option": "Nytt alternativ",
   "compose_form.poll.duration": "Varaktighet för omröstning",

@@ -192,6 +192,7 @@
   "common.cancel": "Zaniechaj",
   "common.save": "Zapisz",
   "compare_history_modal.header": "Historia edycji",
+  "compose.character_counter.title": "Wykorzystano {chars} z {maxChars} {maxChars, plural, one {znaku} other {znaków}}",
   "compose.edit.success": "Twój wpis został zedytowany",
   "compose.language_dropdown.add_language": "Dodaj język",
   "compose.language_dropdown.delete_language": "Usuń język",

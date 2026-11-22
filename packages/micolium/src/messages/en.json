@@ -281,6 +281,7 @@
   "common.save": "Save",
   "compare_history_modal.header": "Edit history",
   "compare_history_modal.original": "Original",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} {maxChars, plural, one {character} other {characters}}",
   "compose.delete.fail": "Failed to delete post",
   "compose.delete.success": "Post deleted",
   "compose.edit.success": "Your post was edited",

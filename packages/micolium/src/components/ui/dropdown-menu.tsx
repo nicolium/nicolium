@@ -10,7 +10,7 @@ import {
   Text as SwiftUIText,
   Toggle as SwiftUIToggle,
 } from '@expo/ui/swift-ui';
-import { disabled } from '@expo/ui/swift-ui/modifiers';
+import { accessibilityHint, accessibilityLabel, disabled } from '@expo/ui/swift-ui/modifiers';
 import React from 'react';
 import { View } from 'react-native';
 
@@ -82,6 +82,8 @@ const swiftUIRenderItem = (item: DropdownMenuItem, isLast?: boolean) => {
 type IDropdownMenu<T extends Array<unknown>> = {
   trigger: React.JSX.Element | ((onPress: () => void) => React.JSX.Element);
   fullWidth?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 } & (
   | {
       items: Array<DropdownMenuItem>;
@@ -111,9 +113,20 @@ const DropdownMenu: <T extends Array<unknown> = []>(
     >
       <SwiftUIHost matchContents>
         <SwiftUIMenu
+          modifiers={
+            props.accessibilityLabel
+              ? [
+                  accessibilityLabel(props.accessibilityLabel),
+                  ...(props.accessibilityHint ? [accessibilityHint(props.accessibilityHint)] : []),
+                ]
+              : undefined
+          }
           label={
             <SwiftUIRNHostView matchContents>
-              <View style={props.fullWidth ? { width } : undefined}>
+              <View
+                style={props.fullWidth ? { width } : undefined}
+                accessibilityElementsHidden={!!props.accessibilityLabel}
+              >
                 {typeof props.trigger === 'function' ? props.trigger(() => {}) : props.trigger}
               </View>
             </SwiftUIRNHostView>

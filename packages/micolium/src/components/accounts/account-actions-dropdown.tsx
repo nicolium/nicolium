@@ -643,7 +643,6 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
           headerButton ? (
             <HeaderIconButton
               icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
-              accessibilityLabel={intl.formatMessage(messages.menuTitle)}
               visible={visible}
             />
           ) : (
@@ -651,10 +650,10 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
               mode='outlined'
               icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
               onPress={() => {}}
-              accessibilityLabel={intl.formatMessage(messages.menuTitle)}
             />
           )
         }
+        accessibilityLabel={intl.formatMessage(messages.menuTitle)}
         useItems={useMenuItems}
         hookArgs={[
           account,

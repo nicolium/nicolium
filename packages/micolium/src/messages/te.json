@@ -32,6 +32,7 @@
   "column.lists": "జాబితాలు",
   "column.notifications": "ప్రకటనలు",
   "column.public": "సమాఖ్య కాలక్రమం",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose_form.placeholder": "మీ మనస్సులో ఏముంది?",
   "compose_form.poll.add_option": "ఒక ఎంపికను చేర్చండి",
   "compose_form.poll.duration": "ఎన్నిక వ్యవధి",

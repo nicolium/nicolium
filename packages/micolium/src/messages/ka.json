@@ -28,6 +28,7 @@
   "column.lists": "სიები",
   "column.notifications": "შეტყობინებები",
   "column.public": "ფედერალური თაიმლაინი",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose.submit.success": "თქვენი პოსტი გაიგზავნა!",
   "compose_form.placeholder": "რაზე ფიქრობ?",
   "compose_form.poll.add_option": "Add a choice",

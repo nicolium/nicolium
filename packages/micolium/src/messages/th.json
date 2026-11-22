@@ -32,6 +32,7 @@
   "column.lists": "รายการ",
   "column.notifications": "การแจ้งเตือน",
   "column.public": "เส้นเวลาที่ติดต่อกับภายนอก",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose_form.placeholder": "คุณกำลังคิดอะไรอยู่?",
   "compose_form.poll.add_option": "เพิ่มทางเลือก",
   "compose_form.poll.duration": "ระยะเวลาโพล",

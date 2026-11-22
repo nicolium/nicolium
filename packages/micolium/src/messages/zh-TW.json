@@ -82,6 +82,7 @@
   "common.cancel": "取消",
   "common.save": "儲存",
   "compare_history_modal.header": "編輯歷史",
+  "compose.character_counter.title": "已輸入{chars}字元，最多可輸入{maxChars}",
   "compose.edit.success": "你的貼文已編輯",
   "compose.submit.success": "您的貼文已發送！",
   "compose_form.placeholder": "您正在想些什麼？",

@@ -148,6 +148,7 @@
   "common.cancel": "取消",
   "common.save": "保存",
   "compare_history_modal.header": "编辑历史",
+  "compose.character_counter.title": "最大字符数：{maxChars} 字符（已用 {chars} 字符）",
   "compose.edit.success": "您的帖文已编辑",
   "compose.language_dropdown.add_language": "添加语言",
   "compose.language_dropdown.delete_language": "删除语言",

@@ -55,6 +55,7 @@
   "column.notifications": "Hysbysiadau",
   "column.public": "Ffrwd y ffedysawd",
   "column.scheduled_statuses": "Negeseuon arfaethedig",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose_form.placeholder": "Beth sydd ar eich meddwl?",
   "compose_form.poll.add_option": "Ychwanegu ateb",
   "compose_form.poll.duration": "Hyd yr arolwg",

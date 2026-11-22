@@ -31,6 +31,7 @@
   "column.lists": "Listas",
   "column.notifications": "Notificacións",
   "column.public": "Liña temporal federada",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose.submit.success": "Your post was sent",
   "compose_form.placeholder": "Qué contas?",
   "compose_form.poll.add_option": "Engadir unha opción",

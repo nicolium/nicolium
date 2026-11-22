@@ -167,6 +167,7 @@
   "common.cancel": "Abbrechen",
   "common.save": "Speichern",
   "compare_history_modal.header": "Verlauf bearbeiten",
+  "compose.character_counter.title": "{chars} von {maxChars} zulässigen Zeichen verwendet",
   "compose.edit.success": "Dein Beitrag wurde bearbeitet",
   "compose.submit.success": "Beitrag gesendet!",
   "compose_form.placeholder": "Was gibt's Neues?",

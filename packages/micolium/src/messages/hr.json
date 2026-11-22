@@ -68,6 +68,7 @@
   "common.cancel": "Otkaži",
   "common.save": "Save",
   "compare_history_modal.header": "Edit history",
+  "compose.character_counter.title": "Iskorišteno {chars} od {maxChars} {maxChars, plural, one {znakova} other {znakova}}",
   "compose.edit.success": "Vaša objava je uređena",
   "compose.submit.success": "Vaša objava je poslana!",
   "compose_form.placeholder": "Što ti je na umu?",

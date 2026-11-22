@@ -32,6 +32,7 @@
   "column.lists": "Listas",
   "column.notifications": "Notificaciones",
   "column.public": "Línea temporal federada",
+  "compose.character_counter.title": "Used {chars} out of {maxChars} characters",
   "compose_form.placeholder": "¿Qué onda?",
   "compose_form.poll.add_option": "Agregá una opción",
   "compose_form.poll.duration": "Duración de la encuesta",

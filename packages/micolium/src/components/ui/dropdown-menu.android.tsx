@@ -165,6 +165,8 @@ const jetpackRenderGroups = (items: Array<DropdownMenuItem>, onClose: () => void
 type IDropdownMenu<T extends Array<unknown>> = {
   trigger: React.JSX.Element | ((onPress: () => void) => React.JSX.Element);
   fullWidth?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 } & (
   | {
       items: Array<DropdownMenuItem>;
@@ -209,7 +211,14 @@ const DropdownMenu: <T extends Array<unknown> = []>(
         <View>
           {typeof props.trigger === 'function'
             ? props.trigger(onPress)
-            : React.cloneElement(props.trigger, { onPress })}
+            : React.cloneElement(props.trigger, {
+                onPress,
+                ...(props.accessibilityLabel && {
+                  accessibilityRole: 'dropdownlist',
+                  accessibilityLabel: props.accessibilityLabel,
+                  accessibilityHint: props.accessibilityHint,
+                }),
+              })}
         </View>
       </JetpackRNHostView>
       <JetpackDropdownMenuPopup expanded={expanded} onDismissRequest={() => setExpanded(false)}>

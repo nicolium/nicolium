@@ -275,8 +275,9 @@ const ComposeLanguageDropdown: React.FC<ICompose> = ({ composeId }) => {
   const languagesCount = Object.keys(textMap).length;
 
   let label = intl.formatMessage(messages.languagePrompt);
+  let displayedLanguage: string | undefined = undefined;
   if (language || (defaultLanguage && defaultLanguage !== 'detect')) {
-    let displayedLanguage: string | undefined = modifiedLanguage ?? language ?? defaultLanguage!;
+    displayedLanguage = modifiedLanguage ?? language ?? defaultLanguage!;
     const list: string[] = [getNativeName(displayedLanguage) ?? displayedLanguage];
     if (languagesCount)
       list.push(
@@ -293,7 +294,11 @@ const ComposeLanguageDropdown: React.FC<ICompose> = ({ composeId }) => {
   const handlePress = () => setShowPicker(true);
 
   const chip = glassEffect ? (
-    <Pressable onPress={handlePress}>
+    <Pressable
+      onPress={handlePress}
+      accessibilityHint={intl.formatMessage(messages.languagePrompt)}
+      accessibilityLanguage={displayedLanguage}
+    >
       <GlassView
         style={{
           gap: 4,
@@ -304,7 +309,6 @@ const ComposeLanguageDropdown: React.FC<ICompose> = ({ composeId }) => {
           paddingHorizontal: 12,
           paddingVertical: 4,
         }}
-        accessibilityLabel={intl.formatMessage(messages.languagePrompt)}
       >
         <Icon source={iconHelper(TranslateIcon)} size={20} color={colors.onSurfaceVariant} />
         <Text>{label}</Text>
@@ -316,8 +320,9 @@ const ComposeLanguageDropdown: React.FC<ICompose> = ({ composeId }) => {
       mode='outlined'
       icon={iconHelper(TranslateIcon)}
       onPress={handlePress}
-      accessibilityLabel={intl.formatMessage(messages.languagePrompt)}
+      accessibilityHint={intl.formatMessage(messages.languagePrompt)}
       rightIcon={iconHelper(CaretDownIcon)}
+      accessibilityLanguage={displayedLanguage}
     >
       {label}
     </Chip>

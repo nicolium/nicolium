@@ -107,6 +107,7 @@
   "common.cancel": "Annulla",
   "common.save": "Salva",
   "compare_history_modal.header": "Storico delle modifiche",
+  "compose.character_counter.title": "Stai usando {chars} di {maxChars} {maxChars, plural, one {carattere} other {caratteri}}",
   "compose.edit.success": "Hai modificato la pubblicazione",
   "compose.language_dropdown.add_language": "Aggiungi lingua",
   "compose.language_dropdown.delete_language": "Elimina lingua",

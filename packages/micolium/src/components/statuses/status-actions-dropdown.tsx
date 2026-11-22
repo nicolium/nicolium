@@ -587,9 +587,9 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({
             icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
             style={{ height: 32, width: 32 }}
             onPress={() => {}}
-            accessibilityLabel={intl.formatMessage(messages.menuTitle)}
           />
         }
+        accessibilityLabel={intl.formatMessage(messages.menuTitle)}
         useItems={useMenuItems}
         hookArgs={[
           status,

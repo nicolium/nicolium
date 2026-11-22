@@ -64,6 +64,7 @@
   "common.cancel": "Cancel",
   "common.save": "Save",
   "compare_history_modal.header": "Edit history",
+  "compose.character_counter.title": "𐑿𐑟𐑛 {chars} 𐑬𐑑 𐑝 {maxChars} 𐑒𐑨𐑮𐑩𐑒𐑑𐑼𐑟",
   "compose.edit.success": "Your post was edited",
   "compose.submit.success": "𐑘𐑹 𐑐𐑴𐑕𐑑 𐑢𐑪𐑟 𐑕𐑧𐑯𐑑",
   "compose_form.placeholder": "𐑢𐑪𐑑𐑕 𐑪𐑯 𐑘𐑹 𐑥𐑲𐑯𐑛?",

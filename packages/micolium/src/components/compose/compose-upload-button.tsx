@@ -137,9 +137,9 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
             isUploading ||
             mediaAttachments.length >= configuration.statuses.max_media_attachments
           }
-          accessibilityLabel={intl.formatMessage(messages.upload)}
         />
       }
+      accessibilityLabel={intl.formatMessage(messages.upload)}
       items={[
         {
           key: 'camera',

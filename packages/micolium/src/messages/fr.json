@@ -150,6 +150,7 @@
   "common.cancel": "Annuler",
   "common.save": "Enregistrer",
   "compare_history_modal.header": "Modifier l’historique",
+  "compose.character_counter.title": "{chars} sur {maxChars} {maxChars, plural, one {caractère} other {caractères}} {maxChars, plural, one {utilisé} other {utilisés}}",
   "compose.edit.success": "Votre publication a été modifiée",
   "compose.language_dropdown.add_language": "Ajouter une langue",
   "compose.language_dropdown.delete_language": "Supprimer une langue",

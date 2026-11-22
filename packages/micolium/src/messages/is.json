@@ -64,6 +64,7 @@
   "common.cancel": "Cancel",
   "common.save": "Save",
   "compare_history_modal.header": "Edit history",
+  "compose.character_counter.title": "{chars} af {maxChars} stöfum notaðir",
   "compose.edit.success": "Your post was edited",
   "compose.submit.success": "Færslan þín var send",
   "compose_form.placeholder": "Hvað hefurðu í huga?",

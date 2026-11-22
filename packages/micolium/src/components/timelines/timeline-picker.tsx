@@ -54,6 +54,7 @@ const messages = defineMessages({
   addAntenna: { id: 'antennas.new.create', defaultMessage: 'Add antenna' },
   addCircle: { id: 'circles.new.create', defaultMessage: 'Add circle' },
   addBookmarkFolder: { id: 'bookmark_folders.new.create', defaultMessage: 'Add bookmark folder' },
+  title: { id: 'timeline_picker.title', defaultMessage: 'Select timeline' },
 });
 
 const useTimelineHeadingAndIcon = (
@@ -338,6 +339,7 @@ interface ITimelinePicker {
 }
 
 const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home' }) => {
+  const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
 
   const MaybeGlassView = glassEffect ? GlassView : View;
@@ -352,6 +354,8 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     <>
       <View style={{ alignItems: 'flex-start' }}>
         <DropdownMenu
+          accessibilityLabel={heading}
+          accessibilityHint={intl.formatMessage(messages.title)}
           trigger={
             <Pressable>
               <MaybeGlassView

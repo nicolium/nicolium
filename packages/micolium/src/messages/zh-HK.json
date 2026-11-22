@@ -62,6 +62,7 @@
   "column.search": "搜尋",
   "common.cancel": "取消",
   "compare_history_modal.header": "編輯歷史",
+  "compose.character_counter.title": "最大字符數: {maxChars}; 已使用 {chars}",
   "compose.edit.success": "你的帖文已編輯",
   "compose.submit.success": "帖文已送出",
   "compose_form.placeholder": "您正在想些什麼？",

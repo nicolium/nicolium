@@ -92,6 +92,7 @@
   "common.cancel": "Cancel",
   "common.save": "Save",
   "compare_history_modal.header": "Edit history",
+  "compose.character_counter.title": "Usó {chars} de {maxChars} {maxChars, plural, one {carácter} other {caracteres}}",
   "compose.edit.success": "Your post was edited",
   "compose.submit.success": "¡Tu publicación fue enviada!",
   "compose_form.placeholder": "¿En qué estás pensando?",

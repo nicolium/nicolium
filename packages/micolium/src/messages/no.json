@@ -80,6 +80,7 @@
   "common.cancel": "Avbryt",
   "common.save": "Lagre",
   "compare_history_modal.header": "Rediger historikk",
+  "compose.character_counter.title": "Brukt {chars} av {maxChars} {maxChars, plural, one {character} andre{characters}}",
   "compose.edit.success": "Innlegget ditt ble redigert",
   "compose.submit.success": "Ditt innlegg ble sendt!",
   "compose_form.placeholder": "Hva har du på hjertet?",

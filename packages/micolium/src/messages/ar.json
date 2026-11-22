@@ -82,6 +82,7 @@
   "common.cancel": "إلغاء",
   "common.save": "حفظ",
   "compare_history_modal.header": "سِجلّ التعديلات",
+  "compose.character_counter.title": "مُستخدم {chars} حرف من أصل {maxChars} {maxChars, plural, one {حروف} other {حروف}}",
   "compose.edit.success": "تم تعديل المنشور",
   "compose.submit.success": "تم إرسال المنشور!",
   "compose_form.placeholder": "بمَ تُفكر؟",
