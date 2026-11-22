@@ -133,6 +133,7 @@ const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
   const emojis = category.emojis.map((emoji) => emojiData.emojis[emoji].skins[0].native);
 
   const renderedEmojis = React.useMemo(() => {
+    const selected = state?.selected?.includes(emoji);
     return emojis.map((emoji) => (
       <IconButton
         key={emoji}
@@ -141,9 +142,10 @@ const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
           haptics.selection();
           closeEmojiPicker();
         }}
-        mode={state?.selected?.includes(emoji) ? 'contained-tonal' : 'outlined'}
+        mode={selected ? 'contained-tonal' : 'outlined'}
         icon={() => <Text style={{ fontSize: 24 }}>{emoji}</Text>}
         size={24}
+        accessibilityState={{ selected }}
       />
     ));
   }, [emojis]);
@@ -171,28 +173,28 @@ const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) =>
       );
     }
 
-    return searchResults.map((emoji) => (
-      <IconButton
-        key={emoji.id}
-        onPress={() => {
-          state?.onPick(emoji.custom ? emoji.id : emoji.native, emoji.custom);
-          haptics.selection();
-          closeEmojiPicker();
-        }}
-        mode={
-          state?.selected?.includes(emoji.custom ? emoji.id : emoji.native)
-            ? 'contained-tonal'
-            : 'outlined'
-        }
-        icon={() => (
-          <EmojiComponent
-            emoji={emoji.custom ? emoji.id : emoji.native}
-            url={emoji.custom ? emoji.imageUrl : undefined}
-          />
-        )}
-        size={24}
-      />
-    ));
+    return searchResults.map((emoji) => {
+      const selected = state?.selected?.includes(emoji.custom ? emoji.id : emoji.native);
+      return (
+        <IconButton
+          key={emoji.id}
+          onPress={() => {
+            state?.onPick(emoji.custom ? emoji.id : emoji.native, emoji.custom);
+            haptics.selection();
+            closeEmojiPicker();
+          }}
+          mode={selected ? 'contained-tonal' : 'outlined'}
+          icon={() => (
+            <EmojiComponent
+              emoji={emoji.custom ? emoji.id : emoji.native}
+              url={emoji.custom ? emoji.imageUrl : undefined}
+            />
+          )}
+          size={24}
+          accessibilityState={{ selected }}
+        />
+      );
+    });
   }, [searchResults]);
 
   return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{renderedEmojis}</View>;

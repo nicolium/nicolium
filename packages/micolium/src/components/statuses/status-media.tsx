@@ -27,6 +27,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
+import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 import { MIMETYPE_ICONS } from '@/utils/media';
 import { toast } from '@/utils/toast';
@@ -295,6 +296,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   const intl = useIntl();
   const { colors, shapes } = useTheme();
   const { openMediaViewer } = useUiStoreActions();
+  const displayMedia = useSetting('content.displayMedia');
 
   const matchedFilters = React.useMemo(() => filters?.map(({ filter }) => filter.title), [filters]);
 
@@ -305,7 +307,8 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   const filteredMedia = status.media_attachments.filter(isSupportedMedia);
   const unsupportedMedia = status.media_attachments.filter(isUnsupportedMedia);
 
-  const sensitive = status.sensitive || !!filters?.length;
+  const sensitive =
+    status.sensitive || !!filters?.length || (displayMedia === 'hide_all' && !!revealStatusMedia);
 
   const renderSensitiveOverlay = () =>
     sensitive && (
@@ -321,6 +324,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
           }}
           mode='contained'
           onPress={mediaVisible ? hideStatusMedia : revealStatusMedia}
+          accessibilityLabel={intl.formatMessage(mediaVisible ? messages.hide : messages.show)}
         />
         {!thumbs && !mediaVisible && (
           <TouchableRipple

@@ -75,6 +75,7 @@ const settingsSchema = v.object({
 
   'general.useInAppBrowser': v.optional(v.boolean(), false),
   'content.displayTargetHost': v.optional(v.boolean(), true),
+  'content.displayMedia': v.fallback(v.picklist(['default', 'hide_all']), 'default'),
 
   filters: filteredArray(filterSchema),
 });

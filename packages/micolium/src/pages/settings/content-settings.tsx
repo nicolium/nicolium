@@ -17,6 +17,18 @@ const messages = defineMessages({
     id: 'url_privacy.display_target_host',
     defaultMessage: 'Always display the domain external links lead to',
   },
+  displayMedia: {
+    id: 'preferences.fields.media_display.label',
+    defaultMessage: 'Sensitive content',
+  },
+  displayMediaDefault: {
+    id: 'preferences.fields.display_media.default',
+    defaultMessage: 'Hide media from posts marked as sensitive',
+  },
+  displayMediaHideAll: {
+    id: 'preferences.fields.display_media.hide_all',
+    defaultMessage: 'Always hide media in posts',
+  },
 });
 const ContentSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'content'>) => {
   const intl = useIntl();
@@ -25,6 +37,7 @@ const ContentSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
 
   const useInAppBrowser = useSetting('general.useInAppBrowser');
   const displayTargetHost = useSetting('content.displayTargetHost');
+  const displayMedia = useSetting('content.displayMedia');
 
   return (
     <ScrollView>
@@ -43,6 +56,16 @@ const ContentSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
                 label: intl.formatMessage(messages.displayTargetHost),
                 active: displayTargetHost,
                 onPress: () => update('content.displayTargetHost', !displayTargetHost),
+              },
+              {
+                type: 'select',
+                label: intl.formatMessage(messages.displayMedia),
+                active: displayMedia,
+                onChange: (value: typeof displayMedia) => update('content.displayMedia', value),
+                options: [
+                  { value: 'default', label: intl.formatMessage(messages.displayMediaDefault) },
+                  { value: 'hide_all', label: intl.formatMessage(messages.displayMediaHideAll) },
+                ],
               },
             ],
           },

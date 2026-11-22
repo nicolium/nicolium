@@ -41,6 +41,7 @@ const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
   const { colors, shapes } = useTheme();
   const { openMediaViewer } = useUiStoreActions();
   const { revealStatusMedia, hideStatusMedia } = useStatusMetaActions();
+  const displayMedia = useSetting('content.displayMedia');
   const queryClient = useQueryClient();
   const scopeUrl = useScopeUrl();
 
@@ -52,9 +53,11 @@ const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
     return openMediaViewer(media || [], item.index, item.status_id);
   };
 
+  const sensitive = item.sensitive || displayMedia === 'hide_all';
+
   return (
     <Pressable
-      onPress={item.sensitive && !mediaVisible ? undefined : handleOpenMediaViewer}
+      onPress={sensitive && !mediaVisible ? undefined : handleOpenMediaViewer}
       style={{
         flex: 1,
         aspectRatio: 1,
@@ -66,7 +69,7 @@ const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
       accessibilityRole='button'
       accessibilityLabel={item.description}
     >
-      {item.sensitive && (
+      {sensitive && (
         <IconButton
           icon={iconHelper(mediaVisible ? EyeSlashIcon : EyeIcon)}
           style={{
@@ -83,7 +86,7 @@ const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
           accessibilityLabel={intl.formatMessage(mediaVisible ? messages.hide : messages.show)}
         />
       )}
-      {renderMedia(item, item.sensitive, mediaVisible, true)}
+      {renderMedia(item, sensitive, mediaVisible, true)}
     </Pressable>
   );
 };

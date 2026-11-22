@@ -196,7 +196,7 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                       style={styles}
                       right={() => (
                         <View style={{ gap: 2, alignItems: 'center', flexDirection: 'row' }}>
-                          <Text>
+                          <Text style={{ maxWidth: 192 }}>
                             {Array.isArray(item.active)
                               ? intl.formatList(
                                   item.options
