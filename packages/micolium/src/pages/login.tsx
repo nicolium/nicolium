@@ -1,5 +1,7 @@
+import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import {
   Appbar,
+  Button,
   Divider,
   Text,
   TextInput,
@@ -30,6 +32,7 @@ import { GlassButton } from '@/components/ui/glass-button';
 import { Header } from '@/components/ui/header';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 import { toast } from '@/utils/toast';
@@ -155,12 +158,14 @@ const normalizeInstanceUrl = (input: string) => {
 const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'instance'>) => {
   const { colors } = useTheme();
   const intl = useIntl();
+  const glassEffect = useEnableLiquidGlass();
 
   const isLoggedIn = !!useCurrentAccount();
   const { fetchInstance, createApp } = useAuthStoreActions();
   const [instance, setInstance] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const instanceHintSheetRef = React.useRef<TrueSheet>(null);
 
   const instanceUrl = normalizeInstanceUrl(instance);
   const canSubmit = !!instanceUrl;
@@ -236,6 +241,52 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
         onSubmitEditing={submit}
         variant='outlined'
       />
+
+      <Button
+        mode='text'
+        onPress={() => instanceHintSheetRef.current?.present()}
+        style={{ alignSelf: 'center' }}
+      >
+        <FormattedMessage
+          id='landing_mobile.credentials.instance_hint'
+          defaultMessage='What’s an instance?'
+        />
+      </Button>
+      <TrueSheet
+        ref={instanceHintSheetRef}
+        detents={['auto']}
+        style={{
+          padding: 16,
+          paddingTop: Platform.OS === 'ios' ? 16 : 32,
+          gap: 8,
+        }}
+        backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
+      >
+        <Text variant='headlineMedium'>
+          <FormattedMessage
+            id='landing_mobile.credentials.instance_hint.hint'
+            defaultMessage='What’s an instance?'
+          />
+        </Text>
+        <Text>
+          <FormattedMessage
+            id='landing_mobile.credentials.instance_hint.explanation_1'
+            defaultMessage='In the Fediverse, an ‘instance’ is one of the independently hosted servers that make up the network. By design, instances communicate with each other, which is what forms the Fediverse. Your instance is also what hosts your federated identity.'
+          />
+        </Text>
+        <Text>
+          <FormattedMessage
+            id='landing_mobile.credentials.instance_hint.explanation_2'
+            defaultMessage='Instances are run by individuals, communities, organizations or companies. Each one can have its own rules, moderation and topic (many are general-purpose.'
+          />
+        </Text>
+        <Text>
+          <FormattedMessage
+            id='landing_mobile.credentials.instance_hint.explanation_3'
+            defaultMessage='Micolium lets you join instances of any Fediverse platform that implements Mastodon-compatible API. This includes Mastodon (of course), Pleroma, GoToSocial, Iceshrimp.NET and many others. Micolium does not recommend any particular instance.'
+          />
+        </Text>
+      </TrueSheet>
     </LoginLayout>
   );
 };
