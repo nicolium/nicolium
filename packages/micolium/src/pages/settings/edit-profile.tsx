@@ -241,8 +241,12 @@ const messages = defineMessages({
   remove: { id: 'streamfield.remove', defaultMessage: 'Remove' },
   uploadHeader: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },
   clearHeader: { id: 'group.upload_banner.clear', defaultMessage: 'Clear header image' },
+  headerMenu: { id: 'group.upload_banner.menu', defaultMessage: 'Header menu' },
+  headerMenuHint: { id: 'group.upload_banner.menu', defaultMessage: 'No header uploaded' },
   uploadAvatar: { id: 'group.upload_avatar', defaultMessage: 'Upload avatar' },
   clearAvatar: { id: 'group.upload_avatar.clear', defaultMessage: 'Clear avatar image' },
+  avatarMenu: { id: 'group.upload_avatar.menu', defaultMessage: 'Avatar menu' },
+  avatarMenuHint: { id: 'group.upload_avatar.menu', defaultMessage: 'No avatar uploaded' },
   changeDescription: {
     id: 'group.upload_banner.change.description',
     defaultMessage: 'Change alt text',
@@ -885,6 +889,8 @@ const EditProfileScreen = ({
                 </View>
               }
               items={headerMenu}
+              accessibilityLabel={intl.formatMessage(messages.headerMenu)}
+              accessibilityHint={header ? undefined : intl.formatMessage(messages.headerMenuHint)}
             />
             <View
               style={{
@@ -925,6 +931,8 @@ const EditProfileScreen = ({
                   </Pressable>
                 }
                 items={avatarMenu}
+                accessibilityLabel={intl.formatMessage(messages.avatarMenu)}
+                accessibilityHint={avatar ? undefined : intl.formatMessage(messages.avatarMenuHint)}
               />
             </View>
           </View>

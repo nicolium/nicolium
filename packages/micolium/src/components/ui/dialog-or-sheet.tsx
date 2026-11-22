@@ -117,6 +117,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({
             paddingHorizontal: 16,
             paddingTop: 16,
             paddingBottom: 8,
+            gap: 8,
           }}
         >
           {glassEffect && firstAction ? (
@@ -130,7 +131,12 @@ const Sheet: React.FC<IDialogOrSheet> = ({
           ) : (
             <View style={{ width: 44 }} />
           )}
-          <Text accessibilityRole='header' variant='titleMedium'>
+          <Text
+            accessibilityRole='header'
+            variant='titleMedium'
+            style={{ flex: 1 }}
+            numberOfLines={1}
+          >
             {title}
           </Text>
           {glassEffect && secondAction ? (
