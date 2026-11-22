@@ -1,7 +1,5 @@
 import { TrueSheetProvider } from '@lodev09/react-native-true-sheet';
 import { PaperProvider } from '@mkljczk/react-native-paper';
-import { buildScheme } from '@mkljczk/react-native-paper/src/theme/tokens/sys/color';
-import { getMaterial3Theme, isDynamicThemeSupported } from '@pchmn/expo-material3-theme';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
@@ -9,7 +7,6 @@ import { useCalendars, useLocales } from 'expo-localization';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -24,9 +21,10 @@ import { loadPolyfills } from './polyfills';
 import { queryClient } from './queries/client';
 import { RootNavigator } from './router/router';
 import { AlertRoot } from './stores/alerts';
-import { useSetting } from './stores/settings';
-import { DarkTheme, LightTheme, createPalette } from './utils/themes';
+import { useTheme } from './utils/themes';
 import { ToastRoot } from './utils/toast';
+
+import type { ColorSchemeName } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,54 +43,14 @@ const linking = {
     !url.startsWith(makeRedirectUri({ scheme: 'micolium', path: 'redirect' })),
 };
 
-const darkTheme = {
-  ...DarkTheme,
-  shapes: {
-    ...DarkTheme.shapes,
-    corner: {
-      ...DarkTheme.shapes.corner,
-      extraLarge: DarkTheme.shapes.corner.medium,
-    },
-  },
-};
+interface IThemeProvider {
+  colorScheme?: ColorSchemeName;
+  children: React.ReactNode;
+}
 
-const lightTheme = {
-  ...LightTheme,
-  shapes: {
-    ...LightTheme.shapes,
-    corner: {
-      ...LightTheme.shapes.corner,
-      extraLarge: LightTheme.shapes.corner.medium,
-    },
-  },
-};
-
-const BLACK_OVERRIDE = { surface: '#000', surfaceContainer: '#000', background: '#000' };
-
-const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
-  const sourceColor = useSetting('appearance.sourceColor');
-  const contrast = useSetting('appearance.contrast');
-
-  const colorScheme = useColorScheme();
-  const theme = React.useMemo(() => {
-    const theme = getMaterial3Theme(sourceColor.slice(0, 7));
-    if (contrast === 'standard') return theme;
-
-    const palette = createPalette(
-      isDynamicThemeSupported ? theme.light.primary : sourceColor.slice(0, 7),
-    );
-
-    return {
-      light: { ...theme.light, ...buildScheme(palette, { mode: 'light', contrast }) },
-      dark: { ...theme.dark, ...buildScheme(palette, { mode: 'dark', contrast }) },
-    };
-  }, [sourceColor, contrast]);
-  const darkOverrides = useSetting('appearance.black') ? BLACK_OVERRIDE : {};
-
-  const paperTheme =
-    colorScheme === 'dark'
-      ? { ...darkTheme, colors: { ...theme.dark, ...darkOverrides } }
-      : { ...lightTheme, colors: theme.light };
+const ThemeProvider: React.FC<IThemeProvider> = (props) => {
+  const paperTheme = useTheme();
+  console.log(paperTheme)
 
   return (
     <NavigationContainer theme={paperTheme} linking={linking}>

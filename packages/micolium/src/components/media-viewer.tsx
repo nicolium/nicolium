@@ -1,4 +1,4 @@
-import { IconButton, Text } from '@mkljczk/react-native-paper';
+import { IconButton, Text, ThemeProvider } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { Directory, File, Paths } from 'expo-file-system';
 import { Image } from 'expo-image';
@@ -18,6 +18,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useStatus } from '@/queries/statuses/use-status';
 import { useMediaViewer, useUiStoreActions } from '@/stores/ui';
+import { useTheme } from '@/utils/themes';
 import { toast } from '@/utils/toast';
 
 import { StatusActions } from './statuses/status-actions';
@@ -129,6 +130,7 @@ const MediaViewerItem: React.FC<IMediaViewerItem> = ({
 
 const MediaViewer: React.FC = () => {
   const navigation = useNavigation();
+  const theme = useTheme('dark');
 
   const intl = useIntl();
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
@@ -316,7 +318,9 @@ const MediaViewer: React.FC = () => {
                   </Text>
                 )}
                 {mediaViewer?.statusId && (
-                  <MediaViewerStatusActions statusId={mediaViewer.statusId} />
+                  <ThemeProvider theme={theme}>
+                    <MediaViewerStatusActions statusId={mediaViewer.statusId} />
+                  </ThemeProvider>
                 )}
               </LinearGradient>
             ) : null}

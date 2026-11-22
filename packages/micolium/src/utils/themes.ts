@@ -1,16 +1,21 @@
 import { argbFromHex, CorePalette, hexFromArgb } from '@material/material-color-utilities';
 import { DarkTheme, LightTheme, Palette, adaptNavigationTheme } from '@mkljczk/react-native-paper';
+import { buildScheme } from '@mkljczk/react-native-paper/src/theme/tokens/sys/color';
+import { getMaterial3Theme, isDynamicThemeSupported } from '@pchmn/expo-material3-theme';
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
 import merge from 'deepmerge';
+import React from 'react';
+import { useColorScheme, type ColorSchemeName, type StyleProp, type ViewStyle } from 'react-native';
+
+import { useSetting } from '@/stores/settings';
 
 import type {
   ThemeColors,
   TypescaleStyle,
 } from '@mkljczk/react-native-paper/lib/typescript/src/theme/types';
-import type { StyleProp, ViewStyle } from 'react-native';
 
 const { LightTheme: AdaptedLightTheme, DarkTheme: AdaptedDarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -37,6 +42,55 @@ const createPalette = (sourceColor: string) => {
       return [key, hexFromArgb(palettes[name as keyof typeof palettes].tone(Number(tone)))];
     }),
   ) as typeof Palette;
+};
+
+const darkTheme = {
+  ...CombinedDarkTheme,
+  shapes: {
+    ...CombinedDarkTheme.shapes,
+    corner: {
+      ...CombinedDarkTheme.shapes.corner,
+      extraLarge: CombinedDarkTheme.shapes.corner.medium,
+    },
+  },
+};
+
+const lightTheme = {
+  ...CombinedLightTheme,
+  shapes: {
+    ...CombinedLightTheme.shapes,
+    corner: {
+      ...CombinedLightTheme.shapes.corner,
+      extraLarge: CombinedLightTheme.shapes.corner.medium,
+    },
+  },
+};
+
+const BLACK_OVERRIDE = { surface: '#000', surfaceContainer: '#000', background: '#000' };
+
+const useTheme = (colorScheme?: ColorSchemeName) => {
+  const sourceColor = useSetting('appearance.sourceColor');
+  const contrast = useSetting('appearance.contrast');
+
+  const systemColorScheme = useColorScheme();
+  const theme = React.useMemo(() => {
+    const theme = getMaterial3Theme(sourceColor.slice(0, 7));
+    if (contrast === 'standard') return theme;
+
+    const palette = createPalette(
+      isDynamicThemeSupported ? theme.light.primary : sourceColor.slice(0, 7),
+    );
+
+    return {
+      light: { ...theme.light, ...buildScheme(palette, { mode: 'light', contrast }) },
+      dark: { ...theme.dark, ...buildScheme(palette, { mode: 'dark', contrast }) },
+    };
+  }, [sourceColor, contrast]);
+  const darkOverrides = useSetting('appearance.black') ? BLACK_OVERRIDE : {};
+
+  return (colorScheme ?? systemColorScheme) === 'dark'
+    ? { ...darkTheme, colors: { ...theme.dark, ...darkOverrides } }
+    : { ...lightTheme, colors: theme.light };
 };
 
 const multiplyFontSizes = (typescaleStyle: TypescaleStyle, multiplier: number) =>
@@ -86,5 +140,6 @@ export {
   createPalette,
   multiplyFontSizes,
   getSegmentedMenuStyles,
+  useTheme,
   type SurfaceColorVariant,
 };
