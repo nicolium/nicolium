@@ -955,6 +955,7 @@
   "timeline_filters.show_reblogs": "Show reposts",
   "timeline_filters.show_replies": "Show replies",
   "timeline_filters.show_self_reblogs": "Show self-reposts",
+  "timeline_picker.title": "Select timeline",
   "toast.view": "View",
   "trends.count_by_accounts": "{count} {rawCount, plural, one {person} other {people}} are talking",
   "upload_button.camera_permission_required.message": "Permission to access the camera is required.",

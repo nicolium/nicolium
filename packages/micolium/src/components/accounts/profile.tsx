@@ -381,10 +381,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             </GlassView>
           </Pressable>
         ) : (
-          <Chip
-            mode='outlined'
-            rightIcon={iconHelper(CaretDownIcon)}
-          >
+          <Chip mode='outlined' rightIcon={iconHelper(CaretDownIcon)}>
             {filtersLabel}
           </Chip>
         )
