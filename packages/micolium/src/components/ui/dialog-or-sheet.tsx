@@ -130,7 +130,9 @@ const Sheet: React.FC<IDialogOrSheet> = ({
           ) : (
             <View style={{ width: 44 }} />
           )}
-          <Text variant='titleMedium'>{title}</Text>
+          <Text accessibilityRole='header' variant='titleMedium'>
+            {title}
+          </Text>
           {glassEffect && secondAction ? (
             <GlassActionButton
               icon={secondAction.icon}
