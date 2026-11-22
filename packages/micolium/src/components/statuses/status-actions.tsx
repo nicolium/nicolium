@@ -340,7 +340,11 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
 
     return (
       <>
-        <DropdownMenu trigger={(onPress) => renderAction({}, onPress)} items={items} />
+        <DropdownMenu
+          trigger={(onPress) => renderAction({}, onPress)}
+          items={items}
+          accessibilityLabel={intl.formatMessage(messages.reblog)}
+        />
         {showScheduleReblog && (
           <ScheduleReblog status={status} visible setVisible={setShowScheduleReblog} />
         )}

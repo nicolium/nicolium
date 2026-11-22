@@ -104,9 +104,9 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus }) => {
                     icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
                     style={{ height: 32, width: 32 }}
                     onPress={() => {}}
-                    accessibilityLabel={intl.formatMessage(messages.menuTitle)}
                   />
                 }
+                accessibilityLabel={intl.formatMessage(messages.menuTitle)}
                 items={[
                   {
                     key: 'edit',

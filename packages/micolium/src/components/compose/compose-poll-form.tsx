@@ -334,6 +334,8 @@ const ComposePollForm: React.FC<ICompose> = ({ composeId }) => {
             })),
           },
         ]}
+        accessibilityLabel={intl.formatMessage(messages.pollDuration)}
+        accessibilityValue={formatDuration(intl, poll.expires_in)}
       />
 
       <List.Item
@@ -352,6 +354,8 @@ const ComposePollForm: React.FC<ICompose> = ({ composeId }) => {
         )}
         containerStyle={{ gap: 4, alignItems: 'center' }}
         onPress={() => handleSelectMultiple(!poll.multiple)}
+        accessibilityRole='togglebutton'
+        aria-selected={poll.multiple}
       />
     </View>
   );

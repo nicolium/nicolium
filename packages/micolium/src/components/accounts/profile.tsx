@@ -383,13 +383,14 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
         ) : (
           <Chip
             mode='outlined'
-            accessibilityLabel={intl.formatMessage(messages.changeFilters)}
             rightIcon={iconHelper(CaretDownIcon)}
           >
             {filtersLabel}
           </Chip>
         )
       }
+      accessibilityLabel={filtersLabel}
+      accessibilityHint={intl.formatMessage(messages.changeFilters)}
       items={[
         {
           key: 'show-replies',
@@ -526,6 +527,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   outlineWidth: 4,
                   outlineColor: colors.background,
                 }}
+                aria-hidden
               />
             ) : (
               <View
@@ -545,7 +547,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   }}
                   contentFit='contain'
                   recyclingKey={`avatar-${account.id}`}
-                  importantForAccessibility={account.avatar_description ? 'auto' : 'no'}
+                  aria-hidden={!account.avatar_description}
                 />
               </View>
             )}

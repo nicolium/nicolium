@@ -80,10 +80,10 @@ const UIAccount: React.FC<IUIAccount> = ({
               }}
               contentFit='contain'
               recyclingKey={`avatar-${id}`}
-              importantForAccessibility={avatarDescription ? 'auto' : 'no'}
+              aria-hidden={!avatarDescription}
             />
           ) : (
-            <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />
+            <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} aria-hidden />
           )}
         </MaybeLink>
         {badge && (

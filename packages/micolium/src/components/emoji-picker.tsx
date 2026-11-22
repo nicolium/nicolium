@@ -133,21 +133,24 @@ const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
   const emojis = category.emojis.map((emoji) => emojiData.emojis[emoji].skins[0].native);
 
   const renderedEmojis = React.useMemo(() => {
-    const selected = state?.selected?.includes(emoji);
-    return emojis.map((emoji) => (
-      <IconButton
-        key={emoji}
-        onPress={() => {
-          state?.onPick(emoji, false);
-          haptics.selection();
-          closeEmojiPicker();
-        }}
-        mode={selected ? 'contained-tonal' : 'outlined'}
-        icon={() => <Text style={{ fontSize: 24 }}>{emoji}</Text>}
-        size={24}
-        accessibilityState={{ selected }}
-      />
-    ));
+    return emojis.map((emoji) => {
+      const selected = state?.selected?.includes(emoji);
+
+      return (
+        <IconButton
+          key={emoji}
+          onPress={() => {
+            state?.onPick(emoji, false);
+            haptics.selection();
+            closeEmojiPicker();
+          }}
+          mode={selected ? 'contained-tonal' : 'outlined'}
+          icon={() => <Text style={{ fontSize: 24 }}>{emoji}</Text>}
+          size={24}
+          accessibilityState={{ selected }}
+        />
+      );
+    });
   }, [emojis]);
 
   return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{renderedEmojis}</View>;

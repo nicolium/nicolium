@@ -10,7 +10,12 @@ import {
   Text as SwiftUIText,
   Toggle as SwiftUIToggle,
 } from '@expo/ui/swift-ui';
-import { accessibilityHint, accessibilityLabel, disabled } from '@expo/ui/swift-ui/modifiers';
+import {
+  accessibilityHint,
+  accessibilityLabel,
+  accessibilityValue,
+  disabled,
+} from '@expo/ui/swift-ui/modifiers';
 import React from 'react';
 import { View } from 'react-native';
 
@@ -84,6 +89,7 @@ type IDropdownMenu<T extends Array<unknown>> = {
   fullWidth?: boolean;
   accessibilityLabel?: string;
   accessibilityHint?: string;
+  accessibilityValue?: string;
 } & (
   | {
       items: Array<DropdownMenuItem>;
@@ -118,6 +124,9 @@ const DropdownMenu: <T extends Array<unknown> = []>(
               ? [
                   accessibilityLabel(props.accessibilityLabel),
                   ...(props.accessibilityHint ? [accessibilityHint(props.accessibilityHint)] : []),
+                  ...(props.accessibilityValue
+                    ? [accessibilityValue(props.accessibilityValue)]
+                    : []),
                 ]
               : undefined
           }

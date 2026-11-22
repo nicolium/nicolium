@@ -31,7 +31,7 @@ const CurrentAccountAvatar: React.FC<ICurrentAccountAvatar> = ({ size = 24 }) =>
         }}
         contentFit='contain'
         recyclingKey={`avatar-${currentAccount.id}`}
-        importantForAccessibility={currentAccount.avatar_description ? 'auto' : 'no'}
+        aria-hidden={!currentAccount.avatar_description}
       />
     )
   ) : (

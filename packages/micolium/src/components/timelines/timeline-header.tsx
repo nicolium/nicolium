@@ -184,9 +184,9 @@ const FiltersDropdownMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
       trigger={
         <HeaderIconButton
           icon={Platform.OS === 'ios' ? FunnelSimpleIcon : FunnelIcon}
-          accessibilityLabel={intl.formatMessage(messages.timelineFiltersLabel)}
-        />
-      }
+          />
+        }
+        accessibilityLabel={intl.formatMessage(messages.timelineFiltersLabel)}
       items={filtersDropdownMenuItems}
     />
   );
@@ -243,9 +243,9 @@ const TimelineHeaderMenu = () => {
       trigger={
         <HeaderIconButton
           icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
-          accessibilityLabel={intl.formatMessage(messages.menuTitle)}
-        />
-      }
+          />
+        }
+        accessibilityLabel={intl.formatMessage(messages.menuTitle)}
       items={dropdownMenuItems}
     />
   );
@@ -327,9 +327,9 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
         trigger={
           <HeaderIconButton
             icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
-            accessibilityLabel={intl.formatMessage(messages.menuTitle)}
-          />
-        }
+            />
+          }
+          accessibilityLabel={intl.formatMessage(messages.menuTitle)}
         items={[
           {
             key: 'edit',

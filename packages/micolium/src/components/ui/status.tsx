@@ -98,6 +98,7 @@ const UIStatus: React.FC<IUIStatus> = ({
             mode='contained'
             style={{ borderWidth: 1, borderColor: theme.colors.primary }}
             onPress={spoilerExpanded ? collapseStatusSpoiler : expandStatusSpoiler}
+            accessible={false}
           >
             <Card.Content style={{ paddingBottom: expandStatusSpoiler ? 0 : 16 }}>
               <Text
@@ -118,6 +119,7 @@ const UIStatus: React.FC<IUIStatus> = ({
                   mode='text'
                   compact
                   onPress={spoilerExpanded ? collapseStatusSpoiler : expandStatusSpoiler}
+                  aria-expanded={spoilerExpanded}
                 >
                   {spoilerExpanded ? (
                     <FormattedMessage id='status.collapse' defaultMessage='Collapse' />

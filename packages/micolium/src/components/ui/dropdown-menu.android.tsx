@@ -167,6 +167,7 @@ type IDropdownMenu<T extends Array<unknown>> = {
   fullWidth?: boolean;
   accessibilityLabel?: string;
   accessibilityHint?: string;
+  accessibilityValue?: string;
 } & (
   | {
       items: Array<DropdownMenuItem>;
@@ -217,6 +218,7 @@ const DropdownMenu: <T extends Array<unknown> = []>(
                   accessibilityRole: 'dropdownlist',
                   accessibilityLabel: props.accessibilityLabel,
                   accessibilityHint: props.accessibilityHint,
+                  accessibilityValue: { text: props.accessibilityValue },
                 }),
               })}
         </View>

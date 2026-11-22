@@ -1,12 +1,8 @@
-import { Picker, Text as SwiftUIText, Toggle } from '@expo/ui/swift-ui';
-import { pickerStyle, tag } from '@expo/ui/swift-ui/modifiers';
-import { List, Switch, Text, TextInput } from '@mkljczk/react-native-paper';
+import { Text, TextInput } from '@mkljczk/react-native-paper';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
-import { View } from 'react-native';
 
 import { useFeatures } from '@/contexts/current-account-context';
-import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
   useBlockAccountMutation,
@@ -16,8 +12,7 @@ import {
 import { toast } from '@/utils/toast';
 
 import { DialogOrSheet } from '../ui/dialog-or-sheet';
-import { DropdownMenu } from '../ui/dropdown-menu';
-import { SwiftUIList } from '../ui/swift-ui-list';
+import { type IListSections, List } from '../ui/list';
 
 import type { BlockAccountParams, MuteAccountParams } from 'pl-api';
 
@@ -96,7 +91,6 @@ interface IBlockMuteDialog {
 const BlockMuteDialog: React.FC<IBlockMuteDialog> = ({ action, accountId, visible, onDismiss }) => {
   const intl = useIntl();
   const { notes, blocksDuration, mutesDuration } = useFeatures();
-  const glassEffect = useEnableLiquidGlass();
 
   const { data: account } = useAccount(accountId, true);
   const [notifications, setNotifications] = useState(true);
@@ -115,6 +109,38 @@ const BlockMuteDialog: React.FC<IBlockMuteDialog> = ({ action, accountId, visibl
   if (!account) return null;
 
   const handleClose = () => setClosing(true);
+
+  const section: IListSections[number] = { items: [] };
+
+  if (action === 'mute') {
+    section.items.push({
+      type: 'toggle',
+      label: intl.formatMessage(messages.hideNotifications),
+      active: notifications,
+      onPress: () => setNotifications((value) => !value),
+    });
+  }
+
+  if (canSetDuration) {
+    section.items.push({
+      type: 'toggle',
+      label: intl.formatMessage(
+        action === 'mute' ? messages.muteAutoExpire : messages.blockAutoExpire,
+      ),
+      active: duration !== 0,
+      onPress: () => setDuration((value) => (value ? 0 : DURATIONS[5])),
+    });
+
+    if (duration !== 0) {
+      section.items.push({
+        type: 'select',
+        label: intl.formatMessage(messages.duration),
+        active: duration,
+        onChange: setDuration,
+        options: DURATIONS.map((value) => ({ value, label: formatDuration(intl, value) })),
+      });
+    }
+  }
 
   const handleSubmit = (callback?: () => void) => {
     if (action === 'mute') {
@@ -189,117 +215,11 @@ const BlockMuteDialog: React.FC<IBlockMuteDialog> = ({ action, accountId, visibl
         )}
       </Text>
 
-      {(action === 'mute' || canSetDuration) && glassEffect ? (
-        <SwiftUIList>
-          {action === 'mute' && (
-            <Toggle
-              isOn={notifications}
-              onIsOnChange={() => setNotifications((value) => !value)}
-              label={intl.formatMessage(messages.hideNotifications)}
-            />
-          )}
-
-          {canSetDuration && (
-            <>
-              <Toggle
-                isOn={duration !== 0}
-                onIsOnChange={(value) => setDuration(value ? DURATIONS[5] : 0)}
-                label={intl.formatMessage(
-                  action === 'mute' ? messages.muteAutoExpire : messages.blockAutoExpire,
-                )}
-              />
-              {duration !== 0 && (
-                <Picker
-                  label={intl.formatMessage(messages.duration)}
-                  selection={DURATIONS.indexOf(duration)}
-                  onSelectionChange={(index) => setDuration(DURATIONS[index])}
-                  modifiers={[pickerStyle('menu')]}
-                >
-                  {DURATIONS.map((value, index) => (
-                    <SwiftUIText key={value.toString()} modifiers={[tag(index)]}>
-                      {formatDuration(intl, value)}
-                    </SwiftUIText>
-                  ))}
-                </Picker>
-              )}
-            </>
-          )}
-        </SwiftUIList>
-      ) : (
-        <>
-          {action === 'mute' && (
-            <List.Item
-              title={intl.formatMessage(messages.hideNotifications)}
-              titleNumberOfLines={0}
-              right={() => <Switch value={notifications} onValueChange={setNotifications} />}
-              onPress={() => setNotifications((value) => !value)}
-              style={{ marginHorizontal: -16 }}
-              containerStyle={{ gap: 4, alignItems: 'center' }}
-            />
-          )}
-
-          {canSetDuration && (
-            <>
-              <List.Item
-                title={
-                  action === 'mute' ? (
-                    <FormattedMessage
-                      id='mute_modal.auto_expire'
-                      defaultMessage='Automatically expire mute?'
-                    />
-                  ) : (
-                    <FormattedMessage
-                      id='block_modal.auto_expire'
-                      defaultMessage='Automatically expire block?'
-                    />
-                  )
-                }
-                titleNumberOfLines={0}
-                right={() => (
-                  <Switch
-                    value={duration !== 0}
-                    onValueChange={(value) => setDuration(value ? 24 * 60 * 60 : 0)}
-                  />
-                )}
-                onPress={() => setDuration((value) => (value ? 0 : 24 * 60 * 60))}
-                style={{ marginHorizontal: -16 }}
-                containerStyle={{ gap: 4, alignItems: 'center' }}
-              />
-              {duration !== 0 && (
-                <View style={{ marginHorizontal: -16 }}>
-                  <DropdownMenu
-                    fullWidth
-                    trigger={
-                      <List.Item
-                        title={
-                          <FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />
-                        }
-                        right={() => <Text>{formatDuration(intl, duration)}</Text>}
-                        containerStyle={{ alignItems: 'center' }}
-                        onPress={() => {}}
-                      />
-                    }
-                    items={[
-                      {
-                        key: 'duration',
-                        type: 'section',
-                        label: intl.formatMessage(messages.duration),
-                        children: DURATIONS.map((value) => ({
-                          key: value.toString(),
-                          type: 'button',
-                          label: formatDuration(intl, value),
-                          checked: value === duration,
-                          onPress: () => setDuration(value),
-                        })),
-                      },
-                    ]}
-                  />
-                </View>
-              )}
-            </>
-          )}
-        </>
-      )}
+      <List
+        sections={section.items.length ? [section] : []}
+        style={{ marginHorizontal: -16 }}
+        colorVariant='low'
+      />
 
       {notes && (
         <TextInput

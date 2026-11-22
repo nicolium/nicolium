@@ -168,9 +168,9 @@ const BookmarksFolderScreen = ({
           trigger={
             <HeaderIconButton
               icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
-              accessibilityLabel={intl.formatMessage(messages.menuTitle)}
             />
           }
+          accessibilityLabel={intl.formatMessage(messages.menuTitle)}
           items={[
             {
               key: 'edit',

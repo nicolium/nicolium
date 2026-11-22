@@ -9,6 +9,7 @@ import { PlanetIcon } from 'phosphor-react-native/src/icons/Planet';
 import { UsersThreeIcon } from 'phosphor-react-native/src/icons/UsersThree';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { View } from 'react-native';
 
 import { useList } from '@/queries/accounts/use-lists';
 
@@ -114,7 +115,11 @@ const StatusVisibilityIcon: React.FC<IStatusVisibilityIcon> = ({ status }) => {
 
   return (
     <Tooltip title={title}>
-      {(props) => <Icon source={iconHelper(icon)} size={20} {...props} />}
+      {(props) => (
+        <View accessible accessibilityLabel={title}>
+          <Icon source={iconHelper(icon)} size={20} {...props} />
+        </View>
+      )}
     </Tooltip>
   );
 };

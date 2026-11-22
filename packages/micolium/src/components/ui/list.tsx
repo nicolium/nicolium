@@ -182,11 +182,23 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                   aria-selected={item.active}
                 />
               );
-            case 'select':
+            case 'select': {
+              const activeLabel = Array.isArray(item.active)
+                ? intl.formatList(
+                    item.options
+                      .filter((option) => item.active.includes(option.value))
+                      .map((option) => option.label),
+                    { type: 'conjunction' },
+                  )
+                : item.options.find((option) => option.value === item.active)?.label;
+
               return (
                 <DropdownMenu
                   key={index}
                   fullWidth
+                  accessibilityLabel={item.label}
+                  accessibilityHint={item.sublabel}
+                  accessibilityValue={activeLabel}
                   trigger={
                     <PaperList.Item
                       title={item.label}
@@ -194,16 +206,7 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                       style={styles}
                       right={() => (
                         <View style={{ gap: 2, alignItems: 'center', flexDirection: 'row' }}>
-                          <Text style={{ maxWidth: 192 }}>
-                            {Array.isArray(item.active)
-                              ? intl.formatList(
-                                  item.options
-                                    .filter((option) => item.active.includes(option.value))
-                                    .map((option) => option.label),
-                                  { type: 'conjunction' },
-                                )
-                              : item.options.find((option) => option.value === item.active)?.label}
-                          </Text>
+                          <Text style={{ maxWidth: 192 }}>{activeLabel}</Text>
                           <Icon source={CaretUpDownIcon} size={16} />
                         </View>
                       )}
@@ -231,6 +234,7 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                   ]}
                 />
               );
+            }
             case 'color-picker':
               return (
                 <PaperList.Item

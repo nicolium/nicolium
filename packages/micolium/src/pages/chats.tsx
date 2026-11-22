@@ -64,12 +64,13 @@ const Chat: React.FC<IChat> = ({ chat }) => {
               }}
               contentFit='contain'
               recyclingKey={`avatar-${chat.account.id}`}
-              importantForAccessibility={chat.account.avatar_description ? 'auto' : 'no'}
+              aria-hidden={!chat.account.avatar_description}
             />
           ) : (
             <Avatar.Text
               size={40}
               label={(chat.account.display_name || chat.account.acct).slice(0, 2)}
+              aria-hidden
             />
           )}
           {chat.unread > 0 && (
