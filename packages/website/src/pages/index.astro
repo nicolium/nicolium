@@ -104,6 +104,11 @@ const latestPost = posts[0];
     <Footer />
   </body><style lang="scss">
     @use "@mkljczk/astro-theme/styles/variables";
+
+    :global(body .site-footer) {
+      margin-top: -121px;
+    }
+
     .sections {
       padding: 2rem 0;
     }

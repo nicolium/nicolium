@@ -1,0 +1,34 @@
+---
+import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
+import BaseBlogPost from "@mkljczk/astro-theme/layouts/BlogPost.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+
+---
+
+<style is:global>
+  .article-footer {
+    display: none;
+  }
+</style>
+<BaseBlogPost
+  {...Astro.props}
+  lang="en"
+  title="Micolium privacy policy"
+  pubDate={new Date('2026-11-22T15:22:58.167Z')}
+//  updatedDate={new Date('2026-11-22T15:22:58.167Z')}
+  updatedOnText='Updated on'
+>
+  <BaseHead
+    slot="head"
+    siteTitle="Nicolium"
+    title="Micolium privacy policy"
+  />
+  <Header slot="header" />
+  <Footer slot="footer" />
+  <p>
+    The Micolium app does not collect or process any personal information from its users. The app is used to connect to third-party Fediverse servers that may or may not collect personal information and are not covered by this privacy policy. Each third-party Fediverse server can come equipped with its own privacy policy that can be viewed through that server's website.
+    <br>
+    <small>Adapted from <a href="https://joinmastodon.org/ios/privacy">Mastodon for iOS privacy policy</a>.</small>
+  </p>
+</BaseBlogPost>
