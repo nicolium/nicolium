@@ -39,6 +39,8 @@ interface IUserList {
 }
 
 const UserList: React.FC<IUserList> = ({ accountId, list, added, style }) => {
+  const intl = useIntl();
+
   const { mutate: addToList } = useAddAccountsToList(list.id);
   const { mutate: removeFromList } = useRemoveAccountsFromList(list.id);
 
