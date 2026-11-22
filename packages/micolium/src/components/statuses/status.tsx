@@ -382,6 +382,7 @@ const Status: React.FC<IStatus> = ({
           navigation.navigate('status', { screen: 'view', params: { id } });
         }}
         style={{ padding: 16, ...style }}
+        accessible={false}
       >
         {statusBody}
       </TouchableRipple>
