@@ -216,32 +216,34 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media, compact, language }) => {
       ) : (
         <>
           <StatusImage media={media} uri={media.preview_url} language={language} />
-          <View
-            style={[StyleSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center' }]}
-          >
-            {glassEffect ? (
-              <Pressable
-                onPress={() => setActive(true)}
-                accessibilityLabel={intl.formatMessage(messages.play)}
-                accessibilityRole='button'
-              >
-                <GlassView
-                  style={{ borderRadius: compact ? 14 : 36, padding: compact ? 6 : 16 }}
-                  glassEffectStyle='clear'
-                  isInteractive
+          {!compact && (
+            <View
+              style={[StyleSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center' }]}
+            >
+              {glassEffect ? (
+                <Pressable
+                  onPress={() => setActive(true)}
+                  accessibilityLabel={intl.formatMessage(messages.play)}
+                  accessibilityRole='button'
                 >
-                  <PlayIcon weight='fill' size={compact ? 16 : 40} color='#fff' />
-                </GlassView>
-              </Pressable>
-            ) : (
-              <IconButton
-                mode='contained'
-                icon={(props) => <PlayIcon {...props} weight='fill' />}
-                onPress={() => setActive(true)}
-                accessibilityLabel={intl.formatMessage(messages.play)}
-              />
-            )}
-          </View>
+                  <GlassView
+                    style={{ borderRadius: compact ? 14 : 36, padding: compact ? 6 : 16 }}
+                    glassEffectStyle='clear'
+                    isInteractive
+                  >
+                    <PlayIcon weight='fill' size={compact ? 16 : 40} color='#fff' />
+                  </GlassView>
+                </Pressable>
+              ) : (
+                <IconButton
+                  mode='contained'
+                  icon={(props) => <PlayIcon {...props} weight='fill' />}
+                  onPress={() => setActive(true)}
+                  accessibilityLabel={intl.formatMessage(messages.play)}
+                />
+              )}
+            </View>
+          )}
         </>
       )}
     </View>
