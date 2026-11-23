@@ -1795,7 +1795,9 @@ const useUploadCompose = (composeId: string) => {
   const intl = useIntl();
 
   return useCallback(
-    (files: FileList | Array<File>, descriptions?: Array<string>) => {
+    (fileList: FileList | Array<File>, descriptions?: Array<string>) => {
+      // firefox workaround
+      const files = Array.from(fileList);
       if (files.length === 0) return;
 
       const compose =
@@ -1804,7 +1806,7 @@ const useUploadCompose = (composeId: string) => {
       const attachmentLimit = instance.configuration.statuses.max_media_attachments;
       const media = compose.mediaAttachments;
       const progress = new Array(files.length).fill(0);
-      let total = Array.from(files).reduce((a, v) => a + v.size, 0);
+      let total = files.reduce((a, v) => a + v.size, 0);
       let uploaded = 0;
       const mediaCount = media ? media.length : 0;
 
@@ -1817,7 +1819,7 @@ const useUploadCompose = (composeId: string) => {
         draft.isUploading = true;
       });
 
-      Array.from(files).forEach((f, i) => {
+      files.forEach((f, i) => {
         if (mediaCount + i > attachmentLimit - 1) return;
 
         uploadFile(
