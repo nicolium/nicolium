@@ -26,6 +26,7 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { useAutoPlayGif } from '@/hooks/use-auto-play-gif';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
@@ -199,9 +200,14 @@ const StatusVideoPlayer: React.FC<IMediaVideo> = ({ media, language }) => {
 
 const StatusVideo: React.FC<IMediaVideo> = ({ media, compact, language }) => {
   const intl = useIntl();
+  const autoPlayGif = useAutoPlayGif();
   const [active, setActive] = useState(false);
 
   const glassEffect = useEnableLiquidGlass();
+
+  if (media.type === 'gifv' && (active || autoPlayGif)) {
+    return <StatusGifv media={media} language={language} />;
+  }
 
   return (
     <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>
@@ -278,7 +284,6 @@ const renderMedia = (
         />
       );
     case 'gifv':
-      return <StatusGifv media={media} compact={compact} language={language} />;
     case 'video':
       return <StatusVideo media={media} compact={compact} language={language} />;
   }

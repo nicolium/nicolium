@@ -43,7 +43,7 @@ const StatusEmojiReactions: React.FC<IStatusEmojiReactions> = ({ status }) => {
         <Chip
           key={emoji.name}
           mode={emoji.me ? 'flat' : 'outlined'}
-          icon={() => <Emoji emoji={emoji.name} url={emoji.url} />}
+          icon={() => <Emoji emoji={emoji.name} url={emoji.url} staticUrl={emoji.static_url} />}
           onPress={() => handleReact(emoji)}
           onLongPress={() => {
             haptics.longPress();

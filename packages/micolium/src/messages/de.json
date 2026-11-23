@@ -329,6 +329,7 @@
   "poll.vote": "Abstimmen",
   "poll_button.add_poll": "Eine Umfrage erstellen",
   "poll_button.remove_poll": "Umfrage entfernen",
+  "preferences.fields.auto_play_gif.label": "Animierte GIFs automatisch abspielen",
   "preferences.fields.autoload_more.label": "Weitere Beiträge automatisch laden, wenn das Ende der Timeline erreicht wurde",
   "preferences.fields.autoload_timelines.label": "Neue Beiträge automatisch laden, wenn das obere Ende der Timeline erreicht wurde",
   "preferences.fields.boost_modal.label": "Bestätigungsdialog öffnen, bevor ein Beitrag geteilt wird",

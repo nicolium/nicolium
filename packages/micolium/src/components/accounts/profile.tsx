@@ -10,7 +10,6 @@ import {
 } from '@mkljczk/react-native-paper';
 import { Link, useNavigation } from '@react-navigation/native';
 import { GlassView } from 'expo-glass-effect';
-import { Image } from 'expo-image';
 import { ArrowLineDownIcon } from 'phosphor-react-native/src/icons/ArrowLineDown';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { type Account, mediaAttachmentSchema } from 'pl-api';
@@ -32,6 +31,7 @@ import { AccountActionsDropdown } from '@/components/accounts/account-actions-dr
 import { FollowButton } from '@/components/accounts/follow-button';
 import { ProfileFeatured } from '@/components/accounts/profile-featured';
 import { ComposeButton } from '@/components/compose-button';
+import { StillImage } from '@/components/still-image';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Emojify } from '@/components/ui/emojify';
@@ -481,7 +481,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           disabled={account.header_default}
           onPress={account.header_default ? undefined : handlePreviewHeader}
         >
-          <Image
+          <StillImage
             style={{
               flex: 1,
               width: '100%',
@@ -492,9 +492,8 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                 180,
               ),
             }}
-            source={{
-              uri: account.header,
-            }}
+            src={account.header}
+            staticSrc={account.header_static}
             accessibilityLabel={account.header_description}
             contentFit='cover'
             transition={300}
@@ -535,8 +534,9 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   overflow: 'hidden',
                 }}
               >
-                <Image
-                  source={{ uri: account.avatar }}
+                <StillImage
+                  src={account.avatar}
+                  staticSrc={account.avatar_static}
                   accessibilityLabel={account.avatar_description}
                   style={{
                     height: 80,

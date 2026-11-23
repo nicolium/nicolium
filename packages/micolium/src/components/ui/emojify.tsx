@@ -1,6 +1,6 @@
-import { Image } from 'expo-image';
 import React from 'react';
 
+import { StillImage } from '@/components/still-image';
 import nyaize from '@/queries/utils/nyaize';
 import { makeEmojiMap } from '@/utils/emojis';
 
@@ -50,9 +50,10 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis, nyaize: shouldNy
           if (currentText.length) nodes.push(currentText);
           currentText = '';
           nodes.push(
-            <Image
+            <StillImage
               key={i}
-              source={{ uri: emoji.url }}
+              src={emoji.url}
+              staticSrc={emoji.static_url}
               accessibilityLabel={emoji.shortcode}
               style={{ width: 16, height: 16, objectFit: 'contain', display: 'inline-block' }}
             />,

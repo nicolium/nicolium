@@ -332,7 +332,12 @@ const Notification: React.FC<INotification> = (props) => {
     (notification.type === 'subscribed_reaction' && notification.emoji)
   ) {
     icon = () => (
-      <Emoji size={18} emoji={notification.emoji!} url={notification.emoji_url || undefined} />
+      <Emoji
+        size={18}
+        emoji={notification.emoji!}
+        url={notification.emoji_url || undefined}
+        staticUrl={notification.emoji_static_url || undefined}
+      />
     );
   } else if (useHeartIconForFavourites && displayedType === 'favourite') {
     icon = iconHelper(HeartIcon);

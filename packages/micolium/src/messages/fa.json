@@ -211,6 +211,7 @@
   "poll.vote": "رأی",
   "poll_button.add_poll": "افزودن نظرسنجی",
   "poll_button.remove_poll": "حذف نظرسنجی",
+  "preferences.fields.auto_play_gif.label": "Auto-play animated GIFs",
   "preferences.fields.autoload_more.label": "Automatically load more items when scrolled to the bottom of the page",
   "preferences.fields.autoload_timelines.label": "Automatically load new posts when scrolled to the top of the page",
   "preferences.fields.boost_modal.label": "Show confirmation dialog before reposting",

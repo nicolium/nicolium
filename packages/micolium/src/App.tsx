@@ -50,7 +50,6 @@ interface IThemeProvider {
 
 const ThemeProvider: React.FC<IThemeProvider> = (props) => {
   const paperTheme = useTheme();
-  console.log(paperTheme)
 
   return (
     <NavigationContainer theme={paperTheme} linking={linking}>

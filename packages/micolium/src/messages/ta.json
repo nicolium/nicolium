@@ -355,6 +355,7 @@
   "poll.vote": "வாக்களி",
   "poll_button.add_poll": "வாக்கெடுப்பைச் சேர்க்கவும்",
   "poll_button.remove_poll": "வாக்கெடுப்பை அகற்று",
+  "preferences.fields.auto_play_gif.label": "ஆட்டோ-பிளே அனிமேசன் GIF கள்",
   "preferences.fields.autoload_more.label": "பக்கத்தின் கீழே உருட்டும்போது தானாகவே அதிக உருப்படிகளை ஏற்றவும்",
   "preferences.fields.autoload_timelines.label": "பக்கத்தின் மேலே உருட்டும்போது புதிய இடுகைகளை தானாக ஏற்றவும்",
   "preferences.fields.boost_modal.label": "மறுபதிவு செய்வதற்கு முன் உறுதிப்படுத்தல் உரையாடலைக் காட்டு",

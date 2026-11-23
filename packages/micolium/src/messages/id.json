@@ -244,6 +244,7 @@
   "poll.vote": "Vote",
   "poll_button.add_poll": "Tambahka poling",
   "poll_button.remove_poll": "Hapus poling",
+  "preferences.fields.auto_play_gif.label": "Putar otomatis GIF animasi",
   "preferences.fields.autoload_more.label": "Secara otomatis memuat lebih banyak item ketika digulir ke bagian bawah halaman",
   "preferences.fields.autoload_timelines.label": "Secara otomatis memuat postingan baru ketika digulir ke bagian atas halaman",
   "preferences.fields.boost_modal.label": "Tampilkan dialog konfirmasi sebelum memposting ulang",

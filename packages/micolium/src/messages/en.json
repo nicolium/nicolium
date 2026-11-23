@@ -726,6 +726,7 @@
   "preferences.appearance.black_mode": "Use black color for the background in dark mode",
   "preferences.appearance.enable_liquid_glass": "Use native glass effect",
   "preferences.appearance.enable_liquid_glass.description": "Turning this option off will reduce the amount of displayed glass effects, but won’t fully disable it.",
+  "preferences.fields.auto_play_gif.label": "Auto-play animated GIFs",
   "preferences.fields.autoload_more.label": "Automatically load more items when scrolled to the bottom of the page",
   "preferences.fields.autoload_timelines.label": "Automatically load new posts when scrolled to the top of the page",
   "preferences.fields.autosave_drafts": "Automatically save posts as drafts while composing",

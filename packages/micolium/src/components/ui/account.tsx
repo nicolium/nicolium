@@ -5,11 +5,11 @@ import {
   useTheme,
   type TouchableRippleProps,
 } from '@mkljczk/react-native-paper';
-import { Image } from 'expo-image';
 import React from 'react';
 import { type GestureResponderEvent, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import RelativeTimestamp from '@/components/relative-timestamp';
+import { StillImage } from '@/components/still-image';
 
 import { Emojify } from './emojify';
 
@@ -35,6 +35,7 @@ const MaybeLink = ({
 interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   id?: string;
   avatarSrc?: string;
+  avatarStaticSrc?: string;
   avatarDescription?: string;
   displayName: string;
   displayNameDetail?: string;
@@ -50,6 +51,7 @@ interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
 const UIAccount: React.FC<IUIAccount> = ({
   id,
   avatarSrc,
+  avatarStaticSrc,
   avatarDescription,
   displayName,
   displayNameDetail,
@@ -70,8 +72,9 @@ const UIAccount: React.FC<IUIAccount> = ({
       <View style={{ position: 'relative' }}>
         <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
           {avatarSrc ? (
-            <Image
-              source={{ uri: avatarSrc }}
+            <StillImage
+              src={avatarSrc}
+              staticSrc={avatarStaticSrc}
               accessibilityLabel={avatarDescription}
               style={{
                 height: 40,

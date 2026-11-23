@@ -2,6 +2,7 @@ import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, ScrollView } from 'react-native';
+import { useReducedMotion } from 'react-native-reanimated';
 
 import { type IListSections, List } from '@/components/ui/list';
 import { useSetting, useSettingsActions } from '@/stores/settings';
@@ -10,6 +11,10 @@ import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const messages = defineMessages({
+  autoPlayGif: {
+    id: 'preferences.fields.auto_play_gif.label',
+    defaultMessage: 'Auto-play animated GIFs',
+  },
   blackMode: {
     id: 'preferences.appearance.black_mode',
     defaultMessage: 'Use black color for the background in dark mode',
@@ -39,6 +44,8 @@ const messages = defineMessages({
 const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'appearance'>) => {
   const intl = useIntl();
   const glassEffect = isGlassEffectAPIAvailable();
+  const reducedMotion = useReducedMotion();
+  console.log({ reducedMotion });
 
   const { update } = useSettingsActions();
 
@@ -47,6 +54,7 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   const black = useSetting('appearance.black');
   const contrast = useSetting('appearance.contrast');
   const useHeartIconForFavourites = useSetting('appearance.useHeartIconForFavourites');
+  const autoPlayGif = useSetting('appearance.autoPlayGif');
 
   const listSections = React.useMemo(() => {
     const section: IListSections[number] = {
@@ -96,6 +104,13 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
         items: [
           {
             type: 'toggle',
+            label: intl.formatMessage(messages.autoPlayGif),
+            active: autoPlayGif,
+            onPress: () => update('appearance.autoPlayGif', !autoPlayGif),
+            disabled: reducedMotion,
+          },
+          {
+            type: 'toggle',
             label: intl.formatMessage(messages.useHeartIconForFavourites),
             active: useHeartIconForFavourites,
             onPress: () =>
@@ -104,7 +119,16 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
         ],
       },
     ] as IListSections;
-  }, [black, contrast, sourceColor, glassEffect, enableLiquidGlass, useHeartIconForFavourites]);
+  }, [
+    black,
+    contrast,
+    sourceColor,
+    glassEffect,
+    enableLiquidGlass,
+    useHeartIconForFavourites,
+    autoPlayGif,
+    reducedMotion,
+  ]);
 
   return (
     <ScrollView>

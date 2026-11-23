@@ -1,18 +1,21 @@
-import { Image } from 'expo-image';
 import React from 'react';
 import { Text } from 'react-native';
 
+import { StillImage } from '@/components/still-image';
+
 interface IEmoji {
   url?: string;
+  staticUrl?: string;
   shortcode?: string;
   emoji: string;
   size?: number;
 }
 
-const Emoji: React.FC<IEmoji> = ({ emoji, url, shortcode, size = 24 }) =>
+const Emoji: React.FC<IEmoji> = ({ emoji, url, staticUrl, shortcode, size = 24 }) =>
   url ? (
-    <Image
-      source={{ uri: url }}
+    <StillImage
+      src={url}
+      staticSrc={staticUrl}
       accessibilityLabel={shortcode || emoji}
       style={{ width: size, height: size, objectFit: 'contain' }}
     />

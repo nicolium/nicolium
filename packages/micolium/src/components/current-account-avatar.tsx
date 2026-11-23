@@ -1,8 +1,8 @@
 import { Avatar } from '@mkljczk/react-native-paper';
-import { Image } from 'expo-image';
 import { UserIcon } from 'phosphor-react-native/src/icons/User';
 import React from 'react';
 
+import { StillImage } from '@/components/still-image';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 
 import { iconHelper } from './ui/icon';
@@ -21,8 +21,9 @@ const CurrentAccountAvatar: React.FC<ICurrentAccountAvatar> = ({ size = 24 }) =>
         label={(currentAccount.display_name || currentAccount.acct).slice(0, 2)}
       />
     ) : (
-      <Image
-        source={{ uri: currentAccount.avatar }}
+      <StillImage
+        src={currentAccount.avatar}
+        staticSrc={currentAccount.avatar_static}
         accessibilityLabel={currentAccount.avatar_description}
         style={{
           height: size,

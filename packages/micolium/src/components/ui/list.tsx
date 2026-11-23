@@ -3,7 +3,7 @@ import {
   Host as SwiftUIHost,
   Toggle as SwiftUIToggle,
 } from '@expo/ui/swift-ui';
-import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
+import { disabled, labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { Icon, List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
 import { CaretRightIcon } from 'phosphor-react-native/src/icons/CaretRight';
@@ -166,7 +166,9 @@ const List: React.FC<IList> = ({ sections, style, colorVariant }) => {
                             isOn={item.active}
                             onIsOnChange={item.onPress}
                             label={item.label}
-                            modifiers={[labelsHidden()]}
+                            modifiers={[labelsHidden(), item.disabled ? disabled() : false].filter(
+                              (value) => value,
+                            )}
                           />
                         </SwiftUIHost>
                       </Pressable>

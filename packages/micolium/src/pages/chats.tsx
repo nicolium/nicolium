@@ -13,7 +13,6 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
-import { Image } from 'expo-image';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -21,6 +20,7 @@ import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import RelativeTimestamp from '@/components/relative-timestamp';
+import { StillImage } from '@/components/still-image';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { Header } from '@/components/ui/header';
@@ -54,8 +54,9 @@ const Chat: React.FC<IChat> = ({ chat }) => {
       >
         <View style={{ position: 'relative' }}>
           {chat.account.avatar ? (
-            <Image
-              source={{ uri: chat.account.avatar }}
+            <StillImage
+              src={chat.account.avatar}
+              staticSrc={chat.account.avatar_static}
               accessibilityLabel={chat.account.avatar_description}
               style={{
                 height: 40,

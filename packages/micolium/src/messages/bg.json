@@ -276,6 +276,7 @@
   "poll.vote": "Гласуване",
   "poll_button.add_poll": "Добавяне на анкета",
   "poll_button.remove_poll": "Премахване на анкетата",
+  "preferences.fields.auto_play_gif.label": "Автоматично възпроизвеждане на анимирани GIF файлове",
   "preferences.fields.autoload_more.label": "Автоматично зареждане на повече елементи при превъртане до края на страницата",
   "preferences.fields.autoload_timelines.label": "Автоматично зареждане на нови публикации при превъртане до върха на страницата",
   "preferences.fields.boost_modal.label": "Запитване за потвърждение преди препубликуване",

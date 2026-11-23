@@ -244,6 +244,7 @@
   "poll.vote": "投票",
   "poll_button.add_poll": "發起投票",
   "poll_button.remove_poll": "移除投票",
+  "preferences.fields.auto_play_gif.label": "自動播放GIF",
   "preferences.fields.autoload_more.label": "滾動至時間軸底部自動載入更多貼文",
   "preferences.fields.autoload_timelines.label": "滾動至時間軸頂部自動載入更多新貼文",
   "preferences.fields.boost_modal.label": "轉發前顯示確認提示",

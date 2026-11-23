@@ -235,6 +235,7 @@
   "poll.vote": "Vote",
   "poll_button.add_poll": "Legg til en meningsmåling",
   "poll_button.remove_poll": "Fjern avstemning",
+  "preferences.fields.auto_play_gif.label": "Spill av animerte GIF-er automatisk",
   "preferences.fields.autoload_more.label": "Last automatisk inn flere elementer når du ruller til bunnen av siden",
   "preferences.fields.autoload_timelines.label": "Last automatisk inn nye innlegg når de rulles til toppen av sidenge",
   "preferences.fields.boost_modal.label": "Vis bekreftelsesdialog før du reposter",

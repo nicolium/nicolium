@@ -244,6 +244,7 @@
   "poll.vote": "تصويت",
   "poll_button.add_poll": "إضافة إستبيان",
   "poll_button.remove_poll": "إزالة الإستبيان",
+  "preferences.fields.auto_play_gif.label": "تشغيل صور GIF بشكل تلقائي",
   "preferences.fields.autoload_more.label": "تحميل منشورات إضافية عند الوصول لنهاية الصفحة",
   "preferences.fields.autoload_timelines.label": "تحميل منشورات جديدة عند السحب لاعلى الصفحة",
   "preferences.fields.boost_modal.label": "أظهار إشعار لتأكيد المشاركة قبل التنفيذ",

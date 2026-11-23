@@ -1,9 +1,9 @@
 import { Chip } from '@mkljczk/react-native-paper';
-import { Image } from 'expo-image';
 import { TagIcon } from 'phosphor-react-native/src/icons/Tag';
 import React from 'react';
 import { ScrollView } from 'react-native';
 
+import { StillImage } from '@/components/still-image';
 import { useComposeSuggestions, type Suggestion } from '@/hooks/use-compose-suggestions';
 import { useAccount } from '@/queries/accounts/use-account';
 
@@ -51,8 +51,9 @@ const ComposeAccountSuggestion: React.FC<IComposeAccountSuggestion> = ({ account
     <Chip
       mode='outlined'
       icon={() => (
-        <Image
-          source={{ uri: account.avatar }}
+        <StillImage
+          src={account.avatar}
+          staticSrc={account.avatar_static}
           accessibilityLabel={account.avatar_description}
           style={{
             height: 20,

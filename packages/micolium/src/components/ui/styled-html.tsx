@@ -104,7 +104,14 @@ interface IEmoji {
 const Emoji: React.FC<IEmoji> = ({ tnode }) => {
   const size = tnode.getNativeStyles().lineHeight;
 
-  return <EmojiComponent emoji={tnode.attributes.title} url={tnode.attributes.src} size={size} />;
+  return (
+    <EmojiComponent
+      emoji={tnode.attributes.title}
+      url={tnode.attributes.src}
+      staticUrl={tnode.attributes['static-src']}
+      size={size}
+    />
+  );
 };
 
 interface IPartialAccountLink {
@@ -332,7 +339,8 @@ const StyledHtml: React.FC<IStyledHtml> = ({
                   text = '';
                   nodes.push(
                     new Element('emoji', {
-                      src: emoji.static_url,
+                      src: emoji.url,
+                      'static-src': emoji.static_url,
                       title: stack,
                     }),
                   );

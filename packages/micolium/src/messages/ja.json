@@ -232,6 +232,7 @@
   "poll.vote": "投票",
   "poll_button.add_poll": "アンケートを追加",
   "poll_button.remove_poll": "アンケートを削除",
+  "preferences.fields.auto_play_gif.label": "アニメGIFを自動再生する",
   "preferences.fields.autoload_more.label": "ページの最下部まで行くと自動で追加の要素を読み込む",
   "preferences.fields.autoload_timelines.label": "ページの最上部までスクロールすると自動で新しい投稿を読み込む",
   "preferences.fields.boost_modal.label": "リピートする前に確認ダイアログを表示する",

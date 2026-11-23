@@ -140,6 +140,7 @@
   "poll.vote": "Votar",
   "poll_button.add_poll": "Afegeix una enquesta",
   "poll_button.remove_poll": "Elimina l'enquesta",
+  "preferences.fields.auto_play_gif.label": "Reprodueix automàticament els GIF animats",
   "preferences.fields.boost_modal.label": "Mostra el diàleg de confirmació abans de tornar a publicar",
   "preferences.fields.content_type.label": "Default post format",
   "preferences.fields.display_media.default": "Amaga les imatges marcades com a sensibles",

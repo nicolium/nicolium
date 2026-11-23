@@ -64,7 +64,7 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
   const { closeEmojiPicker } = useUiStoreActions();
 
   const renderEmoji = (emoji: CustomEmoji) => (
-    <EmojiComponent emoji={emoji.shortcode} url={emoji.url} />
+    <EmojiComponent emoji={emoji.shortcode} url={emoji.url} staticUrl={emoji.static_url} />
   );
 
   const renderedEmojis = React.useMemo(

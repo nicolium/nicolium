@@ -244,6 +244,7 @@
   "poll.vote": "Oy ver",
   "poll_button.add_poll": "Bir anket ekleyin",
   "poll_button.remove_poll": "Anket kaldır",
+  "preferences.fields.auto_play_gif.label": "Animasyonlu GIF'leri otomatik oynat",
   "preferences.fields.autoload_more.label": "Sayfanın en altına kaydırıldığında otomatik olarak daha fazla öğe yükle",
   "preferences.fields.autoload_timelines.label": "Sayfanın en üstüne kaydırıldığında yeni gönderileri otomatik olarak yükle",
   "preferences.fields.boost_modal.label": "Yeniden göndermeden önce onay iletişim kutusunu göster",
