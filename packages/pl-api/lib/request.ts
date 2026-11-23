@@ -25,15 +25,34 @@ type Response<T = any> = {
   @returns {object} Link object
   */
 const getLinks = (
-  response: Pick<Response, 'headers'>,
+  response: Pick<Response, 'headers' | 'url'>,
 ): { next: string | null; prev: string | null } => {
   const headers = response.headers?.get('link');
   const linkHeader = (headers && new LinkHeader(headers)) || null;
 
-  return {
-    next: linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'next')?.uri || null,
-    prev: linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'prev')?.uri || null,
-  };
+  let next = linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'next')?.uri || null;
+  let prev = linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'prev')?.uri || null;
+
+  try {
+    const omittedParams = ['max_id', 'since_id', 'limit', 'min_id', 'offset'];
+    const previousParams = [...new URL(response.url).searchParams.entries()].filter(
+      ([key]) => !omittedParams.includes(key),
+    );
+
+    const withPreviousParams = (link: string) => {
+      const url = new URL(link);
+      url.search = new URLSearchParams([
+        ...previousParams.filter(([key]) => !url.searchParams.has(key)),
+        ...url.searchParams.entries(),
+      ]).toString();
+      return url.href;
+    };
+
+    if (next) next = withPreviousParams(next);
+    if (prev) prev = withPreviousParams(prev);
+  } catch {}
+
+  return { next, prev };
 };
 
 interface AsyncRefreshHeader {
