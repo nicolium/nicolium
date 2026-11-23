@@ -56,6 +56,7 @@ if (Platform.OS === 'ios') {
     const unreadCount = useNotificationsUnreadCount();
     const { openAccountSwitcher, openCompose } = useUiStoreActions();
     const { width } = useWindowDimensions();
+    const tabBarLabels = useSetting('appearance.tabBarLabels');
 
     return (
       <Tab.Navigator
@@ -72,7 +73,7 @@ if (Platform.OS === 'ios') {
           name='timeline'
           component={HomeStackScreen}
           options={{
-            tabBarLabel: intl.formatMessage(messages.home),
+            tabBarLabel: tabBarLabels ? intl.formatMessage(messages.home) : '',
             tabBarIcon: {
               type: 'sfSymbol',
               name: 'house.fill',
@@ -83,7 +84,7 @@ if (Platform.OS === 'ios') {
           name='search'
           component={SearchScreen}
           options={{
-            tabBarLabel: intl.formatMessage(messages.search),
+            tabBarLabel: tabBarLabels ? intl.formatMessage(messages.search) : '',
             tabBarIcon: {
               type: 'sfSymbol',
               name: 'magnifyingglass',
@@ -94,7 +95,7 @@ if (Platform.OS === 'ios') {
           name='notifications'
           component={NotificationsStackScreen}
           options={{
-            tabBarLabel: intl.formatMessage(messages.notifications),
+            tabBarLabel: tabBarLabels ? intl.formatMessage(messages.notifications) : '',
             tabBarIcon: {
               type: 'sfSymbol',
               name: 'bell.fill',
@@ -107,7 +108,7 @@ if (Platform.OS === 'ios') {
             name='chats'
             component={ChatsStackScreen}
             options={{
-              tabBarLabel: intl.formatMessage(messages.chats),
+              tabBarLabel: tabBarLabels ? intl.formatMessage(messages.chats) : '',
               tabBarIcon: {
                 type: 'sfSymbol',
                 name: 'bubble.left.and.bubble.right',
@@ -120,7 +121,7 @@ if (Platform.OS === 'ios') {
           name='profile'
           component={ProfileStackScreen}
           options={{
-            tabBarLabel: intl.formatMessage(messages.profile),
+            tabBarLabel: tabBarLabels ? intl.formatMessage(messages.profile) : '',
             tabBarIcon: {
               type: 'sfSymbol',
               name: 'person.fill',
@@ -143,7 +144,7 @@ if (Platform.OS === 'ios') {
             name='compose'
             component={EmptyComponent}
             options={{
-              tabBarLabel: intl.formatMessage(messages.compose),
+              tabBarLabel: tabBarLabels ? intl.formatMessage(messages.compose) : '',
               tabBarIcon: { type: 'sfSymbol', name: 'square.and.pencil' },
               tabBarSelectionEnabled: false,
             }}
@@ -159,6 +160,7 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
   const { colors } = useTheme();
   const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
+  const tabBarLabels = useSetting('appearance.tabBarLabels');
 
   const insets = useSafeAreaInsets();
   const { openAccountSwitcher } = useUiStoreActions();
@@ -223,6 +225,7 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
           borderTopColor: colors.surfaceContainerHighest,
         }
       }
+      labeled={tabBarLabels}
     />
   );
 };

@@ -72,6 +72,7 @@ const settingsSchema = v.object({
   'appearance.contrast': v.fallback(v.picklist(['standard', 'medium', 'high']), 'standard'),
   'appearance.enableLiquidGlass': v.optional(v.boolean(), true),
   'appearance.sourceColor': v.optional(v.string(), '#6750A4'),
+  'appearance.tabBarLabels': v.optional(v.boolean(), true),
   'appearance.useHeartIconForFavourites': v.optional(v.boolean(), false),
 
   'general.useInAppBrowser': v.optional(v.boolean(), false),

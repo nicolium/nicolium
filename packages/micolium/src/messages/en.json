@@ -748,6 +748,7 @@
   "preferences.fields.prepend_re_to_spoilers.label": "Prepend RE: to content warning when replying",
   "preferences.fields.preserve_spoilers.label": "Preserve content warning when replying",
   "preferences.fields.privacy.label": "Default post privacy for new posts",
+  "preferences.fields.tab_bar_labels": "Display labels in the navigation bar",
   "preferences.fields.use_heart_icon_for_favourites.label.short": "Use heart icon for likes",
   "preferences.fields.web_include_boosts.label": "Include reposts in web view",
   "preferences.fields.web_layout.label": "Layout of the web view of your profile",

@@ -40,6 +40,10 @@ const messages = defineMessages({
     id: 'preferences.fields.use_heart_icon_for_favourites.label.short',
     defaultMessage: 'Use heart icon for likes',
   },
+  tabBarLabels: {
+    id: 'preferences.fields.tab_bar_labels',
+    defaultMessage: 'Display labels in the navigation bar',
+  },
 });
 const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'appearance'>) => {
   const intl = useIntl();
@@ -54,6 +58,7 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   const contrast = useSetting('appearance.contrast');
   const useHeartIconForFavourites = useSetting('appearance.useHeartIconForFavourites');
   const autoPlayGif = useSetting('appearance.autoPlayGif');
+  const tabBarLabels = useSetting('appearance.tabBarLabels');
 
   const listSections = React.useMemo(() => {
     const section: IListSections[number] = {
@@ -97,6 +102,13 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
       });
     }
 
+    section.items.push({
+      type: 'toggle',
+      label: intl.formatMessage(messages.tabBarLabels),
+      active: tabBarLabels,
+      onPress: () => update('appearance.tabBarLabels', !tabBarLabels),
+    });
+
     return [
       section,
       {
@@ -124,6 +136,7 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
     sourceColor,
     glassEffect,
     enableLiquidGlass,
+    tabBarLabels,
     useHeartIconForFavourites,
     autoPlayGif,
     reducedMotion,
