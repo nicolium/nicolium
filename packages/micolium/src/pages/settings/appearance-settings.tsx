@@ -45,7 +45,6 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   const intl = useIntl();
   const glassEffect = isGlassEffectAPIAvailable();
   const reducedMotion = useReducedMotion();
-  console.log({ reducedMotion });
 
   const { update } = useSettingsActions();
 
