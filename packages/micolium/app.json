@@ -11,6 +11,7 @@
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "app.nicolium.micolium",
       "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
         "ITSAppUsesNonExemptEncryption": false
       },
       "appleTeamId": "28NDJH3G7W",
@@ -36,7 +37,12 @@
     },
     "plugins": [
       "expo-image",
-      "expo-secure-store",
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": false
+        }
+      ],
       "expo-splash-screen",
       "expo-video",
       [
@@ -211,12 +217,23 @@
       "expo-asset",
       "expo-font",
       "expo-status-bar",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "micolium needs access to your photos to attach them to posts and set your avatar or header.",
+          "cameraPermission": "$(PRODUCT_NAME) needs access to your camera to take photos for posts.",
+          "microphonePermission": "micolium needs access to your microphone to record videos with sound."
+        }
+      ]
     ],
     "extra": {
       "eas": {
         "projectId": "b848f0e7-82c2-441b-bd09-2afcf86415f1"
       }
+    },
+    "locales": {
+      "pl": "./src/messages/expo/pl.json"
     }
   }
 }

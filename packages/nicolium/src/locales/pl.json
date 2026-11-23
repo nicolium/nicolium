@@ -1361,7 +1361,6 @@
   "edit_federation.success": "Zaktualizowano federację {host}",
   "edit_federation.unlisted": "Wymuś oznaczanie wpisów jako niewidoczne",
   "edit_password.header": "Zmień hasło",
-  "textarea.counter.label": "{count, plural, one {Pozostał # znak} few {Pozostały # znaki} other {Pozostało # znaków}}",
   "edit_profile.error": "Aktualizacja profilu nie powiodła się",
   "edit_profile.fields.bio.label": "Opis",
   "edit_profile.fields.bio.placeholder": "Powiedz nam coś o sobie.",

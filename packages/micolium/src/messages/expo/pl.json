@@ -1,0 +1,7 @@
+{
+  "ios": {
+    "NSPhotoLibraryUsageDescription": "micolium wymaga dostępu do Twoich zdjęć, aby załączyć je we wpisie lub ustawić je jako awatar lub zdjęcie nagłówka.",
+    "NSCameraUsageDescription": "micolium wymaga dostępu do aparatu, aby wykonywać zdjęcia do wpisów.",
+    "NSMicrophoneUsageDescription": "micolium wymaga dostępu do mikrofonu, aby nagrywać wideo z dźwiękiem."
+  }
+}
