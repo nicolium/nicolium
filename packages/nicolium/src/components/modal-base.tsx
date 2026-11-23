@@ -183,6 +183,7 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
           params: (prev) => prev,
           search: (prev) => prev,
           state: (prev) => ({ ...prev, modalIndex: index + 1 }),
+          resetScroll: false,
         });
       });
     } else if (router.state.location.state.modalIndex > modalIndex) {
