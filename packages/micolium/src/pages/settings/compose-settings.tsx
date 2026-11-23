@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ScrollView } from 'react-native';
 
+import { languages } from '@/components/compose/compose-language-dropdown';
 import { type IListSections, List } from '@/components/ui/list';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useSetting, useSettingsActions } from '@/stores/settings';
@@ -32,6 +33,18 @@ const messages = defineMessages({
   defaultContentType: {
     id: 'preferences.fields.content_type.label',
     defaultMessage: 'Default content type for new posts',
+  },
+  detectLanguage: {
+    id: 'preferences.fields.detect_language.label',
+    defaultMessage: 'Detect post language automatically',
+  },
+  defaultLanguage: {
+    id: 'preferences.fields.default_post_language.label',
+    defaultMessage: 'Default post language',
+  },
+  defaultLanguageUnset: {
+    id: 'preferences.fields.default_post_language.unset',
+    defaultMessage: 'No default language',
   },
   autosaveDrafts: {
     id: 'preferences.fields.autosave_drafts',
@@ -76,6 +89,7 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
   const autosaveDrafts = useSetting('compose.autosaveDrafts');
   const defaultPrivacy = useSetting('compose.defaultPrivacy');
   const defaultContentType = useSetting('compose.defaultContentType');
+  const defaultLanguage = useSetting('compose.defaultLanguage');
   const forceImplicitAddressing = useSetting('compose.forceImplicitAddressing');
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
   const missingLanguageModal = useSetting('compose.missingLanguageModal');
@@ -132,6 +146,29 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
         onChange: (value) => update('compose.defaultContentType', value),
         options: contentTypes,
       });
+    }
+
+    if (features.postLanguages) {
+      section.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.detectLanguage),
+        active: defaultLanguage === 'detect',
+        onPress: () =>
+          update('compose.defaultLanguage', defaultLanguage === 'detect' ? '' : 'detect'),
+      });
+
+      if (defaultLanguage !== 'detect') {
+        section.items.push({
+          type: 'select',
+          label: intl.formatMessage(messages.defaultLanguage),
+          active: defaultLanguage,
+          onChange: (value) => update('compose.defaultLanguage', value),
+          options: [
+            { value: '', label: intl.formatMessage(messages.defaultLanguageUnset) },
+            ...languages.map(([code, nativeName]) => ({ value: code, label: nativeName })),
+          ],
+        });
+      }
     }
 
     section.items.push({
@@ -199,6 +236,7 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
     autosaveDrafts,
     defaultPrivacy,
     defaultContentType,
+    defaultLanguage,
     forceImplicitAddressing,
     missingDescriptionModal,
     missingLanguageModal,

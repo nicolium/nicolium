@@ -342,4 +342,4 @@ const ComposeLanguageDropdown: React.FC<ICompose> = ({ composeId }) => {
   );
 };
 
-export { ComposeLanguageDropdown };
+export { ComposeLanguageDropdown, languages };

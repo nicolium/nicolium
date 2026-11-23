@@ -1,8 +1,10 @@
+import { guessLanguageAsync } from '@bsky.app/expo-guess-language';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, Card, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { DragDropContentView, type DragDropContentViewProps } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
 import { TextInputWrapper } from 'expo-paste-input';
+import { debounce } from 'lodash-es';
 import KeyboardOffIcon from 'lucide-react-native/icons/keyboard-off';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
@@ -495,11 +497,12 @@ const ComposeBody: React.FC<IComposeBody> = ({
   const { bottom: bottomInset } = useSafeAreaInsets();
   const features = useFeatures();
   const compose = useCompose(COMPOSE_ID);
-  const { updateCompose } = useComposeActions();
+  const { getCompose, updateCompose } = useComposeActions();
   const uploadCompose = useUploadCompose(COMPOSE_ID);
   const { configuration } = useInstance();
   const { data: currentAccountId } = useCredentialAccountId();
   const { text, spoilerText } = useComposeText();
+  const defaultLanguage = useSetting('compose.defaultLanguage');
 
   const checkSuggestionToken = (field: SuggestionField) => {
     const [tokenStart, token] = textAtCursorMatchesToken(
@@ -520,9 +523,39 @@ const ComposeBody: React.FC<IComposeBody> = ({
     }
   };
 
+  const detectLanguage = React.useCallback(
+    debounce((text: string) => {
+      const compose = getCompose(COMPOSE_ID);
+
+      if (
+        !features.postLanguages ||
+        features.languageDetection ||
+        compose?.language ||
+        defaultLanguage !== 'detect'
+      )
+        return;
+
+      const wordsLength = text.split(/\s+/).length;
+
+      if (wordsLength < 4) return;
+
+      guessLanguageAsync(text, { maxResults: 1 })
+        .then(([result]) => {
+          if (result && result.confidence > 0.5) {
+            updateCompose(COMPOSE_ID, (draft) => {
+              draft.suggestedLanguage = result.language.split('-')[0];
+            });
+          }
+        })
+        .catch(() => {});
+    }, 750),
+    [defaultLanguage],
+  );
+
   const handleChangeText = (text: string) => {
     textRefs.text.current = text;
     checkSuggestionToken('text');
+    detectLanguage(text);
 
     updateCompose(COMPOSE_ID, (draft) => {
       if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {

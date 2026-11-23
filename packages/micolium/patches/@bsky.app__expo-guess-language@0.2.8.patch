@@ -1,0 +1,63 @@
+diff --git a/android/build.gradle b/android/build.gradle
+deleted file mode 100644
+index b165061e4bfe89ef87ab3ad4b4af50f3aa2c08f3..0000000000000000000000000000000000000000
+diff --git a/android/src/main/AndroidManifest.xml b/android/src/main/AndroidManifest.xml
+deleted file mode 100644
+index bdae66c8f5a82773eaadc8f7befc05437e27cf25..0000000000000000000000000000000000000000
+diff --git a/android/src/main/java/expo/modules/expoguesslanguage/ExpoGuessLanguageModule.kt b/android/src/main/java/expo/modules/expoguesslanguage/ExpoGuessLanguageModule.kt
+deleted file mode 100644
+index 3e7b3dda28b283f3ac51ab76ff0f148c73d5dba9..0000000000000000000000000000000000000000
+diff --git a/build/module.android.js b/build/module.android.js
+index c3fdaa12894114547367adb5388760b9371d14cd..93614c10321dfbdc4284a47170bd38ba27fe73d7 100644
+--- a/build/module.android.js
++++ b/build/module.android.js
+@@ -1,11 +1,6 @@
+-import ExpoGuessLanguageModule from "./ExpoGuessLanguageModule";
+ import { detectWithLande } from "./lande-detect";
+ export function guessLanguageAsync(text, options) {
+-    const maxResults = options?.maxResults ?? 10;
+-    if (ExpoGuessLanguageModule.isNativeAvailable) {
+-        return ExpoGuessLanguageModule.guessLanguageAsync(text, maxResults);
+-    }
+-    return Promise.resolve(detectWithLande(text, maxResults));
++    return Promise.resolve(detectWithLande(text, options?.maxResults ?? 10));
+ }
+ export function guessLanguageSync(text, options) {
+     return detectWithLande(text, options?.maxResults ?? 10);
+diff --git a/expo-module.config.json b/expo-module.config.json
+index 72e93952c456570509d0833ad4cdbb9d115c2722..08aa4d29d4581efdcc7f1de7b4829fec9aa9aa27 100644
+--- a/expo-module.config.json
++++ b/expo-module.config.json
+@@ -1,9 +1,6 @@
+ {
+-  "platforms": ["apple", "android", "web"],
++  "platforms": ["apple", "web"],
+   "apple": {
+     "modules": ["ExpoGuessLanguageModule"]
+-  },
+-  "android": {
+-    "modules": ["expo.modules.expoguesslanguage.ExpoGuessLanguageModule"]
+   }
+ }
+diff --git a/src/module.android.ts b/src/module.android.ts
+index 2582491e9d9edb9948eb4d6a4b1ab68791c04c45..f00becc637b9a2eebc69e7cdbe32569dea87d689 100644
+--- a/src/module.android.ts
++++ b/src/module.android.ts
+@@ -1,4 +1,3 @@
+-import ExpoGuessLanguageModule from "./ExpoGuessLanguageModule";
+ import { detectWithLande } from "./lande-detect";
+ 
+ import type {
+@@ -15,11 +14,7 @@ export function guessLanguageAsync(
+   text: string,
+   options?: GuessLanguageOptions,
+ ): Promise<LanguageResult[]> {
+-  const maxResults = options?.maxResults ?? 10;
+-  if (ExpoGuessLanguageModule.isNativeAvailable) {
+-    return ExpoGuessLanguageModule.guessLanguageAsync(text, maxResults);
+-  }
+-  return Promise.resolve(detectWithLande(text, maxResults));
++  return Promise.resolve(detectWithLande(text, options?.maxResults ?? 10));
+ }
+ 
+ export function guessLanguageSync(
