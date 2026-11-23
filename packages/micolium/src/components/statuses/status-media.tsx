@@ -210,7 +210,7 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media, compact, language }) => {
   }
 
   return (
-    <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>
+    <View style={{ flex: 1 }} onStartShouldSetResponder={() => !compact}>
       {active ? (
         <StatusVideoPlayer media={media} language={language} />
       ) : (

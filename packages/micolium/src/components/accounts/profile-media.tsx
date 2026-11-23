@@ -49,6 +49,7 @@ const ProfileMediaItem: React.FC<IProfileMediaItem> = ({ item }) => {
     const media = queryClient.getQueryData(
       scopedQueryKey(queryKeys.statuses.show(item.status_id), scopeUrl),
     )?.media_attachments;
+    console.log(media)
 
     return openMediaViewer(media || [], item.index, item.status_id);
   };

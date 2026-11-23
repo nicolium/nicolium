@@ -67,6 +67,8 @@ interface IMediaViewerVideo {
 }
 
 const MediaViewerVideo: React.FC<IMediaViewerVideo> = ({ media, loop }) => {
+  const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
+
   const player = useVideoPlayer(media.url, (player) => {
     player.loop = loop;
     player.muted = loop;
@@ -76,7 +78,7 @@ const MediaViewerVideo: React.FC<IMediaViewerVideo> = ({ media, loop }) => {
   return (
     <VideoView
       player={player}
-      style={{ flex: 1 }}
+      style={{ flex: 1, marginTop: 36 + topInset, marginBottom: 48 + bottomInset }}
       contentFit='contain'
       nativeControls={!loop}
       surfaceType='textureView'
@@ -241,11 +243,15 @@ const MediaViewer: React.FC = () => {
             maxScale={5}
             doubleTapScale={2.5}
             onSwipeToClose={closeMediaViewer}
-            onTap={() => setShowDetails((value) => !value)}
+            onTap={
+              media[index]?.type === 'image' ? () => setShowDetails((value) => !value) : undefined
+            }
             style={{ backgroundColor: '#000' }}
+            pinchEnabled={media[index]?.type === 'image'}
+            doubleTapEnabled={media[index]?.type === 'image'}
           />
         )}
-        {showDetails && (
+        {(media[index]?.type !== 'image' || showDetails) && (
           <>
             <LinearGradient
               colors={['rgba(0,0,0,0.6)', 'transparent']}
@@ -293,7 +299,7 @@ const MediaViewer: React.FC = () => {
                 accessibilityLabel={intl.formatMessage(messages.share)}
               />
             </LinearGradient>
-            {current?.description || mediaViewer?.statusId ? (
+            {media[index]?.type === 'image' || current?.description || mediaViewer?.statusId ? (
               <LinearGradient
                 colors={['transparent', 'rgba(0,0,0,0.6)']}
                 style={{
