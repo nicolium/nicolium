@@ -29,6 +29,7 @@ import {
 import { type ColorValue, View } from 'react-native';
 
 import { useInstance } from '@/contexts/current-account-context';
+import { useCompactMode } from '@/hooks/use-compact-mode';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useNotification } from '@/queries/notifications/use-notifications';
 import { useSetting } from '@/stores/settings';
@@ -248,6 +249,7 @@ const Notification: React.FC<INotification> = (props) => {
   const intl = useIntl();
   const instance = useInstance();
   const { colors } = useTheme();
+  const compactMode = useCompactMode();
 
   const { data: currentAccountId } = useCredentialAccountId();
   const useHeartIconForFavourites = useSetting('appearance.useHeartIconForFavourites');
@@ -281,7 +283,13 @@ const Notification: React.FC<INotification> = (props) => {
   const renderContent = () => {
     if (notification.type === 'bite' && status) {
       return (
-        <Status id={status.id} withLink compact context='notifications' style={{ padding: 0 }} />
+        <Status
+          id={status.id}
+          withLink
+          compact
+          context='notifications'
+          style={{ paddingHorizontal: 0, paddingVertical: 0 }}
+        />
       );
     }
 
@@ -316,7 +324,13 @@ const Notification: React.FC<INotification> = (props) => {
       case 'quoted_update':
       case 'subscribed_reaction':
         return status ? (
-          <Status id={status.id} withLink compact context='notifications' style={{ padding: 0 }} />
+          <Status
+            id={status.id}
+            withLink
+            compact
+            context='notifications'
+            style={{ paddingHorizontal: 0, paddingVertical: 0 }}
+          />
         ) : null;
       default:
         return null;
@@ -353,7 +367,8 @@ const Notification: React.FC<INotification> = (props) => {
   return (
     <View
       style={{
-        padding: 16,
+        paddingHorizontal: compactMode ? 12 : 16,
+        paddingVertical: compactMode ? 12 : 16,
         gap: 8,
         backgroundColor: props.unread ? unreadBackgroundColor : undefined,
       }}

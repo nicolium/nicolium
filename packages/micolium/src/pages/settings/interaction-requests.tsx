@@ -18,6 +18,7 @@ import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';
+import { useCompactMode } from '@/hooks/use-compact-mode';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
   type MinifiedInteractionRequest,
@@ -82,6 +83,7 @@ interface IInteractionRequest {
 const InteractionRequest: React.FC<IInteractionRequest> = ({ interactionRequest }) => {
   const { colors } = useTheme();
   const intl = useIntl();
+  const compactMode = useCompactMode();
 
   const { data: account } = useAccount(interactionRequest.account_id);
 
@@ -191,7 +193,13 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({ interactionRequest 
   );
 
   return (
-    <View style={{ padding: 16, gap: 8 }}>
+    <View
+      style={{
+        paddingHorizontal: compactMode ? 12 : 16,
+        paddingVertical: compactMode ? 12 : 16,
+        gap: compactMode ? 4 : 8,
+      }}
+    >
       <View
         style={{
           flexDirection: 'row',
@@ -213,7 +221,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({ interactionRequest 
           withLink
           compact
           context='notifications'
-          style={{ padding: 0 }}
+          style={{ paddingHorizontal: 0, paddingVertical: 0 }}
           withActions={false}
           isConnectedBottom={!!interactionRequest.reply_id}
           actions={interactionRequest.reply_id ? undefined : actions}
@@ -224,7 +232,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({ interactionRequest 
           id={interactionRequest.reply_id}
           withLink
           context='notifications'
-          style={{ padding: 0, marginTop: 24 }}
+          style={{ paddingHorizontal: 0, paddingVertical: 0, marginTop: 24 }}
           withActions={false}
           actions={actions}
         />
