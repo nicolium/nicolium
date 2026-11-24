@@ -417,6 +417,14 @@ const EditListMembersDialog: React.FC<IEditListMembersDialog> = ({
             onDismissCreateDialog();
           },
           confirm: true,
+          sheetOnly: true,
+        },
+        {
+          label: intl.formatMessage(messages.close),
+          onPress: () => {
+            setClosing(true);
+          },
+          dialogOnly: true,
         },
       ]}
       title={title}

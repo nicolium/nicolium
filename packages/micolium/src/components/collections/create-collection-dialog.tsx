@@ -384,6 +384,13 @@ const EditCollectionAccountsDialog: React.FC<IEditCollectionAccountsDialog> = ({
           },
           confirm: true,
         },
+        {
+          label: intl.formatMessage(messages.close),
+          onPress: () => {
+            setClosing(true);
+          },
+          dialogOnly: true,
+        },
       ]}
       title={<FormattedMessage id='collections.manage_accounts' defaultMessage='Manage accounts' />}
     >

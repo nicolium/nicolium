@@ -18,6 +18,7 @@ type DialogOrSheetAction = {
   disabled?: boolean;
   loading?: boolean;
   sheetOnly?: boolean;
+  dialogOnly?: boolean;
 };
 
 const GlassActionButton: React.FC<DialogOrSheetAction> = ({
@@ -98,8 +99,12 @@ const Sheet: React.FC<IDialogOrSheet> = ({
     }
   }, [visible]);
 
-  const [firstAction, secondAction] = actions.filter((action) => action === null || action.icon);
-  const remainingActions = actions.filter((action) => action && !action.icon);
+  const filteredActions = actions.filter((action) => !action?.dialogOnly);
+
+  const [firstAction, secondAction] = filteredActions.filter(
+    (action) => action === null || action.icon,
+  );
+  const remainingActions = filteredActions.filter((action) => action && !action.icon);
 
   return (
     <TrueSheet
@@ -154,9 +159,9 @@ const Sheet: React.FC<IDialogOrSheet> = ({
         </View>
       }
       footer={
-        !glassEffect && actions.length ? (
+        !glassEffect && filteredActions.length ? (
           <View style={{ flexDirection: 'row', gap: 8, marginHorizontal: 16, marginTop: 16 }}>
-            {actions.map(
+            {filteredActions.map(
               (action, i) =>
                 action && (
                   <React.Fragment key={i}>
