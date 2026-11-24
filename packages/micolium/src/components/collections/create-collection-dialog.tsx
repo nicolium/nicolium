@@ -373,6 +373,7 @@ const EditCollectionAccountsDialog: React.FC<IEditCollectionAccountsDialog> = ({
           icon: 'arrow.left',
           label: intl.formatMessage(messages.back),
           onPress: () => setClosing(true),
+          sheetOnly: true,
         },
         {
           icon: 'checkmark',

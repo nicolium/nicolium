@@ -41,7 +41,6 @@ const messages = defineMessages({
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
   circles: { id: 'column.circles', defaultMessage: 'Circles' },
-  back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
   noLists: { id: 'column.lists.empty', defaultMessage: 'You have no lists yet.' },
   noAntennas: { id: 'column.antennas.empty', defaultMessage: 'You have no antennas yet.' },
   noCircles: { id: 'column.circles.empty', defaultMessage: 'You have no circles yet.' },

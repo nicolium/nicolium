@@ -407,6 +407,7 @@ const EditListMembersDialog: React.FC<IEditListMembersDialog> = ({
           icon: 'arrow.left',
           label: intl.formatMessage(messages.back),
           onPress: () => setClosing(true),
+          sheetOnly: true,
         },
         {
           icon: 'checkmark',

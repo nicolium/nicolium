@@ -17,6 +17,7 @@ type DialogOrSheetAction = {
   confirm?: boolean;
   disabled?: boolean;
   loading?: boolean;
+  sheetOnly?: boolean;
 };
 
 const GlassActionButton: React.FC<DialogOrSheetAction> = ({
@@ -213,18 +214,21 @@ const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, h
     }
   }, [visible]);
 
+  const displayedActions = actions.filter((action) => !action?.sheetOnly);
+
   return (
     <PaperDialog visible={visible} onDismiss={handleDismiss} style={{ maxHeight: height * 0.8 }}>
       <PaperDialog.Title>{title}</PaperDialog.Title>
       <PaperDialog.ScrollArea>
         <ScrollView>{children}</ScrollView>
       </PaperDialog.ScrollArea>
-      {actions.length > 0 && (
+      {displayedActions.length > 0 && (
         <PaperDialog.Actions>
-          {actions.map(
+          {displayedActions.map(
             (action, i) =>
               action && (
                 <React.Fragment key={i}>
+                  {i === displayedActions.length - 1 && <View style={{ flex: 1 }} />}
                   <Button
                     onPress={action.onPress}
                     loading={action.loading}
@@ -233,7 +237,6 @@ const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, h
                   >
                     {action.label}
                   </Button>
-                  {i === 0 && <View style={{ flex: 1 }} />}
                 </React.Fragment>
               ),
           )}
