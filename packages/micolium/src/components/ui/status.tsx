@@ -3,6 +3,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { View } from 'react-native';
 
+import { useCompactMode } from '@/hooks/use-compact-mode';
+
 import { CollapsibleContent } from './collapsible-content';
 import { Emojify } from './emojify';
 import { StyledHtml } from './styled-html';
@@ -58,6 +60,7 @@ const UIStatus: React.FC<IUIStatus> = ({
   nyaize: shouldNyaize,
   language,
 }) => {
+  const compactMode = useCompactMode();
   const theme = useTheme();
 
   let status;
@@ -91,7 +94,12 @@ const UIStatus: React.FC<IUIStatus> = ({
     );
 
     status = (
-      <View style={[{ flexDirection: 'column', gap: 8 }, isConnectedBottom && { flex: 1 }]}>
+      <View
+        style={[
+          { flexDirection: 'column', gap: compactMode ? 4 : 8 },
+          isConnectedBottom && { flex: 1 },
+        ]}
+      >
         {displayedMentions}
         {!textOnly && spoilerText && (
           <Card
@@ -153,7 +161,13 @@ const UIStatus: React.FC<IUIStatus> = ({
   }
 
   return (
-    <View style={{ flexDirection: 'column', gap: 8, marginBottom: isConnectedBottom ? -16 : 0 }}>
+    <View
+      style={{
+        flexDirection: 'column',
+        gap: compactMode ? 4 : 8,
+        marginBottom: isConnectedBottom ? (compactMode ? -8 : -16) : 0,
+      }}
+    >
       {chip && <View style={{ flexDirection: 'row' }}>{chip}</View>}
       {account}
       {isConnectedBottom ? (
@@ -163,7 +177,7 @@ const UIStatus: React.FC<IUIStatus> = ({
               marginHorizontal: 19,
               width: 2,
               backgroundColor: theme.colors.surfaceContainerHigh,
-              marginBottom: -8,
+              marginBottom: compactMode ? 0 : -8,
               zIndex: 1,
             }}
           ></View>

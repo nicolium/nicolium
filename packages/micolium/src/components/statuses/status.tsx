@@ -12,8 +12,9 @@ import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
 import React from 'react';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { useWindowDimensions, View, type StyleProp, type ViewStyle } from 'react-native';
 
+import { useCompactMode } from '@/hooks/use-compact-mode';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -162,6 +163,7 @@ const Status: React.FC<IStatus> = ({
   actions,
   ...props
 }) => {
+  const compactMode = useCompactMode();
   const intl = useIntl();
 
   const { data: status } = useStatus(id, { withFilteredResults: true });
@@ -386,7 +388,11 @@ const Status: React.FC<IStatus> = ({
         onPress={() => {
           navigation.navigate('status', { screen: 'view', params: { id } });
         }}
-        style={{ padding: 16, ...style }}
+        style={{
+          paddingHorizontal: compactMode ? 12 : 16,
+          paddingVertical: compactMode ? 12 : 16,
+          ...style,
+        }}
         accessible={false}
       >
         {statusBody}
@@ -394,7 +400,17 @@ const Status: React.FC<IStatus> = ({
     );
   }
 
-  return <View style={{ padding: 16, ...style }}>{statusBody}</View>;
+  return (
+    <View
+      style={{
+        paddingHorizontal: compactMode ? 12 : 16,
+        paddingVertical: compactMode ? 12 : 16,
+        ...style,
+      }}
+    >
+      {statusBody}
+    </View>
+  );
 };
 
 export { Status };
