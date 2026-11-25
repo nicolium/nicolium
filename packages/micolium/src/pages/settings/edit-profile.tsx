@@ -43,6 +43,7 @@ import { useClient, useFeatures, useInstance } from '@/contexts/current-account-
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { Alert } from '@/stores/alerts';
 import { useSetting } from '@/stores/settings';
+import { haptics } from '@/utils/haptics';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 import { toast } from '@/utils/toast';
 
@@ -372,6 +373,7 @@ const ProfileField: React.FC<IProfileField> = ({
     minDistance: 0,
     hitSlop: 32,
     onBegin: () => {
+      scheduleOnRN(haptics.longPress);
       activeIndex.value = index;
       dragY.value = 0;
     },

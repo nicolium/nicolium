@@ -24,6 +24,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { useCompose, useComposeActions } from '@/stores/compose';
+import { haptics } from '@/utils/haptics';
 
 import { formatDuration, DURATIONS as TOO_MANY_DURATIONS } from '../accounts/block-mute-dialog';
 import { DropdownMenu } from '../ui/dropdown-menu';
@@ -81,6 +82,7 @@ const Option: React.FC<IOption> = ({
     minDistance: 0,
     hitSlop: 12,
     onBegin: () => {
+      scheduleOnRN(haptics.longPress);
       activeIndex.value = index;
       dragY.value = 0;
     },
