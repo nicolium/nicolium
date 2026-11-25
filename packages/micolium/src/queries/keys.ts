@@ -53,10 +53,12 @@ import type {
   PleromaConfig,
   PleromaConfigDescription,
   Poll,
+  PrivacyPolicy,
   Relationship,
   RssFeed,
   ScheduledStatus,
   Tag,
+  TermsOfService,
   Translation,
   TrendsLink,
 } from 'pl-api';
@@ -539,6 +541,8 @@ const instance = {
   root: ['instance'] as const,
   customEmojis: key<Array<CustomEmoji>>()('instance', 'customEmojis'),
   bubbleDomains: key<Array<string>>()('instance', 'bubbleDomains'),
+  privacyPolicy: key<PrivacyPolicy>()('instance', 'privacyPolicy'),
+  termsOfService: key<TermsOfService>()('instance', 'termsOfService'),
 };
 
 const frontend = {

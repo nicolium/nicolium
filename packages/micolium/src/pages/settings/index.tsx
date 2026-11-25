@@ -20,9 +20,11 @@ import { InteractionRequestsScreen } from './interaction-requests';
 import { MutedThreadsScreen } from './muted-threads';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
 import { NotificationsSettingsScreen } from './notifications-settings';
+import { PrivacyPolicyScreen } from './privacy-policy';
 import { RulesScreen } from './rules';
 import { ScheduledStatusesScreen } from './scheduled-statuses';
 import { SettingsScreen } from './settings';
+import { TermsOfServiceScreen } from './terms-of-service';
 import { TimelinesSettingsScreen } from './timeline-settings';
 
 import type { SettingsStackParams } from '@/router/router';
@@ -72,6 +74,8 @@ const messages = defineMessages({
   },
   announcements: { id: 'announcements.title', defaultMessage: 'Announcements' },
   instanceRules: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },
+  instancePrivacyPolicy: { id: 'column.privacy_policy', defaultMessage: 'Privacy policy' },
+  instanceTermsOfService: { id: 'shared.tos', defaultMessage: 'Terms of Service' },
 });
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
@@ -194,6 +198,16 @@ const SettingsStackScreen = (
         name='rules'
         component={RulesScreen}
         options={{ title: intl.formatMessage(messages.instanceRules) }}
+      />
+      <SettingsStack.Screen
+        name='tos'
+        component={TermsOfServiceScreen}
+        options={{ title: intl.formatMessage(messages.instanceTermsOfService) }}
+      />
+      <SettingsStack.Screen
+        name='privacy_policy'
+        component={PrivacyPolicyScreen}
+        options={{ title: intl.formatMessage(messages.instancePrivacyPolicy) }}
       />
     </SettingsStack.Navigator>
   );

@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import TimelineIcon from 'lucide-react-native/icons/timeline';
-import { FileIcon } from 'phosphor-react-native';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
+import { CookieIcon } from 'phosphor-react-native/src/icons/Cookie';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
+import { GavelIcon } from 'phosphor-react-native/src/icons/Gavel';
 import { HashIcon } from 'phosphor-react-native/src/icons/Hash';
 import { InfoIcon } from 'phosphor-react-native/src/icons/Info';
 import { MonitorIcon } from 'phosphor-react-native/src/icons/Monitor';
 import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
 import { PaletteIcon } from 'phosphor-react-native/src/icons/Palette';
+import { ScrollIcon } from 'phosphor-react-native/src/icons/Scroll';
 import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
@@ -63,6 +65,8 @@ const messages = defineMessages({
   mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
   followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
   instanceRules: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },
+  instancePrivacyPolicy: { id: 'column.privacy_policy', defaultMessage: 'Privacy policy' },
+  instanceTermsOfService: { id: 'shared.tos', defaultMessage: 'Terms of Service' },
 });
 
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
@@ -147,21 +151,39 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
 
     sections.push(accountSection);
 
-    if (instance.rules.length) {
-      const instanceSection: IListSections[number] = {
-        subheader: intl.formatMessage(messages.instanceHeader),
-        items: [
-          {
-            icon: FileIcon,
-            type: 'button',
-            label: intl.formatMessage(messages.instanceRules),
-            onPress: () => navigation.navigate('rules'),
-          },
-        ],
-      };
+    const instanceSection: IListSections[number] = {
+      subheader: intl.formatMessage(messages.instanceHeader),
+      items: [],
+    };
 
-      sections.push(instanceSection);
+    if (instance.rules.length) {
+      instanceSection.items.push({
+        icon: GavelIcon,
+        type: 'button',
+        label: intl.formatMessage(messages.instanceRules),
+        onPress: () => navigation.navigate('rules'),
+      });
     }
+
+    if (features.instancePrivacyPolicy) {
+      instanceSection.items.push({
+        icon: CookieIcon,
+        type: 'button',
+        label: intl.formatMessage(messages.instancePrivacyPolicy),
+        onPress: () => navigation.navigate('privacy_policy'),
+      });
+    }
+
+    if (features.instanceTermsOfService && instance.configuration.urls.terms_of_service) {
+      instanceSection.items.push({
+        icon: ScrollIcon,
+        type: 'button',
+        label: intl.formatMessage(messages.instanceTermsOfService),
+        onPress: () => navigation.navigate('tos'),
+      });
+    }
+
+    if (instanceSection.items.length) sections.push(instanceSection);
 
     const accountsSection: IListSections[number] = {
       subheader: intl.formatMessage(messages.accountsHeader),

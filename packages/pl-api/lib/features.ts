@@ -1266,6 +1266,16 @@ const getFeatures = (instance: Instance) => {
     importOverwrite: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
 
     /**
+     * @see GET /api/v1/instance/privacy_policy
+     */
+    instancePrivacyPolicy: v.software === MASTODON && gte(v.version, '4.0.0'),
+
+    /**
+     * @see GET /api/v1/instance/terms_of_service
+     */
+    instanceTermsOfService: v.software === MASTODON && gte(v.version, '4.4.0'),
+
+    /**
      * View posts from specific instance.
      * @see GET /api/v1/timelines/public
      */
