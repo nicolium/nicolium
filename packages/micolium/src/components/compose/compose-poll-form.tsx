@@ -79,7 +79,7 @@ const Option: React.FC<IOption> = ({
 
   const gesture = usePanGesture({
     minDistance: 0,
-    hitSlop: { horizontal: 12, vertical: 12 },
+    hitSlop: 12,
     onBegin: () => {
       activeIndex.value = index;
       dragY.value = 0;
@@ -361,4 +361,4 @@ const ComposePollForm: React.FC<ICompose> = ({ composeId }) => {
   );
 };
 
-export { ComposePollForm, formatDuration };
+export { ComposePollForm, formatDuration, clamp };

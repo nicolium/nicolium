@@ -1,6 +1,8 @@
+// oxlint-disable react/no-unstable-nested-components
 import {
   Appbar,
   Button,
+  Icon,
   IconButton,
   List as PaperList,
   TextInput,
@@ -12,13 +14,24 @@ import * as ImagePicker from 'expo-image-picker';
 import { pick } from 'lodash-es';
 import { create } from 'mutative';
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
+import { DotsSixVerticalIcon } from 'phosphor-react-native/src/icons/DotsSixVertical';
 import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
 import { XIcon } from 'phosphor-react-native/src/icons/X';
 import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
+import { GestureDetector, usePanGesture } from 'react-native-gesture-handler';
+import Animated, {
+  createAnimatedComponent,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  type SharedValue,
+} from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 
+import { clamp } from '@/components/compose/compose-poll-form';
 import { TextFieldDialog } from '@/components/text-field-dialog';
 import { CornerInset } from '@/components/ui/corner-inset';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
@@ -36,6 +49,8 @@ import { toast } from '@/utils/toast';
 import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ImagePickerAsset } from 'expo-image-picker';
+
+const AnimatedListItem = createAnimatedComponent(PaperList.Item);
 
 const messages = defineMessages({
   heading: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
@@ -238,6 +253,7 @@ const messages = defineMessages({
     id: 'edit_profile.fields.meta_fields.label.placeholder.first',
     defaultMessage: 'Label (e.g. pronouns)',
   },
+  reorderField: { id: 'edit_profile.fields.reorder_field', defaultMessage: 'Reorder field' },
   remove: { id: 'streamfield.remove', defaultMessage: 'Remove' },
   uploadHeader: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },
   clearHeader: { id: 'group.upload_banner.clear', defaultMessage: 'Clear header image' },
@@ -320,6 +336,250 @@ const accountToCredentials = (account: CredentialAccount): UpdateCredentials => 
     hide_followers_count: hideNetwork,
     hide_follows_count: hideNetwork,
   };
+};
+
+interface IProfileField {
+  field: UpdateCredentials['fields'][number];
+  index: number;
+  count: number;
+  handleReorder: (newIndex: number) => void;
+  handleDelete: () => void;
+  handleUpdateName: (name: string) => void;
+  handleUpdateValue: (value: string) => void;
+  activeIndex: SharedValue<number>;
+  dragY: SharedValue<number>;
+  rowHeight: SharedValue<number>;
+}
+
+const ProfileField: React.FC<IProfileField> = ({
+  field,
+  index,
+  count,
+  handleReorder,
+  handleDelete,
+  handleUpdateName,
+  handleUpdateValue,
+  activeIndex,
+  dragY,
+  rowHeight,
+}) => {
+  const intl = useIntl();
+  const theme = useTheme();
+
+  const styles = [getSegmentedMenuStyles(theme, false, index, count), { marginHorizontal: 16 }];
+
+  const gesture = usePanGesture({
+    minDistance: 0,
+    hitSlop: 32,
+    onBegin: () => {
+      activeIndex.value = index;
+      dragY.value = 0;
+    },
+    onUpdate: (event) => {
+      const step = rowHeight.value;
+      dragY.value = clamp(event.translationY, -index * step, (count - 1 - index) * step);
+    },
+    onFinalize: () => {
+      const step = rowHeight.value;
+      const target = step ? clamp(Math.round(index + dragY.value / step), 0, count - 1) : index;
+
+      if (target !== index) {
+        scheduleOnRN(handleReorder, target);
+      } else {
+        activeIndex.value = -1;
+        dragY.set(withTiming(0));
+      }
+    },
+  });
+
+  const animatedStyle = useAnimatedStyle(() => {
+    const active = activeIndex.value;
+
+    if (active === -1) {
+      return { transform: [{ translateY: 0 }], zIndex: 0 };
+    }
+
+    if (active === index) {
+      return { transform: [{ translateY: dragY.value }], zIndex: 1 };
+    }
+
+    const step = rowHeight.value;
+    const target = step ? clamp(Math.round(active + dragY.value / step), 0, count - 1) : active;
+
+    let offset = 0;
+    if (active < index && index <= target) offset = -step;
+    else if (target <= index && index < active) offset = step;
+
+    return { transform: [{ translateY: withTiming(offset, { duration: 150 }) }], zIndex: 0 };
+  });
+
+  const handleLayout =
+    index === 0
+      ? (event: { nativeEvent: { layout: { height: number } } }) => {
+          rowHeight.value = event.nativeEvent.layout.height;
+        }
+      : undefined;
+
+  return (
+    <AnimatedListItem
+      style={[animatedStyle, styles]}
+      onLayout={handleLayout}
+      title={() => (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          {count > 1 && (
+            <GestureDetector gesture={gesture}>
+              <View
+                accessible
+                accessibilityRole='adjustable'
+                accessibilityLabel={intl.formatMessage(messages.reorderField)}
+                accessibilityActions={[
+                  ...(index > 0 ? [{ name: 'decrement' as const }] : []),
+                  ...(index < count - 1 ? [{ name: 'increment' as const }] : []),
+                ]}
+                onAccessibilityAction={({ nativeEvent }) => {
+                  if (nativeEvent.actionName === 'decrement') handleReorder(index - 1);
+                  if (nativeEvent.actionName === 'increment') handleReorder(index + 1);
+                }}
+                style={{ padding: 4 }}
+              >
+                <Icon
+                  source={iconHelper(DotsSixVerticalIcon)}
+                  size={24}
+                  color={theme.colors.onSurface}
+                />
+              </View>
+            </GestureDetector>
+          )}
+          <View style={{ flex: 2 }}>
+            <TextInput
+              variant='outlined'
+              label={intl.formatMessage(messages.metaFieldLabel)}
+              placeholder={intl.formatMessage(
+                index === 0 ? messages.firstMetaFieldLabel : messages.metaFieldLabel,
+              )}
+              value={field.name}
+              onChangeText={(text) => handleUpdateName(text)}
+            />
+          </View>
+          <View style={{ flex: 3 }}>
+            <TextInput
+              variant='outlined'
+              label={intl.formatMessage(messages.metaFieldContent)}
+              placeholder={intl.formatMessage(messages.metaFieldContent)}
+              value={field.value}
+              onChangeText={(text) => handleUpdateValue(text)}
+            />
+          </View>
+          {count > 1 && (
+            <IconButton
+              onPress={handleDelete}
+              icon={iconHelper(XIcon)}
+              style={{ margin: -4 }}
+              accessibilityLabel={intl.formatMessage(messages.remove)}
+            />
+          )}
+        </View>
+      )}
+    />
+  );
+};
+
+interface IProfileFields {
+  data: UpdateCredentials;
+  updateData: (key: string, value: any | ((oldValue: any) => any)) => void;
+}
+
+const ProfileFields: React.FC<IProfileFields> = ({ data, updateData }) => {
+  const instance = useInstance();
+
+  const activeIndex = useSharedValue(-1);
+  const dragY = useSharedValue(0);
+  const rowHeight = useSharedValue(0);
+
+  const keys = React.useRef<Array<number>>([]);
+  const nextKey = React.useRef(0);
+
+  while (keys.current.length < data.fields.length) keys.current.push(nextKey.current++);
+  keys.current.length = data.fields.length;
+
+  React.useLayoutEffect(() => {
+    activeIndex.value = -1;
+    dragY.value = 0;
+  }, [data.fields]);
+
+  const handleAddField = () => {
+    const fields = [...data.fields, { name: '', value: '' }];
+    updateData('fields', fields);
+  };
+
+  const handleRemoveField = (i: number) => {
+    keys.current.splice(i, 1);
+    const fields = [...data.fields];
+    fields.splice(i, 1);
+    updateData('fields', fields);
+  };
+
+  const handleMoveField = (oldIndex: number, newIndex: number) => {
+    keys.current.splice(newIndex, 0, keys.current.splice(oldIndex, 1)[0]);
+    const newFields = [...data.fields];
+    const item = newFields.splice(oldIndex, 1)[0];
+    newFields.splice(newIndex, 0, item);
+
+    updateData('fields', newFields);
+  };
+
+  return (
+    <PaperList.Section>
+      <PaperList.Subheader>
+        <FormattedMessage
+          id='edit_profile.fields.meta_fields.label'
+          defaultMessage='Profile fields'
+        />
+      </PaperList.Subheader>
+      <View style={{ gap: 2 }}>
+        {data.fields.map((field, index) => {
+          return (
+            <ProfileField
+              key={keys.current[index]}
+              field={field}
+              index={index}
+              count={data.fields.length}
+              handleReorder={(newIndex) => handleMoveField(index, newIndex)}
+              handleDelete={() => handleRemoveField(index)}
+              handleUpdateName={(name) =>
+                updateData('fields', (fields) => {
+                  fields[index].name = name;
+                })
+              }
+              handleUpdateValue={(value) =>
+                updateData('fields', (fields) => {
+                  fields[index].value = value;
+                })
+              }
+              activeIndex={activeIndex}
+              dragY={dragY}
+              rowHeight={rowHeight}
+            />
+          );
+        })}
+      </View>
+      {data.fields.length <=
+        (instance.configuration.accounts?.max_profile_fields ??
+          instance.pleroma.metadata.fields_limits.max_fields) && (
+        <Button
+          mode='text'
+          icon={iconHelper(PlusIcon)}
+          onPress={handleAddField}
+          style={{ alignSelf: 'flex-start', marginHorizontal: 8 }}
+        >
+          <FormattedMessage
+            id='edit_profile.fields.meta_fields.add_field'
+            defaultMessage='Add field'
+          />
+        </Button>
+      )}
+    </PaperList.Section>
+  );
 };
 
 const EditProfileScreen = ({
@@ -516,19 +776,6 @@ const EditProfileScreen = ({
             hide_follows_count: hide,
           }),
     }));
-  };
-
-  const handleAddField = () => {
-    const oldFields = data.fields ?? [];
-    const fields = [...oldFields, { name: '', value: '' }];
-    updateData('fields', fields);
-  };
-
-  const handleRemoveField = (i: number) => {
-    const oldFields = data.fields ?? [];
-    const fields = [...oldFields];
-    fields.splice(i, 1);
-    updateData('fields', fields);
   };
 
   const handleAddAvatar = async (type: 'avatar' | 'header') => {
@@ -977,84 +1224,7 @@ const EditProfileScreen = ({
           )}
         </View>
 
-        <PaperList.Section>
-          <PaperList.Subheader>
-            <FormattedMessage
-              id='edit_profile.fields.meta_fields.label'
-              defaultMessage='Profile fields'
-            />
-          </PaperList.Subheader>
-          <View style={{ gap: 2 }}>
-            {data.fields.map((field, index, fields) => {
-              const styles = [
-                getSegmentedMenuStyles(theme, false, index, fields.length),
-                { marginHorizontal: 16 },
-              ];
-
-              return (
-                <PaperList.Item
-                  key={index}
-                  style={styles}
-                  title={() => (
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                      <View style={{ flex: 2 }}>
-                        <TextInput
-                          variant='outlined'
-                          label={intl.formatMessage(messages.metaFieldLabel)}
-                          placeholder={intl.formatMessage(
-                            index === 0 ? messages.firstMetaFieldLabel : messages.metaFieldLabel,
-                          )}
-                          value={field.name}
-                          onChangeText={(text) =>
-                            updateData('fields', (fields) => {
-                              fields[index].name = text;
-                            })
-                          }
-                        />
-                      </View>
-                      <View style={{ flex: 3 }}>
-                        <TextInput
-                          variant='outlined'
-                          label={intl.formatMessage(messages.metaFieldContent)}
-                          placeholder={intl.formatMessage(messages.metaFieldContent)}
-                          value={field.value}
-                          onChangeText={(text) =>
-                            updateData('fields', (fields) => {
-                              fields[index].value = text;
-                            })
-                          }
-                        />
-                      </View>
-                      {data.fields.length > 1 && (
-                        <IconButton
-                          onPress={() => handleRemoveField(index)}
-                          icon={iconHelper(XIcon)}
-                          style={{ margin: -4 }}
-                          accessibilityLabel={intl.formatMessage(messages.remove)}
-                        />
-                      )}
-                    </View>
-                  )}
-                />
-              );
-            })}
-          </View>
-          {data.fields.length <=
-            (instance.configuration.accounts?.max_profile_fields ??
-              instance.pleroma.metadata.fields_limits.max_fields) && (
-            <Button
-              mode='text'
-              icon={iconHelper(PlusIcon)}
-              onPress={handleAddField}
-              style={{ alignSelf: 'flex-start', marginHorizontal: 8 }}
-            >
-              <FormattedMessage
-                id='edit_profile.fields.meta_fields.add_field'
-                defaultMessage='Add field'
-              />
-            </Button>
-          )}
-        </PaperList.Section>
+        <ProfileFields data={data} updateData={updateData} />
 
         <List sections={listSections} />
 
