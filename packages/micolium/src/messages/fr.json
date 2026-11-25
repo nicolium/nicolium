@@ -84,6 +84,7 @@
   "circles.new.create": "Ajouter un cercle",
   "circles.new.create.title": "Ajouter un cercle",
   "circles.new.title.placeholder": "Nouveau nom du cercle",
+  "column.admin.rules": "Règles de l’instance",
   "column.antennas": "Antennes",
   "column.bookmarks": "Signets",
   "column.bookmarks.all": "Tous les marque-pages",

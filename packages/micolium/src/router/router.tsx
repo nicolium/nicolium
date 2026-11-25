@@ -72,6 +72,7 @@ type SettingsStackParams = {
   about: undefined;
   interaction_requests: undefined;
   announcements: undefined;
+  rules: undefined;
 };
 type StatusStackParams = {
   view: { id: string };

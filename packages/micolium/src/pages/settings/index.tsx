@@ -20,6 +20,7 @@ import { InteractionRequestsScreen } from './interaction-requests';
 import { MutedThreadsScreen } from './muted-threads';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
 import { NotificationsSettingsScreen } from './notifications-settings';
+import { RulesScreen } from './rules';
 import { ScheduledStatusesScreen } from './scheduled-statuses';
 import { SettingsScreen } from './settings';
 import { TimelinesSettingsScreen } from './timeline-settings';
@@ -54,9 +55,6 @@ const messages = defineMessages({
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
   muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
-  settingsHeader: { id: 'settings.settings_header', defaultMessage: 'App settings' },
-  accountHeader: { id: 'settings.account_header', defaultMessage: 'Account settings' },
-  accountsHeader: { id: 'settings.accounts_header', defaultMessage: 'Accounts' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   interactionPolicies: {
     id: 'column.interaction_policies',
@@ -73,6 +71,7 @@ const messages = defineMessages({
     defaultMessage: 'Interaction requests',
   },
   announcements: { id: 'announcements.title', defaultMessage: 'Announcements' },
+  instanceRules: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },
 });
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
@@ -190,6 +189,11 @@ const SettingsStackScreen = (
         name='announcements'
         component={AnnouncementsScreen}
         options={{ title: intl.formatMessage(messages.announcements) }}
+      />
+      <SettingsStack.Screen
+        name='rules'
+        component={RulesScreen}
+        options={{ title: intl.formatMessage(messages.instanceRules) }}
       />
     </SettingsStack.Navigator>
   );

@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import TimelineIcon from 'lucide-react-native/icons/timeline';
+import { FileIcon } from 'phosphor-react-native';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { HashIcon } from 'phosphor-react-native/src/icons/Hash';
@@ -14,7 +15,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { ScrollView } from 'react-native';
 
 import { type IListSections, List } from '@/components/ui/list';
-import { useFeatures } from '@/contexts/current-account-context';
+import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAuthStoreActions } from '@/stores/auth';
 import { useUiStoreActions } from '@/stores/ui';
 import { toast } from '@/utils/toast';
@@ -52,6 +53,7 @@ const messages = defineMessages({
   settingsHeader: { id: 'settings.settings_header', defaultMessage: 'App settings' },
   accountHeader: { id: 'settings.account_header', defaultMessage: 'Account settings' },
   accountsHeader: { id: 'settings.accounts_header', defaultMessage: 'Accounts' },
+  instanceHeader: { id: 'settings.instance_header', defaultMessage: 'Instance information' },
   addOrSwitchAccounts: {
     id: 'settings.add_or_switch_accounts',
     defaultMessage: 'Add or switch accounts',
@@ -60,10 +62,12 @@ const messages = defineMessages({
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
   followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
+  instanceRules: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },
 });
 
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
   const features = useFeatures();
+  const instance = useInstance();
   const intl = useIntl();
 
   const rootNavigation = useNavigation('settings');
@@ -72,6 +76,8 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
   const { openAccountSwitcher } = useUiStoreActions();
 
   const listSections = React.useMemo(() => {
+    const sections: IListSections = [];
+
     const settingsSection: IListSections[number] = {
       subheader: intl.formatMessage(messages.settingsHeader),
       items: [
@@ -116,6 +122,8 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
       onPress: () => navigation.navigate('about'),
     });
 
+    sections.push(settingsSection);
+
     const accountSection: IListSections[number] = {
       subheader: intl.formatMessage(messages.accountHeader),
       items: [
@@ -135,6 +143,24 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
         label: intl.formatMessage(messages.followedTags),
         onPress: () => navigation.navigate('followed_tags'),
       });
+    }
+
+    sections.push(accountSection);
+
+    if (instance.rules.length) {
+      const instanceSection: IListSections[number] = {
+        subheader: intl.formatMessage(messages.instanceHeader),
+        items: [
+          {
+            icon: FileIcon,
+            type: 'button',
+            label: intl.formatMessage(messages.instanceRules),
+            onPress: () => navigation.navigate('rules'),
+          },
+        ],
+      };
+
+      sections.push(instanceSection);
     }
 
     const accountsSection: IListSections[number] = {
@@ -163,8 +189,10 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
       ],
     };
 
-    return [settingsSection, accountSection, accountsSection];
-  }, [features]);
+    sections.push(accountsSection);
+
+    return sections;
+  }, [features, instance.rules]);
 
   return (
     <ScrollView>
