@@ -259,7 +259,7 @@ const messages = defineMessages({
   uploadHeader: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },
   clearHeader: { id: 'group.upload_banner.clear', defaultMessage: 'Clear header image' },
   headerMenu: { id: 'group.upload_banner.menu', defaultMessage: 'Header menu' },
-  headerMenuHint: { id: 'group.upload_banner.menu', defaultMessage: 'No header uploaded' },
+  headerMenuHint: { id: 'group.upload_banner.menu.hint', defaultMessage: 'No header uploaded' },
   uploadAvatar: { id: 'group.upload_avatar', defaultMessage: 'Upload avatar' },
   clearAvatar: { id: 'group.upload_avatar.clear', defaultMessage: 'Clear avatar image' },
   avatarMenu: { id: 'group.upload_avatar.menu', defaultMessage: 'Avatar menu' },
