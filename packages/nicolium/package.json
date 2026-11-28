@@ -142,7 +142,7 @@
     "oxfmt": "^0.79.0",
     "oxlint": "^1.94.0",
     "oxlint-tsgolint": "^7.0.2006",
-    "postcss": "^8.5.32",
+    "postcss": "^8.5.33",
     "rollup-plugin-bundle-stats": "^4.23.1",
     "sass-embedded": "^1.108.2",
     "stylelint": "^18.0.0",
